@@ -1,0 +1,41 @@
+/* [project]/src/components/ParticipationSidebar.module.css [app-client] (css) */
+.ParticipationSidebar-module__8ZyBCG__sidebarContent {
+  flex-direction: column;
+  height: 100%;
+  display: flex;
+}
+
+.ParticipationSidebar-module__8ZyBCG__playerList {
+  flex: 1;
+  margin-top: 10px;
+  overflow-y: auto;
+}
+
+.ParticipationSidebar-module__8ZyBCG__playerItem {
+  background: #f9f9f9;
+  border-bottom: 1px solid #eee;
+  border-radius: 4px;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+  padding: 10px;
+  display: flex;
+}
+
+.ParticipationSidebar-module__8ZyBCG__playerName {
+  font-weight: bold;
+  display: block;
+}
+
+.ParticipationSidebar-module__8ZyBCG__playerPosition {
+  color: #666;
+  font-size: .75rem;
+}
+
+.ParticipationSidebar-module__8ZyBCG__playStats {
+  color: #2e7d32;
+  font-size: .85rem;
+  font-weight: bold;
+}
+
+/*# sourceMappingURL=src_components_ParticipationSidebar_module_css_bad6b30c._.single.css.map*/

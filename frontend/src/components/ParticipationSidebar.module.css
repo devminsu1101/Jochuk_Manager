@@ -1,0 +1,38 @@
+.sidebarContent {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.playerList {
+  flex: 1;
+  overflow-y: auto;
+  margin-top: 10px;
+}
+
+.playerItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  border-bottom: 1px solid #eee;
+  background: #f9f9f9;
+  margin-bottom: 4px;
+  border-radius: 4px;
+}
+
+.playerName {
+  font-weight: bold;
+  display: block;
+}
+
+.playerPosition {
+  font-size: 0.75rem;
+  color: #666;
+}
+
+.playStats {
+  font-size: 0.85rem;
+  font-weight: bold;
+  color: #2e7d32;
+}
