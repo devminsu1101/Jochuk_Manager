@@ -6,7 +6,7 @@ export interface Player {
   primaryPosition: Position;
   secondaryPositions: Position[];
   playCount: number;
-  avatarUrl?: string; // 프로필 이미지 추가
+  color: string; // 고유 색상
 }
 
 export interface QuarterLineup {

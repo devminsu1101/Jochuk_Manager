@@ -67,35 +67,27 @@
 }
 
 .nodeCircle, .nodeCircleEmpty {
-  width: 40px;
-  height: 40px;
-  background: white;
-  border-radius: 50%;
-  border: 2px solid #1b5e20;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-weight: bold;
-  font-size: 0.8rem;
-  color: #1b5e20;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-  cursor: grab;
-  overflow: hidden;
-}
+  .nodeCircle {
+    width: 32px; /* 살짝 크기 조절 */
+    height: 32px;
+    border-radius: 50%;
+    border: 2px solid #fff;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    cursor: grab;
+    transition: transform 0.1s ease;
+  }
 
-.nodeCircleMini {
-  width: 24px;
-  height: 24px;
-  background: white;
-  border-radius: 50%;
-  border: 1.5px solid #1b5e20;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
-  overflow: hidden;
-}
+  .nodeCircle:hover {
+    transform: scale(1.15);
+  }
 
+  .nodeCircleMini {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    border: 1px solid #fff;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+  }
 .nodeLabelMini {
   margin-top: 2px;
   font-size: 0.55rem;

@@ -10,6 +10,7 @@ import { ParticipationSidebar } from '@/components/ParticipationSidebar';
 export default function Home() {
   const { setPlayers, updateLineup, lineups, players, activeQuarterId, setActiveQuarterId } = useMatchStore();
   const [showShareOptions, setShowShareOptions] = useState(false);
+  const [isCapturing, setIsCapturing] = useState(false);
   const captureRef = useRef<HTMLDivElement>(null);
   const fullViewRef = useRef<HTMLDivElement>(null);
   
@@ -88,9 +89,9 @@ export default function Home() {
 
       if (!response.ok) throw new Error('API 호출 실패');
       const data = await response.json();
-      data.forEach((item: { quarterId: number, assignedPlayers: { [pos: string]: string } }) => {
+      data.forEach((item: any) => {
         Object.entries(item.assignedPlayers).forEach(([pos, pid]) => {
-          updateLineup(item.quarterId, pos, pid);
+          updateLineup(item.quarterId, pos, pid as string);
         });
       });
       alert('AI 자동 배정이 완료되었습니다!');
@@ -101,13 +102,16 @@ export default function Home() {
 
   const handleSaveImage = async () => {
     const target = activeQuarterId === 0 ? fullViewRef.current : captureRef.current;
-    if (target === null) return;
+    if (target === null || isCapturing) return;
     
+    setIsCapturing(true);
     try {
+      // 이미지 태그가 없으므로 가장 빠른 기본 옵션 사용
       const dataUrl = await toPng(target, { 
-        cacheBust: true, 
-        backgroundColor: activeQuarterId === 0 ? '#eee' : '#f0f2f5' 
+        backgroundColor: activeQuarterId === 0 ? '#eee' : '#f0f2f5',
+        pixelRatio: 2
       });
+      
       const link = document.createElement('a');
       const filename = activeQuarterId === 0 ? 'full-lineup' : `q${activeQuarterId}-lineup`;
       link.download = `${filename}-${new Date().getTime()}.png`;
@@ -115,7 +119,10 @@ export default function Home() {
       link.click();
       setShowShareOptions(false);
     } catch (err) {
-      alert('이미지 저장 중 오류가 발생했습니다.');
+      console.error('Capture Error:', err);
+      alert('이미지 저장에 실패했습니다.');
+    } finally {
+      setIsCapturing(false);
     }
   };
 
@@ -137,9 +144,7 @@ export default function Home() {
     <DndContext sensors={sensors} onDragEnd={handleDragEnd}>
       <main className="main-layout">
         <section className="workspace">
-          {/* 메인 영역 */}
           {activeQuarterId === 0 ? (
-            /* [전체 보기 모드] */
             <div className="full-view-container" ref={fullViewRef}>
               {[1, 2, 3, 4].map(q => {
                 const subs = getSubsForQuarter(q);
@@ -157,7 +162,6 @@ export default function Home() {
               })}
             </div>
           ) : (
-            /* [개별 편집 모드] */
             <div className="editor-main-view" ref={captureRef}>
               <div className="pitch-wrapper">
                 <span className="pitch-title">{activeQuarterId}쿼터 라인업</span>
@@ -169,7 +173,7 @@ export default function Home() {
                 <div style={{ overflowY: 'auto', marginTop: '10px' }}>
                   {getSubsForQuarter(activeQuarterId).map(p => (
                     <div key={p.id} className="mini-player-badge">
-                      {p.avatarUrl && <img src={p.avatarUrl} alt="" className="mini-avatar" />}
+                      <div style={{ width: '12px', height: '12px', borderRadius: '50%', backgroundColor: p.color }} />
                       <span>{p.name}</span>
                     </div>
                   ))}
@@ -178,7 +182,6 @@ export default function Home() {
             </div>
           )}
 
-          {/* 하단 쿼터 셀렉터 탭 */}
           <div className="quarter-tabs-bottom">
             <button 
               className={`tab-button ${activeQuarterId === 0 ? 'full-view' : ''}`}
@@ -208,8 +211,8 @@ export default function Home() {
                 background: 'white', border: '1px solid #ddd', borderRadius: '8px',
                 padding: '10px', boxShadow: '0 -4px 10px rgba(0,0,0,0.1)', zIndex: 100
               }}>
-                <button onClick={handleSaveImage} style={shareItemStyle}>
-                  {activeQuarterId === 0 ? '전체 라인업 저장' : '현재 쿼터 저장'}
+                <button onClick={handleSaveImage} style={shareItemStyle} disabled={isCapturing}>
+                  {isCapturing ? '저장 중...' : (activeQuarterId === 0 ? '전체 라인업 저장' : '현재 쿼터 저장')}
                 </button>
                 <button onClick={handleCopyInviteLink} style={shareItemStyle}>플레이어 초대 링크 복사</button>
               </div>

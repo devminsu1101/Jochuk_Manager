@@ -71,37 +71,29 @@
   transform: scale(1.2);
 }
 
-.SoccerPitch-module__z10E1q__nodeCircle, .SoccerPitch-module__z10E1q__nodeCircleEmpty {
-  color: #1b5e20;
+:is(.SoccerPitch-module__z10E1q__nodeCircle, .SoccerPitch-module__z10E1q__nodeCircleEmpty) .SoccerPitch-module__z10E1q__nodeCircle {
   cursor: grab;
-  background: #fff;
-  border: 2px solid #1b5e20;
+  border: 2px solid #fff;
   border-radius: 50%;
-  justify-content: center;
-  align-items: center;
-  width: 40px;
-  height: 40px;
-  font-size: .8rem;
-  font-weight: bold;
-  display: flex;
-  overflow: hidden;
-  box-shadow: 0 2px 4px #0003;
+  width: 32px;
+  height: 32px;
+  transition: transform .1s;
+  box-shadow: 0 4px 10px #0000004d;
 }
 
-.SoccerPitch-module__z10E1q__nodeCircleMini {
-  background: #fff;
-  border: 1.5px solid #1b5e20;
+:is(.SoccerPitch-module__z10E1q__nodeCircle, .SoccerPitch-module__z10E1q__nodeCircleEmpty) .SoccerPitch-module__z10E1q__nodeCircle:hover {
+  transform: scale(1.15);
+}
+
+:is(.SoccerPitch-module__z10E1q__nodeCircle, .SoccerPitch-module__z10E1q__nodeCircleEmpty) .SoccerPitch-module__z10E1q__nodeCircleMini {
+  border: 1px solid #fff;
   border-radius: 50%;
-  justify-content: center;
-  align-items: center;
-  width: 24px;
-  height: 24px;
-  display: flex;
-  overflow: hidden;
+  width: 18px;
+  height: 18px;
   box-shadow: 0 1px 3px #0003;
 }
 
-.SoccerPitch-module__z10E1q__nodeLabelMini {
+:is(.SoccerPitch-module__z10E1q__nodeCircle, .SoccerPitch-module__z10E1q__nodeCircleEmpty) .SoccerPitch-module__z10E1q__nodeLabelMini {
   color: #fff;
   white-space: nowrap;
   background: #0009;
@@ -111,24 +103,24 @@
   font-size: .55rem;
 }
 
-.SoccerPitch-module__z10E1q__miniPitch .SoccerPitch-module__z10E1q__pitchLines {
+:is(.SoccerPitch-module__z10E1q__nodeCircle, .SoccerPitch-module__z10E1q__nodeCircleEmpty) .SoccerPitch-module__z10E1q__miniPitch .SoccerPitch-module__z10E1q__pitchLines {
   border-width: 1px;
   margin: 5px;
 }
 
-.SoccerPitch-module__z10E1q__miniPitch .SoccerPitch-module__z10E1q__centerCircle {
+:is(.SoccerPitch-module__z10E1q__nodeCircle, .SoccerPitch-module__z10E1q__nodeCircleEmpty) .SoccerPitch-module__z10E1q__miniPitch .SoccerPitch-module__z10E1q__centerCircle {
   border-width: 1px;
   width: 40px;
   height: 40px;
 }
 
-.SoccerPitch-module__z10E1q__nodeCircleEmpty {
+:is(.SoccerPitch-module__z10E1q__nodeCircle, .SoccerPitch-module__z10E1q__nodeCircleEmpty) .SoccerPitch-module__z10E1q__nodeCircleEmpty {
   cursor: default;
   background: #fff3;
   border: 2px dashed #ffffff80;
 }
 
-.SoccerPitch-module__z10E1q__nodeLabel {
+:is(.SoccerPitch-module__z10E1q__nodeCircle, .SoccerPitch-module__z10E1q__nodeCircleEmpty) .SoccerPitch-module__z10E1q__nodeLabel {
   color: #fff;
   white-space: nowrap;
   background: #0009;
@@ -165,24 +157,13 @@
 }
 
 .ParticipationSidebar-module__8ZyBCG__avatarWrapper {
-  background: #e0e0e0;
   border-radius: 50%;
   flex-shrink: 0;
-  width: 36px;
-  height: 36px;
-  overflow: hidden;
-}
-
-.ParticipationSidebar-module__8ZyBCG__avatar {
-  object-fit: cover;
-  width: 100%;
-  height: 100%;
-}
-
-.ParticipationSidebar-module__8ZyBCG__avatarPlaceholder {
-  background: #ccc;
-  width: 100%;
-  height: 100%;
+  justify-content: center;
+  align-items: center;
+  width: 32px;
+  height: 32px;
+  display: flex;
 }
 
 .ParticipationSidebar-module__8ZyBCG__playerInfo {

@@ -9,7 +9,7 @@ import styles from './SoccerPitch.module.css';
 
 interface SoccerPitchProps {
   quarterId: number;
-  isMini?: boolean; // 미니 뷰 여부 추가
+  isMini?: boolean;
 }
 
 export const SoccerPitch: React.FC<SoccerPitchProps> = ({ quarterId, isMini = false }) => {
@@ -48,8 +48,8 @@ export const SoccerPitch: React.FC<SoccerPitchProps> = ({ quarterId, isMini = fa
                 name={player.name} 
                 quarterId={quarterId} 
                 positionKey={posKey}
-                avatarUrl={player.avatarUrl}
-                isMini={isMini} // 노드에도 미니 여부 전달
+                color={player.color} // 색상 전달
+                isMini={isMini}
               />
             ) : (
               <div className={styles.nodeCircleEmpty} />

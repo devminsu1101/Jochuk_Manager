@@ -4,66 +4,33 @@
 조기축구회 운영자의 고질적인 문제인 '공평한 출전 시간 배분'과 '포지션 배치'를 AI와 직관적인 UI로 해결하는 엔터프라이즈급 관리 솔루션.
 
 ## 2. Requirement History (의사결정 이력)
-*기획적 의사결정과 요구사항의 변천사입니다.*
-
-*   **Initial:** 쿼터별 라인업 생성 프로그램 개발 제안.
-*   **Refinement 1 (Fair Play):** "멀티 포지션이라고 더 뛰는 것이 아니라, 적게 뛰는 사람이 없어야 한다"는 원칙 확립. (최소 출전 시간의 상향 평준화)
-*   **Refinement 2 (GK Rule):** GK를 1순위로 선호하는 선수는 4쿼터 내내 참여(필드 또는 GK)할 수 있도록 배려.
-*   **Refinement 3 (Preference):** 명단 텍스트 중 맨 앞의 포지션을 '1순위 선호'로 간주.
-*   **Refinement 4 (Flexible Strategy):** 쿼터별 가변 포메이션 엔진 요구.
-*   **Refinement 5 (Tech Migration):** Next.js + FastAPI 풀스택 아키텍처 및 실시간 D&D 도입 결정.
-*   **Refinement 6 (Export & Social):** 결과 이미지 저장 및 초대 링크 기반 플레이어 참여 시스템 도입 결정.
-*   **Refinement 7 (Host-Centric):** 호스트(운영자)와 플레이어(참여자)의 권한 분리 및 역할 정의.
+*   ... (중략) ...
+*   **Refinement 8 (Visual Fix Pending):** 축구장 내 노드 디자인이 현재 텍스트만 남는 현상 발생. 차기 단계에서 고유 컬러 원형 노드로 복구 필요.
+*   **Refinement 9 (AI Logic Refinement):** 수비수(DF) 카테고리 세분화 필요. CB(Center Back)와 LB/RB(Side Back)를 구분하여 알고리즘이 배정하도록 개선 예정.
+*   **Refinement 10 (Formation Pivot):** 시스템 기본 포메이션을 4-4-2에서 **4-2-3-1**로 변경 결정.
 
 ## 3. Development History (개발 이력)
-*실제로 구현 완료된 기술적 작업 내역입니다.*
 
 ### 📅 2026-03-17 (Initial Sprint & UX Overhaul)
 - **Frontend Setup**: Next.js 14, Zustand, Vanilla CSS 환경 구축.
-- **Data Model**: `Player`, `QuarterLineup` 인터페이스 및 Zustand 스토어(`useMatchStore`) 구현.
-- **UI Layout Overhaul**: 
-    - **Focused Editor**: 중앙에 대형 축구장과 측면 대기 명단을 배치하여 편집 효율성 극대화.
-    - **Overall View (Optimized)**: 1~4쿼터를 한눈에 확인하고 캡처할 수 있는 '전체 보기' 모드 신설 및 미니 노드 UI 최적화.
-    - **Bottom Navigation**: 쿼터 전환 탭을 하단으로 이동하여 조작성 향상.
-- **D&D Interaction**: `dnd-kit`을 이용한 선수 배정 및 포지션 스왑(Swap) 로직 완성.
-- **Backend AI**: FastAPI 서버 구축 및 공정성 기반 자동 배정 알고리즘 연동 완료.
-- **Phase 6 & 8 Integration**: 
-    - 초대 링크 기반 플레이어 등록 페이지 구현 (이름/포지션 선택).
-    - 등록 후 메인 페이지 리다이렉트 및 실시간 데이터 폴링(5s) 연동.
-    - AI 배정 시 최소 11명 인원 검증 로직 추가.
-    - Pravatar API를 활용한 랜덤 프로필 이미지 시스템 도입.
-    - **Image Export**: 현재 뷰(개별/전체)에 최적화된 지능형 이미지 저장 기능.
-- **Bug Fix**: ESM 모듈 에러 수정, 사이드바 버튼 고정, Next.js 비동기 params 대응, 전체 보기 가독성 및 잘림 현상 해결 완료.
+- **Phase 6 & 8 Completion**: 
+    - 초대 링크 기반 실시간 플레이어 등록 및 자동 명단 동기화 완료.
+    - 현재 뷰(개별/전체)에 따른 지능형 PNG 이미지 저장 기능 구현.
+- **Unique Color System**: 이미지 저장 안정성을 위해 아바타 대신 선수별 고유 Hex 컬러 부여 시스템 도입.
+- **UI/UX Overhaul**: 
+    - 하단 탭 방식 내비게이션 및 중앙 집중식 편집 뷰 도입.
+    - '전체 보기(Overall View)' 모드 추가로 4개 쿼터 동시 확인 및 캡처 지원.
+    - 사이드바 드래그 시 '컬러 노드'만 움직이도록 인터랙션 고도화.
 
-## 4. Current Implementation Status
-- **Current Phase**: Phase 6 & 8 Complete (Stable)
-- **Status**: 실시간 선수 모집부터 종합 라인업 공유까지 가능한 고도화된 프로토타입 완성.
+## 4. Pending Issues & Next Steps (중요)
 
+### 🚨 우선 해결 과제 (Immediate Tasks)
+1. **Pitch Node UI 복구**: 현재 축구장 내에서 선수 노드(Circle)가 보이지 않고 텍스트 라벨만 남은 상태. `SoccerPitch.module.css` 및 `DraggablePlayerNode.tsx`의 스타일 우선 복구 필요.
+2. **DF 세분화 로직**: 백엔드 `get_category` 함수에서 CB와 LB/RB를 동일한 'DF'로 묶지 말고, 각각 독립된 포지션으로 인식하여 선호도 매칭 정확도 향상.
+3. **4-2-3-1 기본값 설정**: `useMatchStore` 초기 상태 및 백엔드 슬롯 구성을 4-2-3-1 포메이션(GK, LB, CB, CB, RB, CDM, CDM, CAM, LW, RW, ST)으로 전면 교체.
 
-## 5. Future Strategic Roadmap (Phase 5 ~ 8)
-
-### 🚀 Phase 5: Refinement (Polishing)
-- 축구장 잔디 텍스처 무늬 및 노드 이동 애니메이션.
-- 모바일/태블릿 반응형 UI 최적화.
-
-### 🚀 Phase 6: 플레이어 참여 시스템 (Invitation)
-- **주체**: [Fullstack/Backend Agent]
-- 고유 초대 링크 발급 및 플레이어 자가 등록 폼(이름/포지션) 구현.
-
-### 🚀 Phase 7: 가변 전술 엔진 (Tactics)
-- **주체**: [Frontend UI Agent]
-- 쿼터별 포메이션 선택 기능(4-3-3, 3-5-2 등) 및 노드 재배치 로직.
-
-### 🚀 Phase 8: 결과 공유 시스템 (Export)
-- **주체**: [Interaction/Export Agent]
-- 완성된 4쿼터 라인업을 이미지(PNG)로 캡처하여 다운로드하는 기능.
+## 5. Current Implementation Status
+- **Status**: 실시간 모집 및 종합 공유 기능 안정화 완료. 시각적 노드 복구 및 포지션 로직 고도화 단계 진입 대기 중.
 
 ---
-
-## 6. Technical Stack
-- **Frontend**: Next.js, TypeScript, Zustand, dnd-kit
-- **Backend**: FastAPI (Python), Uvicorn
-- **Storage (Planned)**: Supabase / PostgreSQL (for Phase 6)
-
----
-*Last Updated: 2026-03-17 by Gemini CLI (History Integrity Maintained)*
+*Last Updated: 2026-03-17 by Gemini CLI (Phase 6&8 Finalized, 4-2-3-1 Pivot Ready)*
