@@ -66,50 +66,32 @@
   transform: scale(1.2);
 }
 
-.nodeCircle, .nodeCircleEmpty {
-  .nodeCircle {
-    width: 32px; /* 살짝 크기 조절 */
-    height: 32px;
-    border-radius: 50%;
-    border: 2px solid #fff;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-    cursor: grab;
-    transition: transform 0.1s ease;
-  }
-
-  .nodeCircle:hover {
-    transform: scale(1.15);
-  }
-
-  .nodeCircleMini {
-    width: 18px;
-    height: 18px;
-    border-radius: 50%;
-    border: 1px solid #fff;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
-  }
-.nodeLabelMini {
-  margin-top: 2px;
-  font-size: 0.55rem;
-  background: rgba(0,0,0,0.6);
-  color: white;
-  padding: 0px 3px;
-  border-radius: 3px;
-  white-space: nowrap;
+.nodeCircle {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 2px solid #fff;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  cursor: grab;
+  transition: transform 0.1s ease;
 }
 
-.miniPitch .pitchLines {
-  margin: 5px;
-  border-width: 1px;
+.nodeCircle:hover {
+  transform: scale(1.15);
 }
 
-.miniPitch .centerCircle {
-  width: 40px;
-  height: 40px;
-  border-width: 1px;
+.nodeCircleMini {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 1px solid #fff;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 }
 
 .nodeCircleEmpty {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
   background: rgba(255, 255, 255, 0.2);
   border: 2px dashed rgba(255, 255, 255, 0.5);
   cursor: default;

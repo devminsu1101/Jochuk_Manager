@@ -43,7 +43,8 @@ PLAYER_COLORS = [
 def get_category(pos: str):
     pos = pos.upper()
     if pos == "GK": return "GK"
-    if any(x in pos for x in ["CB", "LB", "RB", "DF"]): return "DF"
+    if "CB" in pos: return "CB"
+    if "LB" in pos or "RB" in pos: return "SB" # Side Back
     if any(x in pos for x in ["CM", "DM", "AM", "MF"]): return "MF"
     if any(x in pos for x in ["ST", "LW", "RW", "FW"]): return "FW"
     return "MF"
@@ -90,7 +91,8 @@ async def auto_assign(req: AutoAssignRequest):
 
     results = []
     for q in req.quarters:
-        slots = ["GK", "LB", "LCB", "RCB", "RB", "LM", "LCM", "RCM", "RM", "LST", "RST"]
+        # 4-2-3-1 포메이션 슬롯 정의
+        slots = ["GK", "LB", "LCB", "RCB", "RB", "LCDM", "RCDM", "LW", "CAM", "RW", "ST"]
         assigned = {}
         assigned_player_ids = set()
 

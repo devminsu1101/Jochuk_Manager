@@ -32,7 +32,7 @@ export const ParticipationSidebar: React.FC = () => {
               name={player.name}
               position={player.primaryPosition}
               playCount={count}
-              avatarUrl={player.avatarUrl}
+              color={player.color}
             />
           );
         })}

@@ -14,7 +14,7 @@ export const useMatchStore = create<MatchStore>((set) => ({
   activeQuarterId: 1, // 기본값 1쿼터
   lineups: [1, 2, 3, 4].map((id) => ({
     quarterId: id,
-    formation: '4-4-2',
+    formation: '4-2-3-1',
     assignedPlayers: {},
   })),
 

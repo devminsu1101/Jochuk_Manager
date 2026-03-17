@@ -70,7 +70,7 @@ export default function PlayerRegisterPage({ params }: { params: Promise<{ match
           />
         </section>
 
-        <section className={sectionStyle}>
+        <section className={styles.section}>
           <label className={styles.label}>1순위 선호 포지션 (1개)</label>
           <div className={styles.buttonGrid}>
             {ALL_POSITIONS.map(pos => (
@@ -89,7 +89,7 @@ export default function PlayerRegisterPage({ params }: { params: Promise<{ match
           </div>
         </section>
 
-        <section className={sectionStyle}>
+        <section className={styles.section}>
           <label className={styles.label}>수행 가능 포지션 (다중 선택)</label>
           <div className={styles.buttonGrid}>
             {ALL_POSITIONS.map(pos => (
