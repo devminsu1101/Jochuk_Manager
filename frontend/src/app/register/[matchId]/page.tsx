@@ -31,7 +31,8 @@ export default function PlayerRegisterPage({ params }: { params: Promise<{ match
     }
 
     try {
-      const response = await fetch(`http://localhost:8000/api/matches/${matchId}/players`, {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+      const response = await fetch(`${apiUrl}/api/matches/${matchId}/players`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

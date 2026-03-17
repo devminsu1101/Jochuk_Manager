@@ -24,7 +24,8 @@ export default function Home() {
 
   const fetchPlayers = async () => {
     try {
-      const response = await fetch('http://localhost:8000/api/matches/match-123/players');
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+      const response = await fetch(`${apiUrl}/api/matches/match-123/players`);
       if (!response.ok) throw new Error('선수 목록 가져오기 실패');
       const data = await response.json();
       setPlayers(data);
@@ -78,7 +79,8 @@ export default function Home() {
     }
 
     try {
-      const response = await fetch('http://localhost:8000/api/auto-assign', {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+      const response = await fetch(`${apiUrl}/api/auto-assign`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
