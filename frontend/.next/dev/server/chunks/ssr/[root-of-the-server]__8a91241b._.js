@@ -16,6 +16,7 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$zustand$2f$e
 ;
 const useMatchStore = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$zustand$2f$esm$2f$react$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["create"])((set)=>({
         players: [],
+        activeQuarterId: 1,
         lineups: [
             1,
             2,
@@ -26,6 +27,9 @@ const useMatchStore = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_m
                 formation: '4-4-2',
                 assignedPlayers: {}
             })),
+        setActiveQuarterId: (id)=>set({
+                activeQuarterId: id
+            }),
         setPlayers: (players)=>set({
                 players
             }),
@@ -35,7 +39,6 @@ const useMatchStore = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_m
                         const newAssignedPlayers = {
                             ...lineup.assignedPlayers
                         };
-                        // 1. 중복 방지: 해당 선수가 이 쿼터의 다른 포지션에 있다면 제거
                         if (playerId) {
                             Object.keys(newAssignedPlayers).forEach((pos)=>{
                                 if (newAssignedPlayers[pos] === playerId) {
@@ -43,7 +46,6 @@ const useMatchStore = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_m
                                 }
                             });
                         }
-                        // 2. 새로운 포지션에 배정
                         newAssignedPlayers[position] = playerId;
                         return {
                             ...lineup,
@@ -343,6 +345,8 @@ __turbopack_context__.v({
   "playerInfo": "ParticipationSidebar-module__8ZyBCG__playerInfo",
   "playerItem": "ParticipationSidebar-module__8ZyBCG__playerItem",
   "playerList": "ParticipationSidebar-module__8ZyBCG__playerList",
+  "playerName": "ParticipationSidebar-module__8ZyBCG__playerName",
+  "playerPosition": "ParticipationSidebar-module__8ZyBCG__playerPosition",
   "sidebarContent": "ParticipationSidebar-module__8ZyBCG__sidebarContent",
 });
 }),
@@ -516,11 +520,508 @@ const ParticipationSidebar = ()=>{
     }, ("TURBOPACK compile-time value", void 0));
 };
 }),
-"[project]/src/app/page.tsx [app-ssr] (ecmascript)", ((__turbopack_context__, module, exports) => {
+"[project]/src/app/page.tsx [app-ssr] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
 
-const e = new Error("Could not parse module '[project]/src/app/page.tsx'\n\nExpected ',', got ':'");
-e.code = 'MODULE_UNPARSABLE';
-throw e;
+__turbopack_context__.s([
+    "default",
+    ()=>Home
+]);
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react-jsx-dev-runtime.js [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react.js [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$dnd$2d$kit$2f$core$2f$dist$2f$core$2e$esm$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/@dnd-kit/core/dist/core.esm.js [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$html$2d$to$2d$image$2f$es$2f$index$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/html-to-image/es/index.js [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$store$2f$useMatchStore$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/store/useMatchStore.ts [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$SoccerPitch$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/components/SoccerPitch.tsx [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ParticipationSidebar$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/components/ParticipationSidebar.tsx [app-ssr] (ecmascript)");
+'use client';
+;
+;
+;
+;
+;
+;
+;
+function Home() {
+    const { setPlayers, updateLineup, lineups, players, activeQuarterId, setActiveQuarterId } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$store$2f$useMatchStore$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useMatchStore"])();
+    const [showShareOptions, setShowShareOptions] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(false);
+    const captureRef = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useRef"])(null);
+    const fullViewRef = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useRef"])(null);
+    const sensors = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$dnd$2d$kit$2f$core$2f$dist$2f$core$2e$esm$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useSensors"])((0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$dnd$2d$kit$2f$core$2f$dist$2f$core$2e$esm$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useSensor"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$dnd$2d$kit$2f$core$2f$dist$2f$core$2e$esm$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["PointerSensor"], {
+        activationConstraint: {
+            distance: 8
+        }
+    }));
+    const fetchPlayers = async ()=>{
+        try {
+            const response = await fetch('http://localhost:8000/api/matches/match-123/players');
+            if (!response.ok) throw new Error('선수 목록 가져오기 실패');
+            const data = await response.json();
+            setPlayers(data);
+        } catch (error) {
+            console.error(error);
+        }
+    };
+    (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useEffect"])(()=>{
+        fetchPlayers();
+        const interval = setInterval(fetchPlayers, 5000);
+        return ()=>clearInterval(interval);
+    }, [
+        setPlayers
+    ]);
+    const handleDragEnd = (event)=>{
+        const { active, over } = event;
+        if (!over || activeQuarterId === 0) return;
+        const activeData = active.data.current;
+        const overData = over.data.current;
+        if (!activeData || !overData) return;
+        const playerId = activeData.playerId;
+        const { quarterId: targetQuarterId, positionKey: targetPositionKey } = overData;
+        if (activeData.fromPositionKey) {
+            const fromQuarterId = activeData.fromQuarterId;
+            const fromPositionKey = activeData.fromPositionKey;
+            if (fromQuarterId === targetQuarterId) {
+                const targetLineup = lineups.find((l)=>l.quarterId === targetQuarterId);
+                const playerAtTarget = targetLineup?.assignedPlayers[targetPositionKey];
+                updateLineup(targetQuarterId, targetPositionKey, playerId);
+                if (playerAtTarget) {
+                    updateLineup(fromQuarterId, fromPositionKey, playerAtTarget);
+                } else {
+                    updateLineup(fromQuarterId, fromPositionKey, null);
+                }
+            }
+        } else {
+            updateLineup(targetQuarterId, targetPositionKey, playerId);
+        }
+    };
+    const handleAutoAssign = async ()=>{
+        const currentPlayers = __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$store$2f$useMatchStore$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useMatchStore"].getState().players;
+        if (currentPlayers.length < 11) {
+            alert(`최소 11명의 선수가 필요합니다. (현재: ${currentPlayers.length}명)`);
+            return;
+        }
+        try {
+            const response = await fetch('http://localhost:8000/api/auto-assign', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    players: currentPlayers,
+                    quarters: lineups.map((l)=>({
+                            quarterId: l.quarterId,
+                            formation: l.formation
+                        }))
+                })
+            });
+            if (!response.ok) throw new Error('API 호출 실패');
+            const data = await response.json();
+            data.forEach((item)=>{
+                Object.entries(item.assignedPlayers).forEach(([pos, pid])=>{
+                    updateLineup(item.quarterId, pos, pid);
+                });
+            });
+            alert('AI 자동 배정이 완료되었습니다!');
+        } catch (error) {
+            alert('자동 배정 중 오류가 발생했습니다.');
+        }
+    };
+    const handleSaveImage = async ()=>{
+        const target = activeQuarterId === 0 ? fullViewRef.current : captureRef.current;
+        if (target === null) return;
+        try {
+            const dataUrl = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$html$2d$to$2d$image$2f$es$2f$index$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["toPng"])(target, {
+                cacheBust: true,
+                backgroundColor: activeQuarterId === 0 ? '#eee' : '#f0f2f5'
+            });
+            const link = document.createElement('a');
+            const filename = activeQuarterId === 0 ? 'full-lineup' : `q${activeQuarterId}-lineup`;
+            link.download = `${filename}-${new Date().getTime()}.png`;
+            link.href = dataUrl;
+            link.click();
+            setShowShareOptions(false);
+        } catch (err) {
+            alert('이미지 저장 중 오류가 발생했습니다.');
+        }
+    };
+    const handleCopyInviteLink = ()=>{
+        const inviteLink = `${window.location.origin}/register/match-123`;
+        navigator.clipboard.writeText(inviteLink);
+        alert('초대 링크가 클립보드에 복사되었습니다!');
+        setShowShareOptions(false);
+    };
+    const getSubsForQuarter = (quarterId)=>{
+        const lineup = lineups.find((l)=>l.quarterId === quarterId);
+        if (!lineup) return [];
+        const assignedIds = Object.values(lineup.assignedPlayers);
+        return players.filter((p)=>!assignedIds.includes(p.id));
+    };
+    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$dnd$2d$kit$2f$core$2f$dist$2f$core$2e$esm$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["DndContext"], {
+        sensors: sensors,
+        onDragEnd: handleDragEnd,
+        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("main", {
+            className: "main-layout",
+            children: [
+                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("section", {
+                    className: "workspace",
+                    children: [
+                        activeQuarterId === 0 ? /* [전체 보기 모드] */ /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                            className: "full-view-container",
+                            ref: fullViewRef,
+                            children: [
+                                1,
+                                2,
+                                3,
+                                4
+                            ].map((q)=>{
+                                const subs = getSubsForQuarter(q);
+                                return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                    className: "mini-pitch-card",
+                                    children: [
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                            className: "mini-pitch-box",
+                                            children: [
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                    className: "pitch-title",
+                                                    children: [
+                                                        q,
+                                                        "쿼터"
+                                                    ]
+                                                }, void 0, true, {
+                                                    fileName: "[project]/src/app/page.tsx",
+                                                    lineNumber: 149,
+                                                    columnNumber: 23
+                                                }, this),
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                    style: {
+                                                        transform: 'scale(0.7)',
+                                                        transformOrigin: 'top left',
+                                                        width: '143%',
+                                                        height: '143%',
+                                                        pointerEvents: 'none'
+                                                    },
+                                                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$SoccerPitch$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["SoccerPitch"], {
+                                                        quarterId: q
+                                                    }, void 0, false, {
+                                                        fileName: "[project]/src/app/page.tsx",
+                                                        lineNumber: 151,
+                                                        columnNumber: 25
+                                                    }, this)
+                                                }, void 0, false, {
+                                                    fileName: "[project]/src/app/page.tsx",
+                                                    lineNumber: 150,
+                                                    columnNumber: 23
+                                                }, this)
+                                            ]
+                                        }, void 0, true, {
+                                            fileName: "[project]/src/app/page.tsx",
+                                            lineNumber: 148,
+                                            columnNumber: 21
+                                        }, this),
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                            className: "mini-subs-box",
+                                            children: [
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("b", {
+                                                    style: {
+                                                        color: '#d32f2f'
+                                                    },
+                                                    children: "대기:"
+                                                }, void 0, false, {
+                                                    fileName: "[project]/src/app/page.tsx",
+                                                    lineNumber: 155,
+                                                    columnNumber: 23
+                                                }, this),
+                                                " ",
+                                                subs.map((p)=>p.name).join(', ') || '없음'
+                                            ]
+                                        }, void 0, true, {
+                                            fileName: "[project]/src/app/page.tsx",
+                                            lineNumber: 154,
+                                            columnNumber: 21
+                                        }, this)
+                                    ]
+                                }, q, true, {
+                                    fileName: "[project]/src/app/page.tsx",
+                                    lineNumber: 147,
+                                    columnNumber: 19
+                                }, this);
+                            })
+                        }, void 0, false, {
+                            fileName: "[project]/src/app/page.tsx",
+                            lineNumber: 143,
+                            columnNumber: 13
+                        }, this) : /* [개별 편집 모드] */ /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                            className: "editor-main-view",
+                            ref: captureRef,
+                            children: [
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                    className: "pitch-wrapper",
+                                    children: [
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                            className: "pitch-title",
+                                            children: [
+                                                activeQuarterId,
+                                                "쿼터 라인업"
+                                            ]
+                                        }, void 0, true, {
+                                            fileName: "[project]/src/app/page.tsx",
+                                            lineNumber: 165,
+                                            columnNumber: 17
+                                        }, this),
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$SoccerPitch$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["SoccerPitch"], {
+                                            quarterId: activeQuarterId
+                                        }, void 0, false, {
+                                            fileName: "[project]/src/app/page.tsx",
+                                            lineNumber: 166,
+                                            columnNumber: 17
+                                        }, this)
+                                    ]
+                                }, void 0, true, {
+                                    fileName: "[project]/src/app/page.tsx",
+                                    lineNumber: 164,
+                                    columnNumber: 15
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                    className: "subs-sidebar",
+                                    children: [
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h4", {
+                                            style: {
+                                                margin: 0,
+                                                fontSize: '0.9rem',
+                                                color: '#d32f2f'
+                                            },
+                                            children: [
+                                                "이번 쿼터 대기 (",
+                                                getSubsForQuarter(activeQuarterId).length,
+                                                ")"
+                                            ]
+                                        }, void 0, true, {
+                                            fileName: "[project]/src/app/page.tsx",
+                                            lineNumber: 170,
+                                            columnNumber: 17
+                                        }, this),
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                            style: {
+                                                overflowY: 'auto',
+                                                marginTop: '10px'
+                                            },
+                                            children: getSubsForQuarter(activeQuarterId).map((p)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                    className: "mini-player-badge",
+                                                    children: [
+                                                        p.avatarUrl && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("img", {
+                                                            src: p.avatarUrl,
+                                                            alt: "",
+                                                            className: "mini-avatar"
+                                                        }, void 0, false, {
+                                                            fileName: "[project]/src/app/page.tsx",
+                                                            lineNumber: 174,
+                                                            columnNumber: 39
+                                                        }, this),
+                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                            children: p.name
+                                                        }, void 0, false, {
+                                                            fileName: "[project]/src/app/page.tsx",
+                                                            lineNumber: 175,
+                                                            columnNumber: 23
+                                                        }, this)
+                                                    ]
+                                                }, p.id, true, {
+                                                    fileName: "[project]/src/app/page.tsx",
+                                                    lineNumber: 173,
+                                                    columnNumber: 21
+                                                }, this))
+                                        }, void 0, false, {
+                                            fileName: "[project]/src/app/page.tsx",
+                                            lineNumber: 171,
+                                            columnNumber: 17
+                                        }, this)
+                                    ]
+                                }, void 0, true, {
+                                    fileName: "[project]/src/app/page.tsx",
+                                    lineNumber: 169,
+                                    columnNumber: 15
+                                }, this)
+                            ]
+                        }, void 0, true, {
+                            fileName: "[project]/src/app/page.tsx",
+                            lineNumber: 163,
+                            columnNumber: 13
+                        }, this),
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                            className: "quarter-tabs-bottom",
+                            children: [
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                    className: `tab-button ${activeQuarterId === 0 ? 'full-view' : ''}`,
+                                    onClick: ()=>setActiveQuarterId(0),
+                                    children: "📊 전체 보기"
+                                }, void 0, false, {
+                                    fileName: "[project]/src/app/page.tsx",
+                                    lineNumber: 185,
+                                    columnNumber: 13
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                    style: {
+                                        width: '1px',
+                                        height: '24px',
+                                        background: '#ddd',
+                                        margin: '0 10px'
+                                    }
+                                }, void 0, false, {
+                                    fileName: "[project]/src/app/page.tsx",
+                                    lineNumber: 191,
+                                    columnNumber: 13
+                                }, this),
+                                [
+                                    1,
+                                    2,
+                                    3,
+                                    4
+                                ].map((q)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                        className: `tab-button ${activeQuarterId === q ? 'active' : ''}`,
+                                        onClick: ()=>setActiveQuarterId(q),
+                                        children: [
+                                            q,
+                                            "쿼터"
+                                        ]
+                                    }, q, true, {
+                                        fileName: "[project]/src/app/page.tsx",
+                                        lineNumber: 193,
+                                        columnNumber: 15
+                                    }, this))
+                            ]
+                        }, void 0, true, {
+                            fileName: "[project]/src/app/page.tsx",
+                            lineNumber: 184,
+                            columnNumber: 11
+                        }, this)
+                    ]
+                }, void 0, true, {
+                    fileName: "[project]/src/app/page.tsx",
+                    lineNumber: 139,
+                    columnNumber: 9
+                }, this),
+                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("aside", {
+                    className: "sidebar",
+                    children: [
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ParticipationSidebar$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["ParticipationSidebar"], {}, void 0, false, {
+                            fileName: "[project]/src/app/page.tsx",
+                            lineNumber: 205,
+                            columnNumber: 11
+                        }, this),
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                            className: "actions",
+                            style: {
+                                marginTop: 'auto',
+                                paddingTop: '20px',
+                                position: 'relative'
+                            },
+                            children: [
+                                showShareOptions && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                    style: {
+                                        position: 'absolute',
+                                        bottom: '130px',
+                                        left: 0,
+                                        right: 0,
+                                        background: 'white',
+                                        border: '1px solid #ddd',
+                                        borderRadius: '8px',
+                                        padding: '10px',
+                                        boxShadow: '0 -4px 10px rgba(0,0,0,0.1)',
+                                        zIndex: 100
+                                    },
+                                    children: [
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                            onClick: handleSaveImage,
+                                            style: shareItemStyle,
+                                            children: activeQuarterId === 0 ? '전체 라인업 저장' : '현재 쿼터 저장'
+                                        }, void 0, false, {
+                                            fileName: "[project]/src/app/page.tsx",
+                                            lineNumber: 213,
+                                            columnNumber: 17
+                                        }, this),
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                            onClick: handleCopyInviteLink,
+                                            style: shareItemStyle,
+                                            children: "플레이어 초대 링크 복사"
+                                        }, void 0, false, {
+                                            fileName: "[project]/src/app/page.tsx",
+                                            lineNumber: 216,
+                                            columnNumber: 17
+                                        }, this)
+                                    ]
+                                }, void 0, true, {
+                                    fileName: "[project]/src/app/page.tsx",
+                                    lineNumber: 208,
+                                    columnNumber: 15
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                    onClick: ()=>setShowShareOptions(!showShareOptions),
+                                    style: {
+                                        ...actionButtonStyle,
+                                        background: '#1976d2',
+                                        marginBottom: '10px'
+                                    },
+                                    children: "공유 및 관리"
+                                }, void 0, false, {
+                                    fileName: "[project]/src/app/page.tsx",
+                                    lineNumber: 220,
+                                    columnNumber: 13
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                    onClick: handleAutoAssign,
+                                    style: actionButtonStyle,
+                                    children: "AI 자동 배정"
+                                }, void 0, false, {
+                                    fileName: "[project]/src/app/page.tsx",
+                                    lineNumber: 225,
+                                    columnNumber: 13
+                                }, this)
+                            ]
+                        }, void 0, true, {
+                            fileName: "[project]/src/app/page.tsx",
+                            lineNumber: 206,
+                            columnNumber: 11
+                        }, this)
+                    ]
+                }, void 0, true, {
+                    fileName: "[project]/src/app/page.tsx",
+                    lineNumber: 204,
+                    columnNumber: 9
+                }, this)
+            ]
+        }, void 0, true, {
+            fileName: "[project]/src/app/page.tsx",
+            lineNumber: 138,
+            columnNumber: 7
+        }, this)
+    }, void 0, false, {
+        fileName: "[project]/src/app/page.tsx",
+        lineNumber: 137,
+        columnNumber: 5
+    }, this);
+}
+const actionButtonStyle = {
+    width: '100%',
+    padding: '12px',
+    fontSize: '1rem',
+    cursor: 'pointer',
+    background: '#2e7d32',
+    color: 'white',
+    border: 'none',
+    borderRadius: '4px',
+    fontWeight: 'bold'
+};
+const shareItemStyle = {
+    width: '100%',
+    padding: '10px',
+    fontSize: '0.9rem',
+    cursor: 'pointer',
+    background: 'none',
+    border: 'none',
+    borderBottom: '1px solid #eee',
+    textAlign: 'left',
+    display: 'block'
+};
 }),
 ];
 

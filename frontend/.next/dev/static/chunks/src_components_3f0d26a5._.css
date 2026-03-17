@@ -158,12 +158,27 @@
 }
 
 .ParticipationSidebar-module__8ZyBCG__playerInfo {
+  flex-direction: column;
   flex: 1;
+  gap: 2px;
+  display: flex;
+}
+
+.ParticipationSidebar-module__8ZyBCG__playerName {
+  color: #333;
+  font-size: .95rem;
+  font-weight: bold;
+}
+
+.ParticipationSidebar-module__8ZyBCG__playerPosition {
+  color: #888;
+  font-size: .75rem;
 }
 
 .ParticipationSidebar-module__8ZyBCG__playStats {
   color: #2e7d32;
-  font-size: .85rem;
+  white-space: nowrap;
+  font-size: .8rem;
   font-weight: bold;
 }
 

@@ -18,22 +18,26 @@
 ## 3. Development History (개발 이력)
 *실제로 구현 완료된 기술적 작업 내역입니다.*
 
-### 📅 2026-03-17 (Initial Sprint)
+### 📅 2026-03-17 (Initial Sprint & UX Overhaul)
 - **Frontend Setup**: Next.js 14, Zustand, Vanilla CSS 환경 구축.
 - **Data Model**: `Player`, `QuarterLineup` 인터페이스 및 Zustand 스토어(`useMatchStore`) 구현.
-- **UI Layout**: 2x2 축구장 그리드 시스템 및 실시간 통계 사이드바 렌더링.
+- **UI Layout Overhaul**: 
+    - **Focused Editor**: 중앙에 대형 축구장과 측면 대기 명단을 배치하여 편집 효율성 극대화.
+    - **Overall View**: 1~4쿼터를 한눈에 확인하고 캡처할 수 있는 '전체 보기' 모드 신설.
+    - **Bottom Navigation**: 쿼터 전환 탭을 하단으로 이동하여 조작성 향상.
 - **D&D Interaction**: `dnd-kit`을 이용한 선수 배정 및 포지션 스왑(Swap) 로직 완성.
 - **Backend AI**: FastAPI 서버 구축 및 공정성 기반 자동 배정 알고리즘 연동 완료.
-- **Phase 6 Integration**: 
+- **Phase 6 & 8 Integration**: 
     - 초대 링크 기반 플레이어 등록 페이지 구현 (이름/포지션 선택).
     - 등록 후 메인 페이지 리다이렉트 및 실시간 데이터 폴링(5s) 연동.
     - AI 배정 시 최소 11명 인원 검증 로직 추가.
     - Pravatar API를 활용한 랜덤 프로필 이미지 시스템 도입.
-- **Bug Fix**: 모듈 형식 mismatch 해결, 사이드바 레이아웃 고정, Next.js 비동기 params 에러 수정.
+    - **Image Export**: 현재 뷰에 따른 지능형 이미지 저장(개별/전체) 기능 구현.
+- **Bug Fix**: ESM 모듈 에러 수정, 사이드바 버튼 고정, Next.js 비동기 params 대응, 문법 에러(Syntax Error) 수정 완료.
 
 ## 4. Current Implementation Status
-- **Current Phase**: Phase 6 & 8 (Partially) Complete
-- **Status**: 실시간 선수 모집 및 이미지 저장, AI 배정 기능이 통합된 프로토타입 완성.
+- **Current Phase**: Phase 6 & 8 Complete
+- **Status**: 실시간 모집, 집중 편집, 전체 라인업 공유가 가능한 풀스택 프로토타입 완성.
 
 ## 5. Future Strategic Roadmap (Phase 5 ~ 8)
 

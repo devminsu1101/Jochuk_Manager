@@ -2,6 +2,8 @@ import { create } from 'zustand';
 import { Player, QuarterLineup, MatchState } from '@/types';
 
 interface MatchStore extends MatchState {
+  activeQuarterId: number;
+  setActiveQuarterId: (id: number) => void;
   setPlayers: (players: Player[]) => void;
   updateLineup: (quarterId: number, position: string, playerId: string | null) => void;
   setFormation: (quarterId: number, formation: string) => void;
@@ -9,11 +11,14 @@ interface MatchStore extends MatchState {
 
 export const useMatchStore = create<MatchStore>((set) => ({
   players: [],
+  activeQuarterId: 1, // 기본값 1쿼터
   lineups: [1, 2, 3, 4].map((id) => ({
     quarterId: id,
     formation: '4-4-2',
     assignedPlayers: {},
   })),
+
+  setActiveQuarterId: (id) => set({ activeQuarterId: id }),
 
   setPlayers: (players) => set({ players }),
 
@@ -21,10 +26,7 @@ export const useMatchStore = create<MatchStore>((set) => ({
     set((state) => ({
       lineups: state.lineups.map((lineup) => {
         if (lineup.quarterId !== quarterId) return lineup;
-
         const newAssignedPlayers = { ...lineup.assignedPlayers };
-
-        // 1. 중복 방지: 해당 선수가 이 쿼터의 다른 포지션에 있다면 제거
         if (playerId) {
           Object.keys(newAssignedPlayers).forEach((pos) => {
             if (newAssignedPlayers[pos] === playerId) {
@@ -32,14 +34,8 @@ export const useMatchStore = create<MatchStore>((set) => ({
             }
           });
         }
-
-        // 2. 새로운 포지션에 배정
         newAssignedPlayers[position] = playerId;
-
-        return {
-          ...lineup,
-          assignedPlayers: newAssignedPlayers,
-        };
+        return { ...lineup, assignedPlayers: newAssignedPlayers };
       }),
     })),
 

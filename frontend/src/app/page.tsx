@@ -6,28 +6,12 @@ import { toPng } from 'html-to-image';
 import { useMatchStore } from '@/store/useMatchStore';
 import { SoccerPitch } from '@/components/SoccerPitch';
 import { ParticipationSidebar } from '@/components/ParticipationSidebar';
-import { Player } from '@/types';
-
-const MOCK_PLAYERS: Player[] = [
-  { id: '1', name: '김민수', primaryPosition: 'ST', secondaryPositions: ['LW'], playCount: 0 },
-  { id: '2', name: '이철수', primaryPosition: 'GK', secondaryPositions: [], playCount: 0 },
-  { id: '3', name: '박영희', primaryPosition: 'CB', secondaryPositions: ['RB'], playCount: 0 },
-  { id: '4', name: '최강타', primaryPosition: 'CDM', secondaryPositions: ['CM'], playCount: 0 },
-  { id: '5', name: '손흥민', primaryPosition: 'LW', secondaryPositions: ['ST'], playCount: 0 },
-  { id: '6', name: '황희찬', primaryPosition: 'RW', secondaryPositions: ['ST'], playCount: 0 },
-  { id: '7', name: '김민재', primaryPosition: 'CB', secondaryPositions: [], playCount: 0 },
-  { id: '8', name: '이강인', primaryPosition: 'CAM', secondaryPositions: ['RW'], playCount: 0 },
-  { id: '9', name: '백승호', primaryPosition: 'CM', secondaryPositions: ['CDM'], playCount: 0 },
-  { id: '10', name: '설영우', primaryPosition: 'RB', secondaryPositions: ['LB'], playCount: 0 },
-  { id: '11', name: '김진수', primaryPosition: 'LB', secondaryPositions: ['RB'], playCount: 0 },
-  { id: '12', name: '조현우', primaryPosition: 'GK', secondaryPositions: [], playCount: 0 },
-  { id: '13', name: '황인범', primaryPosition: 'CM', secondaryPositions: ['CAM'], playCount: 0 },
-];
 
 export default function Home() {
-  const { setPlayers, updateLineup, lineups } = useMatchStore();
+  const { setPlayers, updateLineup, lineups, players, activeQuarterId, setActiveQuarterId } = useMatchStore();
   const [showShareOptions, setShowShareOptions] = useState(false);
-  const pitchContainerRef = useRef<HTMLDivElement>(null);
+  const captureRef = useRef<HTMLDivElement>(null);
+  const fullViewRef = useRef<HTMLDivElement>(null);
   
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -50,14 +34,13 @@ export default function Home() {
 
   useEffect(() => {
     fetchPlayers();
-    // 5초마다 새로운 참여자 확인 (폴링)
     const interval = setInterval(fetchPlayers, 5000);
     return () => clearInterval(interval);
   }, [setPlayers]);
 
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
-    if (!over) return;
+    if (!over || activeQuarterId === 0) return;
 
     const activeData = active.data.current;
     const overData = over.data.current as { quarterId: number, positionKey: string };
@@ -85,28 +68,29 @@ export default function Home() {
       updateLineup(targetQuarterId, targetPositionKey, playerId);
     }
   };
-const handleAutoAssign = async () => {
-  const currentPlayers = useMatchStore.getState().players;
-  if (currentPlayers.length < 11) {
-    alert(`최소 11명의 선수가 필요합니다. (현재: ${currentPlayers.length}명)`);
-    return;
-  }
 
-  try {
-    const response = await fetch('http://localhost:8000/api/auto-assign', {
-...
+  const handleAutoAssign = async () => {
+    const currentPlayers = useMatchStore.getState().players;
+    if (currentPlayers.length < 11) {
+      alert(`최소 11명의 선수가 필요합니다. (현재: ${currentPlayers.length}명)`);
+      return;
+    }
+
+    try {
+      const response = await fetch('http://localhost:8000/api/auto-assign', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          players: useMatchStore.getState().players,
+          players: currentPlayers,
           quarters: lineups.map(l => ({ quarterId: l.quarterId, formation: l.formation })),
         }),
       });
+
       if (!response.ok) throw new Error('API 호출 실패');
       const data = await response.json();
-      data.forEach((item: any) => {
+      data.forEach((item: { quarterId: number, assignedPlayers: { [pos: string]: string } }) => {
         Object.entries(item.assignedPlayers).forEach(([pos, pid]) => {
-          updateLineup(item.quarterId, pos, pid as string);
+          updateLineup(item.quarterId, pos, pid);
         });
       });
       alert('AI 자동 배정이 완료되었습니다!');
@@ -116,11 +100,17 @@ const handleAutoAssign = async () => {
   };
 
   const handleSaveImage = async () => {
-    if (pitchContainerRef.current === null) return;
+    const target = activeQuarterId === 0 ? fullViewRef.current : captureRef.current;
+    if (target === null) return;
+    
     try {
-      const dataUrl = await toPng(pitchContainerRef.current, { cacheBust: true, backgroundColor: '#e0e0e0' });
+      const dataUrl = await toPng(target, { 
+        cacheBust: true, 
+        backgroundColor: activeQuarterId === 0 ? '#eee' : '#f0f2f5' 
+      });
       const link = document.createElement('a');
-      link.download = `soccer-lineup-${new Date().getTime()}.png`;
+      const filename = activeQuarterId === 0 ? 'full-lineup' : `q${activeQuarterId}-lineup`;
+      link.download = `${filename}-${new Date().getTime()}.png`;
       link.href = dataUrl;
       link.click();
       setShowShareOptions(false);
@@ -130,23 +120,86 @@ const handleAutoAssign = async () => {
   };
 
   const handleCopyInviteLink = () => {
-    const inviteLink = `${window.location.origin}/register/match-123`; // 임시 매치 ID
+    const inviteLink = `${window.location.origin}/register/match-123`;
     navigator.clipboard.writeText(inviteLink);
     alert('초대 링크가 클립보드에 복사되었습니다!');
     setShowShareOptions(false);
   };
 
+  const getSubsForQuarter = (quarterId: number) => {
+    const lineup = lineups.find(l => l.quarterId === quarterId);
+    if (!lineup) return [];
+    const assignedIds = Object.values(lineup.assignedPlayers);
+    return players.filter(p => !assignedIds.includes(p.id));
+  };
+
   return (
     <DndContext sensors={sensors} onDragEnd={handleDragEnd}>
       <main className="main-layout">
-        <div className="editor-container" ref={pitchContainerRef}>
-          {[1, 2, 3, 4].map((q) => (
-            <div key={q} className="pitch-card">
-              <span className="pitch-title">{q}쿼터</span>
-              <SoccerPitch quarterId={q} />
+        <section className="workspace">
+          {/* 메인 영역 */}
+          {activeQuarterId === 0 ? (
+            /* [전체 보기 모드] */
+            <div className="full-view-container" ref={fullViewRef}>
+              {[1, 2, 3, 4].map(q => {
+                const subs = getSubsForQuarter(q);
+                return (
+                  <div key={q} className="mini-pitch-card">
+                    <div className="mini-pitch-box">
+                      <span className="pitch-title">{q}쿼터</span>
+                      <div style={{ transform: 'scale(0.7)', transformOrigin: 'top left', width: '143%', height: '143%', pointerEvents: 'none' }}>
+                        <SoccerPitch quarterId={q} />
+                      </div>
+                    </div>
+                    <div className="mini-subs-box">
+                      <b style={{ color: '#d32f2f' }}>대기:</b> {subs.map(p => p.name).join(', ') || '없음'}
+                    </div>
+                  </div>
+                );
+              })}
             </div>
-          ))}
-        </div>
+          ) : (
+            /* [개별 편집 모드] */
+            <div className="editor-main-view" ref={captureRef}>
+              <div className="pitch-wrapper">
+                <span className="pitch-title">{activeQuarterId}쿼터 라인업</span>
+                <SoccerPitch quarterId={activeQuarterId} />
+              </div>
+
+              <div className="subs-sidebar">
+                <h4 style={{ margin: 0, fontSize: '0.9rem', color: '#d32f2f' }}>이번 쿼터 대기 ({getSubsForQuarter(activeQuarterId).length})</h4>
+                <div style={{ overflowY: 'auto', marginTop: '10px' }}>
+                  {getSubsForQuarter(activeQuarterId).map(p => (
+                    <div key={p.id} className="mini-player-badge">
+                      {p.avatarUrl && <img src={p.avatarUrl} alt="" className="mini-avatar" />}
+                      <span>{p.name}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* 하단 쿼터 셀렉터 탭 */}
+          <div className="quarter-tabs-bottom">
+            <button 
+              className={`tab-button ${activeQuarterId === 0 ? 'full-view' : ''}`}
+              onClick={() => setActiveQuarterId(0)}
+            >
+              📊 전체 보기
+            </button>
+            <div style={{ width: '1px', height: '24px', background: '#ddd', margin: '0 10px' }} />
+            {[1, 2, 3, 4].map(q => (
+              <button 
+                key={q} 
+                className={`tab-button ${activeQuarterId === q ? 'active' : ''}`}
+                onClick={() => setActiveQuarterId(q)}
+              >
+                {q}쿼터
+              </button>
+            ))}
+          </div>
+        </section>
         
         <aside className="sidebar">
           <ParticipationSidebar />
@@ -157,7 +210,9 @@ const handleAutoAssign = async () => {
                 background: 'white', border: '1px solid #ddd', borderRadius: '8px',
                 padding: '10px', boxShadow: '0 -4px 10px rgba(0,0,0,0.1)', zIndex: 100
               }}>
-                <button onClick={handleSaveImage} style={shareItemStyle}>이미지로 저장</button>
+                <button onClick={handleSaveImage} style={shareItemStyle}>
+                  {activeQuarterId === 0 ? '전체 라인업 저장' : '현재 쿼터 저장'}
+                </button>
                 <button onClick={handleCopyInviteLink} style={shareItemStyle}>플레이어 초대 링크 복사</button>
               </div>
             )}
@@ -165,7 +220,7 @@ const handleAutoAssign = async () => {
             <button onClick={() => setShowShareOptions(!showShareOptions)} style={{ 
               ...actionButtonStyle, background: '#1976d2', marginBottom: '10px'
             }}>
-              공유하기
+              공유 및 관리
             </button>
             <button onClick={handleAutoAssign} style={actionButtonStyle}>
               AI 자동 배정
