@@ -84,7 +84,14 @@
   font-size: .8rem;
   font-weight: bold;
   display: flex;
+  overflow: hidden;
   box-shadow: 0 2px 4px #0003;
+}
+
+.SoccerPitch-module__z10E1q__nodeAvatar {
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
 }
 
 .SoccerPitch-module__z10E1q__nodeCircleEmpty {

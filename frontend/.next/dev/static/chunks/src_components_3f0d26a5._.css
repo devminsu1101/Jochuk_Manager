@@ -84,7 +84,14 @@
   font-size: .8rem;
   font-weight: bold;
   display: flex;
+  overflow: hidden;
   box-shadow: 0 2px 4px #0003;
+}
+
+.SoccerPitch-module__z10E1q__nodeAvatar {
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
 }
 
 .SoccerPitch-module__z10E1q__nodeCircleEmpty {
@@ -122,21 +129,36 @@
   background: #f9f9f9;
   border-bottom: 1px solid #eee;
   border-radius: 4px;
-  justify-content: space-between;
   align-items: center;
+  gap: 12px;
   margin-bottom: 4px;
   padding: 10px;
   display: flex;
 }
 
-.ParticipationSidebar-module__8ZyBCG__playerName {
-  font-weight: bold;
-  display: block;
+.ParticipationSidebar-module__8ZyBCG__avatarWrapper {
+  background: #e0e0e0;
+  border-radius: 50%;
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  overflow: hidden;
 }
 
-.ParticipationSidebar-module__8ZyBCG__playerPosition {
-  color: #666;
-  font-size: .75rem;
+.ParticipationSidebar-module__8ZyBCG__avatar {
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+}
+
+.ParticipationSidebar-module__8ZyBCG__avatarPlaceholder {
+  background: #ccc;
+  width: 100%;
+  height: 100%;
+}
+
+.ParticipationSidebar-module__8ZyBCG__playerInfo {
+  flex: 1;
 }
 
 .ParticipationSidebar-module__8ZyBCG__playStats {

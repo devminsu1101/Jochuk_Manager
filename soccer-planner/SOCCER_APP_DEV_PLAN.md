@@ -24,11 +24,16 @@
 - **UI Layout**: 2x2 축구장 그리드 시스템 및 실시간 통계 사이드바 렌더링.
 - **D&D Interaction**: `dnd-kit`을 이용한 선수 배정 및 포지션 스왑(Swap) 로직 완성.
 - **Backend AI**: FastAPI 서버 구축 및 공정성 기반 자동 배정 알고리즘 연동 완료.
-- **Bug Fix**: 모듈 형식 mismatch(ESM vs CJS) 해결 및 사이드바 버튼 고정 레이아웃 수정.
+- **Phase 6 Integration**: 
+    - 초대 링크 기반 플레이어 등록 페이지 구현 (이름/포지션 선택).
+    - 등록 후 메인 페이지 리다이렉트 및 실시간 데이터 폴링(5s) 연동.
+    - AI 배정 시 최소 11명 인원 검증 로직 추가.
+    - Pravatar API를 활용한 랜덤 프로필 이미지 시스템 도입.
+- **Bug Fix**: 모듈 형식 mismatch 해결, 사이드바 레이아웃 고정, Next.js 비동기 params 에러 수정.
 
 ## 4. Current Implementation Status
-- **Current Phase**: Phase 4 Complete (AI Integration)
-- **Status**: 핵심 알고리즘 및 드래그 인터랙션 작동 중. 로컬 환경 테스트 완료.
+- **Current Phase**: Phase 6 & 8 (Partially) Complete
+- **Status**: 실시간 선수 모집 및 이미지 저장, AI 배정 기능이 통합된 프로토타입 완성.
 
 ## 5. Future Strategic Roadmap (Phase 5 ~ 8)
 

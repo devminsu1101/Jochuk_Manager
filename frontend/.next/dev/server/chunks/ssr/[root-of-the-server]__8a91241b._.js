@@ -122,6 +122,7 @@ __turbopack_context__.v({
   "centerCircle": "SoccerPitch-module__z10E1q__centerCircle",
   "halfwayLine": "SoccerPitch-module__z10E1q__halfwayLine",
   "node": "SoccerPitch-module__z10E1q__node",
+  "nodeAvatar": "SoccerPitch-module__z10E1q__nodeAvatar",
   "nodeCircle": "SoccerPitch-module__z10E1q__nodeCircle",
   "nodeCircleEmpty": "SoccerPitch-module__z10E1q__nodeCircleEmpty",
   "nodeLabel": "SoccerPitch-module__z10E1q__nodeLabel",
@@ -180,7 +181,7 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$SoccerP
 ;
 ;
 ;
-const DraggablePlayerNode = ({ playerId, name, quarterId, positionKey })=>{
+const DraggablePlayerNode = ({ playerId, name, quarterId, positionKey, avatarUrl })=>{
     const { attributes, listeners, setNodeRef, transform, isDragging } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$dnd$2d$kit$2f$core$2f$dist$2f$core$2e$esm$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useDraggable"])({
         id: `node-player-${quarterId}-${positionKey}`,
         data: {
@@ -200,10 +201,18 @@ const DraggablePlayerNode = ({ playerId, name, quarterId, positionKey })=>{
         ...listeners,
         ...attributes,
         className: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$SoccerPitch$2e$module$2e$css__$5b$app$2d$ssr$5d$__$28$css__module$29$__["default"].nodeCircle,
-        children: name.substring(0, 2)
+        children: avatarUrl ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("img", {
+            src: avatarUrl,
+            alt: name,
+            className: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$SoccerPitch$2e$module$2e$css__$5b$app$2d$ssr$5d$__$28$css__module$29$__["default"].nodeAvatar
+        }, void 0, false, {
+            fileName: "[project]/src/components/DraggablePlayerNode.tsx",
+            lineNumber: 36,
+            columnNumber: 9
+        }, ("TURBOPACK compile-time value", void 0)) : name.substring(0, 2)
     }, void 0, false, {
         fileName: "[project]/src/components/DraggablePlayerNode.tsx",
-        lineNumber: 27,
+        lineNumber: 28,
         columnNumber: 5
     }, ("TURBOPACK compile-time value", void 0));
 };
@@ -288,7 +297,8 @@ const SoccerPitch = ({ quarterId })=>{
                             playerId: player.id,
                             name: player.name,
                             quarterId: quarterId,
-                            positionKey: posKey
+                            positionKey: posKey,
+                            avatarUrl: player.avatarUrl
                         }, void 0, false, {
                             fileName: "[project]/src/components/SoccerPitch.tsx",
                             lineNumber: 45,
@@ -297,7 +307,7 @@ const SoccerPitch = ({ quarterId })=>{
                             className: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$SoccerPitch$2e$module$2e$css__$5b$app$2d$ssr$5d$__$28$css__module$29$__["default"].nodeCircleEmpty
                         }, void 0, false, {
                             fileName: "[project]/src/components/SoccerPitch.tsx",
-                            lineNumber: 52,
+                            lineNumber: 53,
                             columnNumber: 15
                         }, ("TURBOPACK compile-time value", void 0)),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -305,7 +315,7 @@ const SoccerPitch = ({ quarterId })=>{
                             children: player ? player.name : posKey
                         }, void 0, false, {
                             fileName: "[project]/src/components/SoccerPitch.tsx",
-                            lineNumber: 54,
+                            lineNumber: 55,
                             columnNumber: 13
                         }, ("TURBOPACK compile-time value", void 0))
                     ]
@@ -326,11 +336,13 @@ const SoccerPitch = ({ quarterId })=>{
 "[project]/src/components/ParticipationSidebar.module.css [app-ssr] (css module)", ((__turbopack_context__) => {
 
 __turbopack_context__.v({
+  "avatar": "ParticipationSidebar-module__8ZyBCG__avatar",
+  "avatarPlaceholder": "ParticipationSidebar-module__8ZyBCG__avatarPlaceholder",
+  "avatarWrapper": "ParticipationSidebar-module__8ZyBCG__avatarWrapper",
   "playStats": "ParticipationSidebar-module__8ZyBCG__playStats",
+  "playerInfo": "ParticipationSidebar-module__8ZyBCG__playerInfo",
   "playerItem": "ParticipationSidebar-module__8ZyBCG__playerItem",
   "playerList": "ParticipationSidebar-module__8ZyBCG__playerList",
-  "playerName": "ParticipationSidebar-module__8ZyBCG__playerName",
-  "playerPosition": "ParticipationSidebar-module__8ZyBCG__playerPosition",
   "sidebarContent": "ParticipationSidebar-module__8ZyBCG__sidebarContent",
 });
 }),
@@ -348,7 +360,7 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$Partici
 ;
 ;
 ;
-const DraggablePlayer = ({ id, name, position, playCount })=>{
+const DraggablePlayer = ({ id, name, position, playCount, avatarUrl })=>{
     const { attributes, listeners, setNodeRef, transform, isDragging } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$dnd$2d$kit$2f$core$2f$dist$2f$core$2e$esm$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useDraggable"])({
         id: `player-${id}`,
         data: {
@@ -368,6 +380,28 @@ const DraggablePlayer = ({ id, name, position, playCount })=>{
         className: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ParticipationSidebar$2e$module$2e$css__$5b$app$2d$ssr$5d$__$28$css__module$29$__["default"].playerItem,
         children: [
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                className: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ParticipationSidebar$2e$module$2e$css__$5b$app$2d$ssr$5d$__$28$css__module$29$__["default"].avatarWrapper,
+                children: avatarUrl ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("img", {
+                    src: avatarUrl,
+                    alt: name,
+                    className: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ParticipationSidebar$2e$module$2e$css__$5b$app$2d$ssr$5d$__$28$css__module$29$__["default"].avatar
+                }, void 0, false, {
+                    fileName: "[project]/src/components/DraggablePlayer.tsx",
+                    lineNumber: 37,
+                    columnNumber: 11
+                }, ("TURBOPACK compile-time value", void 0)) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                    className: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ParticipationSidebar$2e$module$2e$css__$5b$app$2d$ssr$5d$__$28$css__module$29$__["default"].avatarPlaceholder
+                }, void 0, false, {
+                    fileName: "[project]/src/components/DraggablePlayer.tsx",
+                    lineNumber: 39,
+                    columnNumber: 11
+                }, ("TURBOPACK compile-time value", void 0))
+            }, void 0, false, {
+                fileName: "[project]/src/components/DraggablePlayer.tsx",
+                lineNumber: 35,
+                columnNumber: 7
+            }, ("TURBOPACK compile-time value", void 0)),
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                 className: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ParticipationSidebar$2e$module$2e$css__$5b$app$2d$ssr$5d$__$28$css__module$29$__["default"].playerInfo,
                 children: [
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -375,7 +409,7 @@ const DraggablePlayer = ({ id, name, position, playCount })=>{
                         children: name
                     }, void 0, false, {
                         fileName: "[project]/src/components/DraggablePlayer.tsx",
-                        lineNumber: 35,
+                        lineNumber: 43,
                         columnNumber: 9
                     }, ("TURBOPACK compile-time value", void 0)),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -383,13 +417,13 @@ const DraggablePlayer = ({ id, name, position, playCount })=>{
                         children: position
                     }, void 0, false, {
                         fileName: "[project]/src/components/DraggablePlayer.tsx",
-                        lineNumber: 36,
+                        lineNumber: 44,
                         columnNumber: 9
                     }, ("TURBOPACK compile-time value", void 0))
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/components/DraggablePlayer.tsx",
-                lineNumber: 34,
+                lineNumber: 42,
                 columnNumber: 7
             }, ("TURBOPACK compile-time value", void 0)),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -400,13 +434,13 @@ const DraggablePlayer = ({ id, name, position, playCount })=>{
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/components/DraggablePlayer.tsx",
-                lineNumber: 38,
+                lineNumber: 46,
                 columnNumber: 7
             }, ("TURBOPACK compile-time value", void 0))
         ]
     }, void 0, true, {
         fileName: "[project]/src/components/DraggablePlayer.tsx",
-        lineNumber: 27,
+        lineNumber: 28,
         columnNumber: 5
     }, ("TURBOPACK compile-time value", void 0));
 };
@@ -430,7 +464,6 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$Partici
 const ParticipationSidebar = ()=>{
     const players = (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$store$2f$useMatchStore$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useMatchStore"])((state)=>state.players);
     const lineups = (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$store$2f$useMatchStore$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useMatchStore"])((state)=>state.lineups);
-    // 선수별 출전 쿼터 계산
     const getPlayCount = (playerId)=>{
         let count = 0;
         lineups.forEach((lineup)=>{
@@ -451,7 +484,7 @@ const ParticipationSidebar = ()=>{
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/components/ParticipationSidebar.tsx",
-                lineNumber: 25,
+                lineNumber: 24,
                 columnNumber: 7
             }, ("TURBOPACK compile-time value", void 0)),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -462,331 +495,32 @@ const ParticipationSidebar = ()=>{
                         id: player.id,
                         name: player.name,
                         position: player.primaryPosition,
-                        playCount: count
+                        playCount: count,
+                        avatarUrl: player.avatarUrl
                     }, player.id, false, {
                         fileName: "[project]/src/components/ParticipationSidebar.tsx",
-                        lineNumber: 30,
+                        lineNumber: 29,
                         columnNumber: 13
                     }, ("TURBOPACK compile-time value", void 0));
                 })
             }, void 0, false, {
                 fileName: "[project]/src/components/ParticipationSidebar.tsx",
-                lineNumber: 26,
+                lineNumber: 25,
                 columnNumber: 7
             }, ("TURBOPACK compile-time value", void 0))
         ]
     }, void 0, true, {
         fileName: "[project]/src/components/ParticipationSidebar.tsx",
-        lineNumber: 24,
+        lineNumber: 23,
         columnNumber: 5
     }, ("TURBOPACK compile-time value", void 0));
 };
 }),
-"[project]/src/app/page.tsx [app-ssr] (ecmascript)", ((__turbopack_context__) => {
-"use strict";
+"[project]/src/app/page.tsx [app-ssr] (ecmascript)", ((__turbopack_context__, module, exports) => {
 
-__turbopack_context__.s([
-    "default",
-    ()=>Home
-]);
-var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react-jsx-dev-runtime.js [app-ssr] (ecmascript)");
-var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react.js [app-ssr] (ecmascript)");
-var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$dnd$2d$kit$2f$core$2f$dist$2f$core$2e$esm$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/@dnd-kit/core/dist/core.esm.js [app-ssr] (ecmascript)");
-var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$store$2f$useMatchStore$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/store/useMatchStore.ts [app-ssr] (ecmascript)");
-var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$SoccerPitch$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/components/SoccerPitch.tsx [app-ssr] (ecmascript)");
-var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ParticipationSidebar$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/components/ParticipationSidebar.tsx [app-ssr] (ecmascript)");
-'use client';
-;
-;
-;
-;
-;
-;
-const MOCK_PLAYERS = [
-    {
-        id: '1',
-        name: '김민수',
-        primaryPosition: 'ST',
-        secondaryPositions: [
-            'LW'
-        ],
-        playCount: 0
-    },
-    {
-        id: '2',
-        name: '이철수',
-        primaryPosition: 'GK',
-        secondaryPositions: [],
-        playCount: 0
-    },
-    {
-        id: '3',
-        name: '박영희',
-        primaryPosition: 'CB',
-        secondaryPositions: [
-            'RB'
-        ],
-        playCount: 0
-    },
-    {
-        id: '4',
-        name: '최강타',
-        primaryPosition: 'CDM',
-        secondaryPositions: [
-            'CM'
-        ],
-        playCount: 0
-    },
-    {
-        id: '5',
-        name: '손흥민',
-        primaryPosition: 'LW',
-        secondaryPositions: [
-            'ST'
-        ],
-        playCount: 0
-    },
-    {
-        id: '6',
-        name: '황희찬',
-        primaryPosition: 'RW',
-        secondaryPositions: [
-            'ST'
-        ],
-        playCount: 0
-    },
-    {
-        id: '7',
-        name: '김민재',
-        primaryPosition: 'CB',
-        secondaryPositions: [],
-        playCount: 0
-    },
-    {
-        id: '8',
-        name: '이강인',
-        primaryPosition: 'CAM',
-        secondaryPositions: [
-            'RW'
-        ],
-        playCount: 0
-    },
-    {
-        id: '9',
-        name: '백승호',
-        primaryPosition: 'CM',
-        secondaryPositions: [
-            'CDM'
-        ],
-        playCount: 0
-    },
-    {
-        id: '10',
-        name: '설영우',
-        primaryPosition: 'RB',
-        secondaryPositions: [
-            'LB'
-        ],
-        playCount: 0
-    },
-    {
-        id: '11',
-        name: '김진수',
-        primaryPosition: 'LB',
-        secondaryPositions: [
-            'RB'
-        ],
-        playCount: 0
-    },
-    {
-        id: '12',
-        name: '조현우',
-        primaryPosition: 'GK',
-        secondaryPositions: [],
-        playCount: 0
-    },
-    {
-        id: '13',
-        name: '황인범',
-        primaryPosition: 'CM',
-        secondaryPositions: [
-            'CAM'
-        ],
-        playCount: 0
-    }
-];
-function Home() {
-    const { setPlayers, updateLineup, lineups } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$store$2f$useMatchStore$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useMatchStore"])();
-    const sensors = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$dnd$2d$kit$2f$core$2f$dist$2f$core$2e$esm$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useSensors"])((0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$dnd$2d$kit$2f$core$2f$dist$2f$core$2e$esm$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useSensor"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$dnd$2d$kit$2f$core$2f$dist$2f$core$2e$esm$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["PointerSensor"], {
-        activationConstraint: {
-            distance: 8
-        }
-    }));
-    (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useEffect"])(()=>{
-        setPlayers(MOCK_PLAYERS);
-    }, [
-        setPlayers
-    ]);
-    const handleDragEnd = (event)=>{
-        const { active, over } = event;
-        if (!over) return;
-        const activeData = active.data.current;
-        const overData = over.data.current;
-        if (!activeData || !overData) return;
-        const playerId = activeData.playerId;
-        const { quarterId: targetQuarterId, positionKey: targetPositionKey } = overData;
-        // 노드 -> 노드 스왑인 경우
-        if (activeData.fromPositionKey) {
-            const fromQuarterId = activeData.fromQuarterId;
-            const fromPositionKey = activeData.fromPositionKey;
-            // 같은 쿼터 내에서의 스왑만 일단 지원 (필요 시 쿼터 간 이동도 가능)
-            if (fromQuarterId === targetQuarterId) {
-                const targetLineup = lineups.find((l)=>l.quarterId === targetQuarterId);
-                const playerAtTarget = targetLineup?.assignedPlayers[targetPositionKey];
-                // 1. 타겟 위치에 현재 선수 배치
-                updateLineup(targetQuarterId, targetPositionKey, playerId);
-                // 2. 원래 위치에 타겟에 있던 선수 배치 (Swap)
-                if (playerAtTarget) {
-                    updateLineup(fromQuarterId, fromPositionKey, playerAtTarget);
-                } else {
-                    updateLineup(fromQuarterId, fromPositionKey, null);
-                }
-            }
-        } else {
-            // 사이드바 -> 노드 배정
-            updateLineup(targetQuarterId, targetPositionKey, playerId);
-        }
-    };
-    const handleAutoAssign = async ()=>{
-        try {
-            const response = await fetch('http://localhost:8000/api/auto-assign', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    players: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$store$2f$useMatchStore$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useMatchStore"].getState().players,
-                    quarters: lineups.map((l)=>({
-                            quarterId: l.quarterId,
-                            formation: l.formation
-                        }))
-                })
-            });
-            if (!response.ok) throw new Error('API 호출 실패');
-            const data = await response.json();
-            // 스토어 업데이트
-            data.forEach((item)=>{
-                Object.entries(item.assignedPlayers).forEach(([pos, pid])=>{
-                    updateLineup(item.quarterId, pos, pid);
-                });
-            });
-            alert('AI 자동 배정이 완료되었습니다!');
-        } catch (error) {
-            console.error(error);
-            alert('자동 배정 중 오류가 발생했습니다. 백엔드 서버가 실행 중인지 확인하세요.');
-        }
-    };
-    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$dnd$2d$kit$2f$core$2f$dist$2f$core$2e$esm$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["DndContext"], {
-        sensors: sensors,
-        onDragEnd: handleDragEnd,
-        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("main", {
-            className: "main-layout",
-            children: [
-                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                    className: "editor-container",
-                    children: [
-                        1,
-                        2,
-                        3,
-                        4
-                    ].map((q)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                            className: "pitch-card",
-                            children: [
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                    className: "pitch-title",
-                                    children: [
-                                        q,
-                                        "쿼터"
-                                    ]
-                                }, void 0, true, {
-                                    fileName: "[project]/src/app/page.tsx",
-                                    lineNumber: 116,
-                                    columnNumber: 15
-                                }, this),
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$SoccerPitch$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["SoccerPitch"], {
-                                    quarterId: q
-                                }, void 0, false, {
-                                    fileName: "[project]/src/app/page.tsx",
-                                    lineNumber: 117,
-                                    columnNumber: 15
-                                }, this)
-                            ]
-                        }, q, true, {
-                            fileName: "[project]/src/app/page.tsx",
-                            lineNumber: 115,
-                            columnNumber: 13
-                        }, this))
-                }, void 0, false, {
-                    fileName: "[project]/src/app/page.tsx",
-                    lineNumber: 113,
-                    columnNumber: 9
-                }, this),
-                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("aside", {
-                    className: "sidebar",
-                    children: [
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ParticipationSidebar$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["ParticipationSidebar"], {}, void 0, false, {
-                            fileName: "[project]/src/app/page.tsx",
-                            lineNumber: 123,
-                            columnNumber: 11
-                        }, this),
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                            className: "actions",
-                            style: {
-                                marginTop: 'auto',
-                                paddingTop: '20px'
-                            },
-                            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                                onClick: handleAutoAssign,
-                                style: {
-                                    width: '100%',
-                                    padding: '12px',
-                                    fontSize: '1.1rem',
-                                    cursor: 'pointer',
-                                    background: '#2e7d32',
-                                    color: 'white',
-                                    border: 'none',
-                                    borderRadius: '4px',
-                                    fontWeight: 'bold'
-                                },
-                                children: "AI 자동 배정"
-                            }, void 0, false, {
-                                fileName: "[project]/src/app/page.tsx",
-                                lineNumber: 125,
-                                columnNumber: 13
-                            }, this)
-                        }, void 0, false, {
-                            fileName: "[project]/src/app/page.tsx",
-                            lineNumber: 124,
-                            columnNumber: 11
-                        }, this)
-                    ]
-                }, void 0, true, {
-                    fileName: "[project]/src/app/page.tsx",
-                    lineNumber: 122,
-                    columnNumber: 9
-                }, this)
-            ]
-        }, void 0, true, {
-            fileName: "[project]/src/app/page.tsx",
-            lineNumber: 112,
-            columnNumber: 7
-        }, this)
-    }, void 0, false, {
-        fileName: "[project]/src/app/page.tsx",
-        lineNumber: 111,
-        columnNumber: 5
-    }, this);
-}
+const e = new Error("Could not parse module '[project]/src/app/page.tsx'\n\nExpected ',', got ':'");
+e.code = 'MODULE_UNPARSABLE';
+throw e;
 }),
 ];
 

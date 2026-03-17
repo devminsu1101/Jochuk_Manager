@@ -46,7 +46,8 @@ export const SoccerPitch: React.FC<SoccerPitchProps> = ({ quarterId }) => {
                 playerId={player.id} 
                 name={player.name} 
                 quarterId={quarterId} 
-                positionKey={posKey} 
+                positionKey={posKey}
+                avatarUrl={player.avatarUrl}
               />
             ) : (
               <div className={styles.nodeCircleEmpty} />

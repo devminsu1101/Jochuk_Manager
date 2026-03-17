@@ -9,9 +9,10 @@ interface DraggablePlayerNodeProps {
   name: string;
   quarterId: number;
   positionKey: string;
+  avatarUrl?: string;
 }
 
-export const DraggablePlayerNode: React.FC<DraggablePlayerNodeProps> = ({ playerId, name, quarterId, positionKey }) => {
+export const DraggablePlayerNode: React.FC<DraggablePlayerNodeProps> = ({ playerId, name, quarterId, positionKey, avatarUrl }) => {
   const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({
     id: `node-player-${quarterId}-${positionKey}`,
     data: { playerId, fromQuarterId: quarterId, fromPositionKey: positionKey }
@@ -31,7 +32,11 @@ export const DraggablePlayerNode: React.FC<DraggablePlayerNodeProps> = ({ player
       {...attributes} 
       className={styles.nodeCircle}
     >
-      {name.substring(0, 2)}
+      {avatarUrl ? (
+        <img src={avatarUrl} alt={name} className={styles.nodeAvatar} />
+      ) : (
+        name.substring(0, 2)
+      )}
     </div>
   );
 };

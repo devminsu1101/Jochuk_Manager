@@ -9,7 +9,6 @@ export const ParticipationSidebar: React.FC = () => {
   const players = useMatchStore((state) => state.players);
   const lineups = useMatchStore((state) => state.lineups);
 
-  // 선수별 출전 쿼터 계산
   const getPlayCount = (playerId: string) => {
     let count = 0;
     lineups.forEach((lineup) => {
@@ -33,6 +32,7 @@ export const ParticipationSidebar: React.FC = () => {
               name={player.name}
               position={player.primaryPosition}
               playCount={count}
+              avatarUrl={player.avatarUrl}
             />
           );
         })}

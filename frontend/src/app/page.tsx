@@ -1,7 +1,8 @@
 'use client';
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { DndContext, DragEndEvent, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
+import { toPng } from 'html-to-image';
 import { useMatchStore } from '@/store/useMatchStore';
 import { SoccerPitch } from '@/components/SoccerPitch';
 import { ParticipationSidebar } from '@/components/ParticipationSidebar';
@@ -25,6 +26,8 @@ const MOCK_PLAYERS: Player[] = [
 
 export default function Home() {
   const { setPlayers, updateLineup, lineups } = useMatchStore();
+  const [showShareOptions, setShowShareOptions] = useState(false);
+  const pitchContainerRef = useRef<HTMLDivElement>(null);
   
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -34,8 +37,22 @@ export default function Home() {
     })
   );
 
+  const fetchPlayers = async () => {
+    try {
+      const response = await fetch('http://localhost:8000/api/matches/match-123/players');
+      if (!response.ok) throw new Error('선수 목록 가져오기 실패');
+      const data = await response.json();
+      setPlayers(data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   useEffect(() => {
-    setPlayers(MOCK_PLAYERS);
+    fetchPlayers();
+    // 5초마다 새로운 참여자 확인 (폴링)
+    const interval = setInterval(fetchPlayers, 5000);
+    return () => clearInterval(interval);
   }, [setPlayers]);
 
   const handleDragEnd = (event: DragEndEvent) => {
@@ -50,20 +67,14 @@ export default function Home() {
     const playerId = activeData.playerId;
     const { quarterId: targetQuarterId, positionKey: targetPositionKey } = overData;
 
-    // 노드 -> 노드 스왑인 경우
     if (activeData.fromPositionKey) {
       const fromQuarterId = activeData.fromQuarterId;
       const fromPositionKey = activeData.fromPositionKey;
 
-      // 같은 쿼터 내에서의 스왑만 일단 지원 (필요 시 쿼터 간 이동도 가능)
       if (fromQuarterId === targetQuarterId) {
         const targetLineup = lineups.find(l => l.quarterId === targetQuarterId);
         const playerAtTarget = targetLineup?.assignedPlayers[targetPositionKey];
-
-        // 1. 타겟 위치에 현재 선수 배치
         updateLineup(targetQuarterId, targetPositionKey, playerId);
-        
-        // 2. 원래 위치에 타겟에 있던 선수 배치 (Swap)
         if (playerAtTarget) {
           updateLineup(fromQuarterId, fromPositionKey, playerAtTarget);
         } else {
@@ -71,46 +82,64 @@ export default function Home() {
         }
       }
     } else {
-      // 사이드바 -> 노드 배정
       updateLineup(targetQuarterId, targetPositionKey, playerId);
     }
   };
+const handleAutoAssign = async () => {
+  const currentPlayers = useMatchStore.getState().players;
+  if (currentPlayers.length < 11) {
+    alert(`최소 11명의 선수가 필요합니다. (현재: ${currentPlayers.length}명)`);
+    return;
+  }
 
-  const handleAutoAssign = async () => {
-    try {
-      const response = await fetch('http://localhost:8000/api/auto-assign', {
+  try {
+    const response = await fetch('http://localhost:8000/api/auto-assign', {
+...
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           players: useMatchStore.getState().players,
           quarters: lineups.map(l => ({ quarterId: l.quarterId, formation: l.formation })),
         }),
       });
-
       if (!response.ok) throw new Error('API 호출 실패');
-      
       const data = await response.json();
-      
-      // 스토어 업데이트
-      data.forEach((item: { quarterId: number, assignedPlayers: { [pos: string]: string } }) => {
+      data.forEach((item: any) => {
         Object.entries(item.assignedPlayers).forEach(([pos, pid]) => {
-          updateLineup(item.quarterId, pos, pid);
+          updateLineup(item.quarterId, pos, pid as string);
         });
       });
-
       alert('AI 자동 배정이 완료되었습니다!');
     } catch (error) {
-      console.error(error);
-      alert('자동 배정 중 오류가 발생했습니다. 백엔드 서버가 실행 중인지 확인하세요.');
+      alert('자동 배정 중 오류가 발생했습니다.');
     }
+  };
+
+  const handleSaveImage = async () => {
+    if (pitchContainerRef.current === null) return;
+    try {
+      const dataUrl = await toPng(pitchContainerRef.current, { cacheBust: true, backgroundColor: '#e0e0e0' });
+      const link = document.createElement('a');
+      link.download = `soccer-lineup-${new Date().getTime()}.png`;
+      link.href = dataUrl;
+      link.click();
+      setShowShareOptions(false);
+    } catch (err) {
+      alert('이미지 저장 중 오류가 발생했습니다.');
+    }
+  };
+
+  const handleCopyInviteLink = () => {
+    const inviteLink = `${window.location.origin}/register/match-123`; // 임시 매치 ID
+    navigator.clipboard.writeText(inviteLink);
+    alert('초대 링크가 클립보드에 복사되었습니다!');
+    setShowShareOptions(false);
   };
 
   return (
     <DndContext sensors={sensors} onDragEnd={handleDragEnd}>
       <main className="main-layout">
-        <div className="editor-container">
+        <div className="editor-container" ref={pitchContainerRef}>
           {[1, 2, 3, 4].map((q) => (
             <div key={q} className="pitch-card">
               <span className="pitch-title">{q}쿼터</span>
@@ -121,21 +150,24 @@ export default function Home() {
         
         <aside className="sidebar">
           <ParticipationSidebar />
-          <div className="actions" style={{ marginTop: 'auto', paddingTop: '20px' }}>
-            <button 
-              onClick={handleAutoAssign}
-              style={{ 
-                width: '100%', 
-                padding: '12px', 
-                fontSize: '1.1rem', 
-                cursor: 'pointer',
-                background: '#2e7d32',
-                color: 'white',
-                border: 'none',
-                borderRadius: '4px',
-                fontWeight: 'bold'
-              }}
-            >
+          <div className="actions" style={{ marginTop: 'auto', paddingTop: '20px', position: 'relative' }}>
+            {showShareOptions && (
+              <div style={{
+                position: 'absolute', bottom: '130px', left: 0, right: 0,
+                background: 'white', border: '1px solid #ddd', borderRadius: '8px',
+                padding: '10px', boxShadow: '0 -4px 10px rgba(0,0,0,0.1)', zIndex: 100
+              }}>
+                <button onClick={handleSaveImage} style={shareItemStyle}>이미지로 저장</button>
+                <button onClick={handleCopyInviteLink} style={shareItemStyle}>플레이어 초대 링크 복사</button>
+              </div>
+            )}
+            
+            <button onClick={() => setShowShareOptions(!showShareOptions)} style={{ 
+              ...actionButtonStyle, background: '#1976d2', marginBottom: '10px'
+            }}>
+              공유하기
+            </button>
+            <button onClick={handleAutoAssign} style={actionButtonStyle}>
               AI 자동 배정
             </button>
           </div>
@@ -144,3 +176,13 @@ export default function Home() {
     </DndContext>
   );
 }
+
+const actionButtonStyle: React.CSSProperties = {
+  width: '100%', padding: '12px', fontSize: '1rem', cursor: 'pointer',
+  background: '#2e7d32', color: 'white', border: 'none', borderRadius: '4px', fontWeight: 'bold'
+};
+
+const shareItemStyle: React.CSSProperties = {
+  width: '100%', padding: '10px', fontSize: '0.9rem', cursor: 'pointer',
+  background: 'none', border: 'none', borderBottom: '1px solid #eee', textAlign: 'left', display: 'block'
+};

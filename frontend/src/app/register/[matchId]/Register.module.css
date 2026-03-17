@@ -1,0 +1,90 @@
+.container {
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 40px 20px;
+  font-family: sans-serif;
+}
+
+.matchIdBadge {
+  display: inline-block;
+  background: #e0e0e0;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  color: #666;
+  margin-top: 8px;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+.label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 1rem;
+  box-sizing: border-box;
+}
+
+.buttonGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+  gap: 8px;
+}
+
+.posButton {
+  padding: 10px 0;
+  border: 1px solid #ddd;
+  background: white;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.2s;
+}
+
+.posButton:hover {
+  background: #f0f0f0;
+}
+
+.active {
+  background: #1976d2 !important;
+  color: white !important;
+  border-color: #1976d2 !important;
+}
+
+.activeSecondary {
+  background: #e3f2fd !important;
+  color: #1976d2 !important;
+  border-color: #1976d2 !important;
+}
+
+.posButton:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.submitButton {
+  margin-top: 20px;
+  padding: 15px;
+  background: #2e7d32;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.submitButton:hover {
+  background: #1b5e20;
+}

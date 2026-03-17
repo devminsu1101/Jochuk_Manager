@@ -9,9 +9,10 @@ interface DraggablePlayerProps {
   name: string;
   position: string;
   playCount: number;
+  avatarUrl?: string;
 }
 
-export const DraggablePlayer: React.FC<DraggablePlayerProps> = ({ id, name, position, playCount }) => {
+export const DraggablePlayer: React.FC<DraggablePlayerProps> = ({ id, name, position, playCount, avatarUrl }) => {
   const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({
     id: `player-${id}`,
     data: { playerId: id }
@@ -31,6 +32,13 @@ export const DraggablePlayer: React.FC<DraggablePlayerProps> = ({ id, name, posi
       {...attributes} 
       className={styles.playerItem}
     >
+      <div className={styles.avatarWrapper}>
+        {avatarUrl ? (
+          <img src={avatarUrl} alt={name} className={styles.avatar} />
+        ) : (
+          <div className={styles.avatarPlaceholder} />
+        )}
+      </div>
       <div className={styles.playerInfo}>
         <span className={styles.playerName}>{name}</span>
         <span className={styles.playerPosition}>{position}</span>

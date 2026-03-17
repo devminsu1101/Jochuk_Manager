@@ -5,18 +5,19 @@ export interface Player {
   name: string;
   primaryPosition: Position;
   secondaryPositions: Position[];
-  playCount: number; // 누적 참여 쿼터 수
+  playCount: number;
+  avatarUrl?: string; // 프로필 이미지 추가
 }
 
 export interface QuarterLineup {
   quarterId: number;
   formation: string;
   assignedPlayers: {
-    [position: string]: string | null; // positionKey: playerId
+    [position: string]: string | null;
   };
 }
 
 export interface MatchState {
   players: Player[];
-  lineups: QuarterLineup[]; // 1~4 쿼터
+  lineups: QuarterLineup[];
 }
