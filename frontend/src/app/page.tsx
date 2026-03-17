@@ -77,8 +77,34 @@ export default function Home() {
   };
 
   const handleAutoAssign = async () => {
-    alert('AI 자동 배정 로직(백엔드)을 연결 중입니다.');
-    // TODO: Phase 4 FastAPI 연동
+    try {
+      const response = await fetch('http://localhost:8000/api/auto-assign', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          players: useMatchStore.getState().players,
+          quarters: lineups.map(l => ({ quarterId: l.quarterId, formation: l.formation })),
+        }),
+      });
+
+      if (!response.ok) throw new Error('API 호출 실패');
+      
+      const data = await response.json();
+      
+      // 스토어 업데이트
+      data.forEach((item: { quarterId: number, assignedPlayers: { [pos: string]: string } }) => {
+        Object.entries(item.assignedPlayers).forEach(([pos, pid]) => {
+          updateLineup(item.quarterId, pos, pid);
+        });
+      });
+
+      alert('AI 자동 배정이 완료되었습니다!');
+    } catch (error) {
+      console.error(error);
+      alert('자동 배정 중 오류가 발생했습니다. 백엔드 서버가 실행 중인지 확인하세요.');
+    }
   };
 
   return (

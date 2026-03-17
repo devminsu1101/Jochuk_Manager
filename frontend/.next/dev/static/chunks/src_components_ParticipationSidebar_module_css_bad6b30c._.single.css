@@ -1,13 +1,15 @@
 /* [project]/src/components/ParticipationSidebar.module.css [app-client] (css) */
 .ParticipationSidebar-module__8ZyBCG__sidebarContent {
   flex-direction: column;
-  height: 100%;
+  flex: 1;
   display: flex;
+  overflow: hidden;
 }
 
 .ParticipationSidebar-module__8ZyBCG__playerList {
   flex: 1;
   margin-top: 10px;
+  padding-right: 5px;
   overflow-y: auto;
 }
 

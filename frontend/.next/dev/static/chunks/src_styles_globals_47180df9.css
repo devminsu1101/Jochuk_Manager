@@ -33,6 +33,7 @@ body {
 
 .sidebar {
   width: var(--sidebar-width);
+  box-sizing: border-box;
   background: #fff;
   border-left: 1px solid #ddd;
   flex-direction: column;
