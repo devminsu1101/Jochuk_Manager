@@ -9,9 +9,10 @@ import styles from './SoccerPitch.module.css';
 
 interface SoccerPitchProps {
   quarterId: number;
+  isMini?: boolean; // 미니 뷰 여부 추가
 }
 
-export const SoccerPitch: React.FC<SoccerPitchProps> = ({ quarterId }) => {
+export const SoccerPitch: React.FC<SoccerPitchProps> = ({ quarterId, isMini = false }) => {
   const lineup = useMatchStore((state) => 
     state.lineups.find((l) => l.quarterId === quarterId)
   );
@@ -22,7 +23,7 @@ export const SoccerPitch: React.FC<SoccerPitchProps> = ({ quarterId }) => {
   const formationData = FORMATIONS[lineup.formation] || FORMATIONS['4-4-2'];
 
   return (
-    <div className={styles.pitch}>
+    <div className={`${styles.pitch} ${isMini ? styles.miniPitch : ''}`}>
       <div className={styles.pitchLines}>
         <div className={styles.centerCircle} />
         <div className={styles.penaltyAreaTop} />
@@ -48,11 +49,13 @@ export const SoccerPitch: React.FC<SoccerPitchProps> = ({ quarterId }) => {
                 quarterId={quarterId} 
                 positionKey={posKey}
                 avatarUrl={player.avatarUrl}
+                isMini={isMini} // 노드에도 미니 여부 전달
               />
             ) : (
               <div className={styles.nodeCircleEmpty} />
             )}
-            <span className={styles.nodeLabel}>{player ? player.name : posKey}</span>
+            {!isMini && <span className={styles.nodeLabel}>{player ? player.name : posKey}</span>}
+            {isMini && player && <span className={styles.nodeLabelMini}>{player.name}</span>}
           </DroppableNode>
         );
       })}

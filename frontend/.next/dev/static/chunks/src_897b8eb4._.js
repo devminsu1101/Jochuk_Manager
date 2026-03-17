@@ -123,11 +123,13 @@ if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelper
 __turbopack_context__.v({
   "centerCircle": "SoccerPitch-module__z10E1q__centerCircle",
   "halfwayLine": "SoccerPitch-module__z10E1q__halfwayLine",
+  "miniPitch": "SoccerPitch-module__z10E1q__miniPitch",
   "node": "SoccerPitch-module__z10E1q__node",
-  "nodeAvatar": "SoccerPitch-module__z10E1q__nodeAvatar",
   "nodeCircle": "SoccerPitch-module__z10E1q__nodeCircle",
   "nodeCircleEmpty": "SoccerPitch-module__z10E1q__nodeCircleEmpty",
+  "nodeCircleMini": "SoccerPitch-module__z10E1q__nodeCircleMini",
   "nodeLabel": "SoccerPitch-module__z10E1q__nodeLabel",
+  "nodeLabelMini": "SoccerPitch-module__z10E1q__nodeLabelMini",
   "nodeOver": "SoccerPitch-module__z10E1q__nodeOver",
   "penaltyAreaBottom": "SoccerPitch-module__z10E1q__penaltyAreaBottom",
   "penaltyAreaTop": "SoccerPitch-module__z10E1q__penaltyAreaTop",
@@ -197,7 +199,7 @@ var _s = __turbopack_context__.k.signature();
 'use client';
 ;
 ;
-const DraggablePlayerNode = ({ playerId, name, quarterId, positionKey, avatarUrl })=>{
+const DraggablePlayerNode = ({ playerId, name, quarterId, positionKey, avatarUrl, isMini = false })=>{
     _s();
     const { attributes, listeners, setNodeRef, transform, isDragging } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$dnd$2d$kit$2f$core$2f$dist$2f$core$2e$esm$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useDraggable"])({
         id: `node-player-${quarterId}-${positionKey}`,
@@ -205,31 +207,42 @@ const DraggablePlayerNode = ({ playerId, name, quarterId, positionKey, avatarUrl
             playerId,
             fromQuarterId: quarterId,
             fromPositionKey: positionKey
-        }
+        },
+        disabled: isMini // 미니 뷰에서는 드래그 비활성화
     });
     const style = transform ? {
         transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,
         opacity: isDragging ? 0.5 : 1,
         zIndex: 999
     } : undefined;
+    const nodeClass = isMini ? __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$SoccerPitch$2e$module$2e$css__$5b$app$2d$client$5d$__$28$css__module$29$__["default"].nodeCircleMini : __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$SoccerPitch$2e$module$2e$css__$5b$app$2d$client$5d$__$28$css__module$29$__["default"].nodeCircle;
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
         ref: setNodeRef,
         style: style,
-        ...listeners,
-        ...attributes,
-        className: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$SoccerPitch$2e$module$2e$css__$5b$app$2d$client$5d$__$28$css__module$29$__["default"].nodeCircle,
+        ...isMini ? {} : listeners,
+        ...isMini ? {} : attributes,
+        className: nodeClass,
         children: avatarUrl ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("img", {
             src: avatarUrl,
             alt: name,
             className: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$SoccerPitch$2e$module$2e$css__$5b$app$2d$client$5d$__$28$css__module$29$__["default"].nodeAvatar
         }, void 0, false, {
             fileName: "[project]/src/components/DraggablePlayerNode.tsx",
-            lineNumber: 36,
+            lineNumber: 42,
             columnNumber: 9
-        }, ("TURBOPACK compile-time value", void 0)) : name.substring(0, 2)
+        }, ("TURBOPACK compile-time value", void 0)) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+            style: {
+                fontSize: isMini ? '0.5rem' : '0.8rem'
+            },
+            children: name.substring(0, 2)
+        }, void 0, false, {
+            fileName: "[project]/src/components/DraggablePlayerNode.tsx",
+            lineNumber: 44,
+            columnNumber: 9
+        }, ("TURBOPACK compile-time value", void 0))
     }, void 0, false, {
         fileName: "[project]/src/components/DraggablePlayerNode.tsx",
-        lineNumber: 28,
+        lineNumber: 34,
         columnNumber: 5
     }, ("TURBOPACK compile-time value", void 0));
 };
@@ -266,7 +279,7 @@ var _s = __turbopack_context__.k.signature();
 ;
 ;
 ;
-const SoccerPitch = ({ quarterId })=>{
+const SoccerPitch = ({ quarterId, isMini = false })=>{
     _s();
     const lineup = (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$store$2f$useMatchStore$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useMatchStore"])({
         "SoccerPitch.useMatchStore[lineup]": (state)=>state.lineups.find({
@@ -279,7 +292,7 @@ const SoccerPitch = ({ quarterId })=>{
     if (!lineup) return null;
     const formationData = __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$constants$2f$formations$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["FORMATIONS"][lineup.formation] || __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$constants$2f$formations$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["FORMATIONS"]['4-4-2'];
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-        className: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$SoccerPitch$2e$module$2e$css__$5b$app$2d$client$5d$__$28$css__module$29$__["default"].pitch,
+        className: `${__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$SoccerPitch$2e$module$2e$css__$5b$app$2d$client$5d$__$28$css__module$29$__["default"].pitch} ${isMini ? __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$SoccerPitch$2e$module$2e$css__$5b$app$2d$client$5d$__$28$css__module$29$__["default"].miniPitch : ''}`,
         children: [
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                 className: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$SoccerPitch$2e$module$2e$css__$5b$app$2d$client$5d$__$28$css__module$29$__["default"].pitchLines,
@@ -288,34 +301,34 @@ const SoccerPitch = ({ quarterId })=>{
                         className: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$SoccerPitch$2e$module$2e$css__$5b$app$2d$client$5d$__$28$css__module$29$__["default"].centerCircle
                     }, void 0, false, {
                         fileName: "[project]/src/components/SoccerPitch.tsx",
-                        lineNumber: 27,
+                        lineNumber: 28,
                         columnNumber: 9
                     }, ("TURBOPACK compile-time value", void 0)),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                         className: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$SoccerPitch$2e$module$2e$css__$5b$app$2d$client$5d$__$28$css__module$29$__["default"].penaltyAreaTop
                     }, void 0, false, {
                         fileName: "[project]/src/components/SoccerPitch.tsx",
-                        lineNumber: 28,
+                        lineNumber: 29,
                         columnNumber: 9
                     }, ("TURBOPACK compile-time value", void 0)),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                         className: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$SoccerPitch$2e$module$2e$css__$5b$app$2d$client$5d$__$28$css__module$29$__["default"].penaltyAreaBottom
                     }, void 0, false, {
                         fileName: "[project]/src/components/SoccerPitch.tsx",
-                        lineNumber: 29,
+                        lineNumber: 30,
                         columnNumber: 9
                     }, ("TURBOPACK compile-time value", void 0)),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                         className: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$SoccerPitch$2e$module$2e$css__$5b$app$2d$client$5d$__$28$css__module$29$__["default"].halfwayLine
                     }, void 0, false, {
                         fileName: "[project]/src/components/SoccerPitch.tsx",
-                        lineNumber: 30,
+                        lineNumber: 31,
                         columnNumber: 9
                     }, ("TURBOPACK compile-time value", void 0))
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/components/SoccerPitch.tsx",
-                lineNumber: 26,
+                lineNumber: 27,
                 columnNumber: 7
             }, ("TURBOPACK compile-time value", void 0)),
             Object.entries(formationData).map(([posKey, style])=>{
@@ -334,37 +347,46 @@ const SoccerPitch = ({ quarterId })=>{
                             name: player.name,
                             quarterId: quarterId,
                             positionKey: posKey,
-                            avatarUrl: player.avatarUrl
+                            avatarUrl: player.avatarUrl,
+                            isMini: isMini
                         }, void 0, false, {
                             fileName: "[project]/src/components/SoccerPitch.tsx",
-                            lineNumber: 45,
+                            lineNumber: 46,
                             columnNumber: 15
                         }, ("TURBOPACK compile-time value", void 0)) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                             className: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$SoccerPitch$2e$module$2e$css__$5b$app$2d$client$5d$__$28$css__module$29$__["default"].nodeCircleEmpty
                         }, void 0, false, {
                             fileName: "[project]/src/components/SoccerPitch.tsx",
-                            lineNumber: 53,
+                            lineNumber: 55,
                             columnNumber: 15
                         }, ("TURBOPACK compile-time value", void 0)),
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                        !isMini && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                             className: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$SoccerPitch$2e$module$2e$css__$5b$app$2d$client$5d$__$28$css__module$29$__["default"].nodeLabel,
                             children: player ? player.name : posKey
                         }, void 0, false, {
                             fileName: "[project]/src/components/SoccerPitch.tsx",
-                            lineNumber: 55,
-                            columnNumber: 13
+                            lineNumber: 57,
+                            columnNumber: 25
+                        }, ("TURBOPACK compile-time value", void 0)),
+                        isMini && player && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                            className: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$SoccerPitch$2e$module$2e$css__$5b$app$2d$client$5d$__$28$css__module$29$__["default"].nodeLabelMini,
+                            children: player.name
+                        }, void 0, false, {
+                            fileName: "[project]/src/components/SoccerPitch.tsx",
+                            lineNumber: 58,
+                            columnNumber: 34
                         }, ("TURBOPACK compile-time value", void 0))
                     ]
                 }, posKey, true, {
                     fileName: "[project]/src/components/SoccerPitch.tsx",
-                    lineNumber: 38,
+                    lineNumber: 39,
                     columnNumber: 11
                 }, ("TURBOPACK compile-time value", void 0));
             })
         ]
     }, void 0, true, {
         fileName: "[project]/src/components/SoccerPitch.tsx",
-        lineNumber: 25,
+        lineNumber: 26,
         columnNumber: 5
     }, ("TURBOPACK compile-time value", void 0));
 };
@@ -775,21 +797,9 @@ function Home() {
                                                     lineNumber: 149,
                                                     columnNumber: 23
                                                 }, this),
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                    style: {
-                                                        transform: 'scale(0.7)',
-                                                        transformOrigin: 'top left',
-                                                        width: '143%',
-                                                        height: '143%',
-                                                        pointerEvents: 'none'
-                                                    },
-                                                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$SoccerPitch$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["SoccerPitch"], {
-                                                        quarterId: q
-                                                    }, void 0, false, {
-                                                        fileName: "[project]/src/app/page.tsx",
-                                                        lineNumber: 151,
-                                                        columnNumber: 25
-                                                    }, this)
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$SoccerPitch$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["SoccerPitch"], {
+                                                    quarterId: q,
+                                                    isMini: true
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/app/page.tsx",
                                                     lineNumber: 150,
@@ -811,7 +821,7 @@ function Home() {
                                                     children: "대기:"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/app/page.tsx",
-                                                    lineNumber: 155,
+                                                    lineNumber: 153,
                                                     columnNumber: 23
                                                 }, this),
                                                 " ",
@@ -819,7 +829,7 @@ function Home() {
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/app/page.tsx",
-                                            lineNumber: 154,
+                                            lineNumber: 152,
                                             columnNumber: 21
                                         }, this)
                                     ]
@@ -848,20 +858,20 @@ function Home() {
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/app/page.tsx",
-                                            lineNumber: 165,
+                                            lineNumber: 163,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$SoccerPitch$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["SoccerPitch"], {
                                             quarterId: activeQuarterId
                                         }, void 0, false, {
                                             fileName: "[project]/src/app/page.tsx",
-                                            lineNumber: 166,
+                                            lineNumber: 164,
                                             columnNumber: 17
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/app/page.tsx",
-                                    lineNumber: 164,
+                                    lineNumber: 162,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -880,7 +890,7 @@ function Home() {
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/app/page.tsx",
-                                            lineNumber: 170,
+                                            lineNumber: 168,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -897,37 +907,37 @@ function Home() {
                                                             className: "mini-avatar"
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/app/page.tsx",
-                                                            lineNumber: 174,
+                                                            lineNumber: 172,
                                                             columnNumber: 39
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                             children: p.name
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/app/page.tsx",
-                                                            lineNumber: 175,
+                                                            lineNumber: 173,
                                                             columnNumber: 23
                                                         }, this)
                                                     ]
                                                 }, p.id, true, {
                                                     fileName: "[project]/src/app/page.tsx",
-                                                    lineNumber: 173,
+                                                    lineNumber: 171,
                                                     columnNumber: 21
                                                 }, this))
                                         }, void 0, false, {
                                             fileName: "[project]/src/app/page.tsx",
-                                            lineNumber: 171,
+                                            lineNumber: 169,
                                             columnNumber: 17
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/app/page.tsx",
-                                    lineNumber: 169,
+                                    lineNumber: 167,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/app/page.tsx",
-                            lineNumber: 163,
+                            lineNumber: 161,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -939,7 +949,7 @@ function Home() {
                                     children: "📊 전체 보기"
                                 }, void 0, false, {
                                     fileName: "[project]/src/app/page.tsx",
-                                    lineNumber: 185,
+                                    lineNumber: 183,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -951,7 +961,7 @@ function Home() {
                                     }
                                 }, void 0, false, {
                                     fileName: "[project]/src/app/page.tsx",
-                                    lineNumber: 191,
+                                    lineNumber: 189,
                                     columnNumber: 13
                                 }, this),
                                 [
@@ -968,13 +978,13 @@ function Home() {
                                         ]
                                     }, q, true, {
                                         fileName: "[project]/src/app/page.tsx",
-                                        lineNumber: 193,
+                                        lineNumber: 191,
                                         columnNumber: 15
                                     }, this))
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/app/page.tsx",
-                            lineNumber: 184,
+                            lineNumber: 182,
                             columnNumber: 11
                         }, this)
                     ]
@@ -988,7 +998,7 @@ function Home() {
                     children: [
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ParticipationSidebar$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["ParticipationSidebar"], {}, void 0, false, {
                             fileName: "[project]/src/app/page.tsx",
-                            lineNumber: 205,
+                            lineNumber: 203,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1019,7 +1029,7 @@ function Home() {
                                             children: activeQuarterId === 0 ? '전체 라인업 저장' : '현재 쿼터 저장'
                                         }, void 0, false, {
                                             fileName: "[project]/src/app/page.tsx",
-                                            lineNumber: 213,
+                                            lineNumber: 211,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1028,13 +1038,13 @@ function Home() {
                                             children: "플레이어 초대 링크 복사"
                                         }, void 0, false, {
                                             fileName: "[project]/src/app/page.tsx",
-                                            lineNumber: 216,
+                                            lineNumber: 214,
                                             columnNumber: 17
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/app/page.tsx",
-                                    lineNumber: 208,
+                                    lineNumber: 206,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1047,7 +1057,7 @@ function Home() {
                                     children: "공유 및 관리"
                                 }, void 0, false, {
                                     fileName: "[project]/src/app/page.tsx",
-                                    lineNumber: 220,
+                                    lineNumber: 218,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1056,19 +1066,19 @@ function Home() {
                                     children: "AI 자동 배정"
                                 }, void 0, false, {
                                     fileName: "[project]/src/app/page.tsx",
-                                    lineNumber: 225,
+                                    lineNumber: 223,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/app/page.tsx",
-                            lineNumber: 206,
+                            lineNumber: 204,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/app/page.tsx",
-                    lineNumber: 204,
+                    lineNumber: 202,
                     columnNumber: 9
                 }, this)
             ]

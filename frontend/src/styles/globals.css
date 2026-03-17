@@ -101,10 +101,11 @@ body {
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-template-rows: 1fr 1fr;
-  gap: 15px;
-  padding: 15px;
-  overflow-y: auto;
+  gap: 10px;
+  padding: 10px;
   background: #eee;
+  height: calc(100vh - 80px); /* 탭 바 높이 제외 */
+  box-sizing: border-box;
 }
 
 .mini-pitch-card {
@@ -113,13 +114,15 @@ body {
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  min-height: 0; /* 그리드 내에서 높이 압축 방지 */
 }
 
 .mini-pitch-box {
   background: var(--pitch-green);
   position: relative;
-  aspect-ratio: 4/3;
+  flex: 1; /* 가용한 높이 차지 */
   width: 100%;
+  overflow: hidden;
 }
 
 .mini-subs-box {

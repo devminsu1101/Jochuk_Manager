@@ -95,29 +95,32 @@ body {
 }
 
 .full-view-container {
+  box-sizing: border-box;
   background: #eee;
   flex: 1;
   grid-template-rows: 1fr 1fr;
   grid-template-columns: 1fr 1fr;
-  gap: 15px;
-  padding: 15px;
+  gap: 10px;
+  height: calc(100vh - 80px);
+  padding: 10px;
   display: grid;
-  overflow-y: auto;
 }
 
 .mini-pitch-card {
   background: #fff;
   border-radius: 8px;
   flex-direction: column;
+  min-height: 0;
   display: flex;
   overflow: hidden;
 }
 
 .mini-pitch-box {
   background: var(--pitch-green);
-  aspect-ratio: 4 / 3;
+  flex: 1;
   width: 100%;
   position: relative;
+  overflow: hidden;
 }
 
 .mini-subs-box {

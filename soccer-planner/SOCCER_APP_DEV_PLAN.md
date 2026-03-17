@@ -23,7 +23,7 @@
 - **Data Model**: `Player`, `QuarterLineup` 인터페이스 및 Zustand 스토어(`useMatchStore`) 구현.
 - **UI Layout Overhaul**: 
     - **Focused Editor**: 중앙에 대형 축구장과 측면 대기 명단을 배치하여 편집 효율성 극대화.
-    - **Overall View**: 1~4쿼터를 한눈에 확인하고 캡처할 수 있는 '전체 보기' 모드 신설.
+    - **Overall View (Optimized)**: 1~4쿼터를 한눈에 확인하고 캡처할 수 있는 '전체 보기' 모드 신설 및 미니 노드 UI 최적화.
     - **Bottom Navigation**: 쿼터 전환 탭을 하단으로 이동하여 조작성 향상.
 - **D&D Interaction**: `dnd-kit`을 이용한 선수 배정 및 포지션 스왑(Swap) 로직 완성.
 - **Backend AI**: FastAPI 서버 구축 및 공정성 기반 자동 배정 알고리즘 연동 완료.
@@ -32,12 +32,13 @@
     - 등록 후 메인 페이지 리다이렉트 및 실시간 데이터 폴링(5s) 연동.
     - AI 배정 시 최소 11명 인원 검증 로직 추가.
     - Pravatar API를 활용한 랜덤 프로필 이미지 시스템 도입.
-    - **Image Export**: 현재 뷰에 따른 지능형 이미지 저장(개별/전체) 기능 구현.
-- **Bug Fix**: ESM 모듈 에러 수정, 사이드바 버튼 고정, Next.js 비동기 params 대응, 문법 에러(Syntax Error) 수정 완료.
+    - **Image Export**: 현재 뷰(개별/전체)에 최적화된 지능형 이미지 저장 기능.
+- **Bug Fix**: ESM 모듈 에러 수정, 사이드바 버튼 고정, Next.js 비동기 params 대응, 전체 보기 가독성 및 잘림 현상 해결 완료.
 
 ## 4. Current Implementation Status
-- **Current Phase**: Phase 6 & 8 Complete
-- **Status**: 실시간 모집, 집중 편집, 전체 라인업 공유가 가능한 풀스택 프로토타입 완성.
+- **Current Phase**: Phase 6 & 8 Complete (Stable)
+- **Status**: 실시간 선수 모집부터 종합 라인업 공유까지 가능한 고도화된 프로토타입 완성.
+
 
 ## 5. Future Strategic Roadmap (Phase 5 ~ 8)
 

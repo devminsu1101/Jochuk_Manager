@@ -88,10 +88,38 @@
   box-shadow: 0 2px 4px #0003;
 }
 
-.SoccerPitch-module__z10E1q__nodeAvatar {
-  object-fit: cover;
-  width: 100%;
-  height: 100%;
+.SoccerPitch-module__z10E1q__nodeCircleMini {
+  background: #fff;
+  border: 1.5px solid #1b5e20;
+  border-radius: 50%;
+  justify-content: center;
+  align-items: center;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  overflow: hidden;
+  box-shadow: 0 1px 3px #0003;
+}
+
+.SoccerPitch-module__z10E1q__nodeLabelMini {
+  color: #fff;
+  white-space: nowrap;
+  background: #0009;
+  border-radius: 3px;
+  margin-top: 2px;
+  padding: 0 3px;
+  font-size: .55rem;
+}
+
+.SoccerPitch-module__z10E1q__miniPitch .SoccerPitch-module__z10E1q__pitchLines {
+  border-width: 1px;
+  margin: 5px;
+}
+
+.SoccerPitch-module__z10E1q__miniPitch .SoccerPitch-module__z10E1q__centerCircle {
+  border-width: 1px;
+  width: 40px;
+  height: 40px;
 }
 
 .SoccerPitch-module__z10E1q__nodeCircleEmpty {

@@ -147,9 +147,7 @@ export default function Home() {
                   <div key={q} className="mini-pitch-card">
                     <div className="mini-pitch-box">
                       <span className="pitch-title">{q}쿼터</span>
-                      <div style={{ transform: 'scale(0.7)', transformOrigin: 'top left', width: '143%', height: '143%', pointerEvents: 'none' }}>
-                        <SoccerPitch quarterId={q} />
-                      </div>
+                      <SoccerPitch quarterId={q} isMini={true} />
                     </div>
                     <div className="mini-subs-box">
                       <b style={{ color: '#d32f2f' }}>대기:</b> {subs.map(p => p.name).join(', ') || '없음'}
