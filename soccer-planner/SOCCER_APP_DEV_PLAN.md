@@ -3,65 +3,45 @@
 ## 1. Project Vision & Goals
 조기축구회 운영자의 고질적인 문제인 '공평한 출전 시간 배분'과 '포지션 배치'를 AI와 직관적인 UI로 해결하는 엔터프라이즈급 관리 솔루션. AI 자동 배정 로직과 드래그 앤 드랍 기반의 직관적인 UI를 결합하여 공정하고 효율적인 팀 운영을 지원합니다.
 
-## 2. Technical Stack & Architecture (Updated: 2026-03-17)
-- **Frontend**: Next.js 14+ (App Router), TypeScript, Zustand (State), dnd-kit (D&D Interaction), Vanilla CSS Modules.
-- **Backend**: FastAPI (Python 3.10+), Pydantic (Data Validation), Uvicorn (ASGI Server).
-- **Communication**: REST API (POST /api/auto-assign), CORS enabled.
+## 2. Requirement History (의사결정 이력)
+*   **Initial:** 쿼터별 라인업 생성 프로그램 개발 제안.
+*   **Refinement 1 (Fair Play):** "멀티 포지션이라고 더 뛰는 것이 아니라, 적게 뛰는 사람이 없어야 한다"는 원칙 확립. (최소 출전 시간의 상향 평준화)
+*   **Refinement 2 (GK Rule):** GK를 1순위로 선호하는 선수는 경기 운영의 특수성을 고려하여 4쿼터 내내 휴식 없이 참여(필드 또는 GK)할 수 있도록 배려.
+*   **Refinement 3 (Preference):** 명단에 나열된 포지션 중 맨 앞의 것을 '1순위 선호'로 간주하고 배정 시 최우선 가중치 부여.
+*   **Refinement 4 (Flexible Strategy):** 쿼터별로 서로 다른 포메이션(4-2-3-1, 4-4-2, 3-4-3 등)을 적용할 수 있는 가변 엔진 요구.
+*   **Refinement 5 (Tech Migration):** 초기 Python 스크립트 기반에서 Next.js(App Router) + FastAPI 풀스택 아키텍처로 전환 및 실시간 D&D 인터랙션 도입.
 
-## 3. Implementation Status (Current: Phase 4 Complete)
+## 3. Technical Stack & Architecture (Updated: 2026-03-17)
+- **Frontend**: Next.js 14, TypeScript, Zustand, dnd-kit, Vanilla CSS Modules.
+- **Backend**: FastAPI (Python), Pydantic, Uvicorn.
+- **Core Logic**: Fairness-based AI Assignment Algorithm.
 
-### ✅ Phase 1: Infra & State Management
-- Zustand 스토어(`useMatchStore`)를 통한 전역 상태 관리 구축.
-- `Player`, `QuarterLineup`, `MatchState` 등 핵심 타입 정의.
-- 동일 쿼터 내 중복 배정 방지 로직(Anti-Duplicate)이 스토어 레벨에서 보장됨.
+## 4. Implementation Status (Current: Phase 4 Complete)
 
-### ✅ Phase 2: UI Layout (Pitch & Sidebar)
-- 2x2 그리드 시스템을 통한 4개 쿼터 동시 렌더링.
-- CSS Variables 기반의 축구장 테마(Pitch Green) 적용.
-- 실시간 참여 통계 사이드바(Participation Stats) 구현.
+### ✅ Phase 1: Infra & Data Schema
+- Zustand를 이용한 전역 상태(`useMatchStore`) 및 타입 정의.
+- 동일 쿼터 내 중복 배정 방지 로직 구현.
 
-### ✅ Phase 3: Interaction (D&D & Swap)
-- `dnd-kit`을 활용한 고도화된 인터랙션.
-    - **Scenario A**: Sidebar -> Pitch (신규 배정)
-    - **Scenario B**: Pitch -> Pitch (같은 쿼터 내 위치 이동 및 선수 스왑)
-- `DroppableNode`와 `DraggablePlayerNode` 간의 데이터 전송(`playerId`, `fromPositionKey`) 처리.
+### ✅ Phase 2: UI Framework
+- 2x2 축구장 그리드 및 포지션 노드 배치 알고리즘 시각화.
+- 실시간 참여 통계 사이드바 연동.
 
-### ✅ Phase 4: AI Integration
-- FastAPI 백엔드 연동 완료.
-- **Fairness Algorithm**: 
-    1. **누적 출전 횟수(`play_count`)**가 적은 선수 우선 선발.
-    2. **포지션 카테고리 매칭** (GK, DF, MF, FW) 가중치 부여.
-    3. 1순위 선호 포지션과 차선호 포지션을 점수화하여 최적 슬롯 탐색.
+### ✅ Phase 3: Advanced Interaction
+- `dnd-kit` 기반의 드래그 앤 드랍 (사이드바 -> 노드, 노드 <-> 노드 스왑) 구현.
 
-## 4. Technical Deep Dive (For Next Developer)
+### ✅ Phase 4: AI & Backend Integration
+- FastAPI 백엔드 구축 및 공정성 알고리즘 API 연동 완료.
+- 누적 출전 횟수와 포지션 선호도를 가중치로 한 자동 배정 기능 탑재.
 
-### A. Zustand Store Structure
-```typescript
-interface MatchStore {
-  players: Player[];
-  lineups: QuarterLineup[]; // 4 quarters
-  updateLineup: (quarterId, position, playerId) => void; // Handles de-duplication
-}
-```
-`updateLineup`은 새 위치에 선수를 배정할 때, 해당 선수가 같은 쿼터의 다른 위치에 있다면 자동으로 `null` 처리하여 데이터 무결성을 유지합니다.
+## 5. Technical Deep Dive
+- **State Integrity**: `updateLineup` 함수가 사이드 이펙트를 최소화하며 선수 위치 정보를 관리.
+- **D&D Protocol**: `fromPositionKey` 유무에 따른 배정/스왑 로직 분기 처리.
+- **Fairness Logic**: `play_count` 가중치(10x)를 통해 최소 출전 시간 보장 원칙 준수.
 
-### B. D&D Data Protocol
-- `active.data.current`: 드래그 중인 선수 ID 및 시작 위치 정보.
-- `over.data.current`: 드롭 대상인 쿼터 ID 및 포지션 키 정보.
-- 스왑 시 `fromPositionKey`가 존재하면 타겟 노드의 선수와 위치를 맞바꾸는 로직이 `page.tsx`에 구현되어 있음.
-
-### C. Backend Logic (FastAPI)
-- `get_category()` 함수를 통해 세부 포지션(LCB, RCB 등)을 대분류(DF)로 그룹화하여 매칭 정확도 향상.
-- 정렬 점수: `play_count * 10 - (match_score)`. (적게 뛴 것이 가장 중요하며, 선호 포지션 일치가 차순위)
-
-## 5. Remaining Phase: Phase 5 (Refinement)
-- **UI/UX Polishing**: 
-    - 축구장 잔디 텍스처(Mowing Patterns) 추가.
-    - 노드 이동 및 AI 배정 시 애니메이션 효과(Framer Motion 등).
-    - 모바일/태블릿 반응형 레이아웃 최적화.
-- **Feature Expansion**:
-    - 포메이션 변경 기능(4-3-3, 3-5-2 등) 연동.
-    - 배정 결과 이미지로 내보내기(Share) 기능.
+## 6. Future Roadmap (Phase 5)
+- UI/UX 폴리싱 (잔디 텍스처, 애니메이션).
+- 다이나믹 포메이션 변경 시스템 구축.
+- 배정 결과 이미지 내보내기 기능.
 
 ---
-*Last Updated: 2026-03-17 by Gemini CLI*
+*Last Updated: 2026-03-17 by Gemini CLI (History Restored)*
