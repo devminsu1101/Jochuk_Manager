@@ -1,0 +1,148 @@
+{
+    "match-123": [
+        {
+            "id": "5de4b911-adff-4889-b2fb-7a6b7eb61c37",
+            "name": "손흥민",
+            "primaryPosition": "LW",
+            "secondaryPositions": [
+                "ST",
+                "RW",
+                "CF"
+            ],
+            "playCount": 0,
+            "color": "#E53935"
+        },
+        {
+            "id": "2922ef5d-ee71-457f-b2d7-3f42a179b6fa",
+            "name": "오현규",
+            "primaryPosition": "ST",
+            "secondaryPositions": [
+                "CF"
+            ],
+            "playCount": 0,
+            "color": "#D81B60"
+        },
+        {
+            "id": "73b8c570-dfe6-46d6-86a1-9907ac8ba49d",
+            "name": "배준호",
+            "primaryPosition": "LM",
+            "secondaryPositions": [
+                "AM",
+                "LW"
+            ],
+            "playCount": 0,
+            "color": "#8E24AA"
+        },
+        {
+            "id": "9f662b58-bfc9-4676-a5ea-a84728cbacce",
+            "name": "이강인",
+            "primaryPosition": "RW",
+            "secondaryPositions": [
+                "AM",
+                "RM",
+                "CF"
+            ],
+            "playCount": 0,
+            "color": "#5E35B1"
+        },
+        {
+            "id": "8e46aadf-9f6e-4019-b13b-a103dfeeedae",
+            "name": "황희찬",
+            "primaryPosition": "RW",
+            "secondaryPositions": [
+                "LW",
+                "ST"
+            ],
+            "playCount": 0,
+            "color": "#3949AB"
+        },
+        {
+            "id": "e60e4436-f69e-45ba-b228-d6edcab114e2",
+            "name": "이재성",
+            "primaryPosition": "AM",
+            "secondaryPositions": [
+                "CM",
+                "RW",
+                "LW"
+            ],
+            "playCount": 0,
+            "color": "#1E88E5"
+        },
+        {
+            "id": "cc6ab4bc-6586-4483-8151-e694eab87ff6",
+            "name": "황인범",
+            "primaryPosition": "CM",
+            "secondaryPositions": [
+                "DM",
+                "AM"
+            ],
+            "playCount": 0,
+            "color": "#039BE5"
+        },
+        {
+            "id": "6b2b018c-fb04-4999-96b9-71602b7f7ea4",
+            "name": "백승호",
+            "primaryPosition": "DM",
+            "secondaryPositions": [
+                "CM"
+            ],
+            "playCount": 0,
+            "color": "#00ACC1"
+        },
+        {
+            "id": "c1e92ee7-1d18-4911-b755-6e08409d2e95",
+            "name": "김민재",
+            "primaryPosition": "CB",
+            "secondaryPositions": [],
+            "playCount": 0,
+            "color": "#00897B"
+        },
+        {
+            "id": "561bc45e-f159-484b-9a46-fa3bf203478a",
+            "name": "조유민",
+            "primaryPosition": "CB",
+            "secondaryPositions": [
+                "DM"
+            ],
+            "playCount": 0,
+            "color": "#43A047"
+        },
+        {
+            "id": "16e69a22-35e5-4dc1-827e-1c6913dc71e6",
+            "name": "설영우",
+            "primaryPosition": "LB",
+            "secondaryPositions": [
+                "RB",
+                "LW"
+            ],
+            "playCount": 0,
+            "color": "#7CB342"
+        },
+        {
+            "id": "748a8be1-b839-4cad-b830-3aa180d40a31",
+            "name": "김문환",
+            "primaryPosition": "RB",
+            "secondaryPositions": [
+                "RM"
+            ],
+            "playCount": 0,
+            "color": "#C0CA33"
+        },
+        {
+            "id": "9125dfa7-313b-4001-a290-49d17cbe1cca",
+            "name": "조현우",
+            "primaryPosition": "GK",
+            "secondaryPositions": [],
+            "playCount": 0,
+            "color": "#FDD835"
+        },
+        {
+            "id": "8b321c01-4cde-4efb-ae7e-34948fd2810a",
+            "name": "김승규",
+            "primaryPosition": "GK",
+            "secondaryPositions": [],
+            "playCount": 0,
+            "color": "#FFB300"
+        }
+    ]
+}

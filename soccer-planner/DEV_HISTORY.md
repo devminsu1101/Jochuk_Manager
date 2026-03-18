@@ -20,3 +20,12 @@
     - `DEV_HISTORY.md` (불변 기록)
     - `REQUIREMENTS.md` (불변 기획 및 로드맵)
     - 세 문서로 분리하여 관리 효율성 및 확장성 증대.
+
+### 📅 2026-03-19 (AI Auto-Assignment Logic Overhaul)
+- **Affinity-Based Matching**: 포지션 간 '전술적 친밀도' 개념을 도입하여 단순 카테고리 매칭을 넘어선 지능형 배정 로직 구축.
+    - 좌우 측면성(Left/Right)을 엄격히 구분하여 RB가 LB보다 RM에 가깝게 배정되도록 개선.
+    - CF(센터 포워드)가 ST와 AM 양쪽 역할을 수행할 수 있도록 유연성 부여.
+- **Robust Post-Balancing Swap**: 배정 완료 후 출전 시간이 2쿼터 이상 차이 나는 선수들을 대상으로 자동 스왑 실시.
+    - 필드 플레이어 전원의 출전 시간을 3~4쿼터(14인 기준)로 균등화하는 최적화 알고리즘 적용.
+    - 골키퍼 그룹 분리를 통한 알고리즘 안정성 확보.
+- **Seed Data Generation**: 국가대표 17명(손흥민, 이강인 등) 데이터 스크립트(`seed_players.py`) 제작을 통한 로직 검증 환경 구축.
