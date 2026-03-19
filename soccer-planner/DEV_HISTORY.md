@@ -29,3 +29,16 @@
     - 필드 플레이어 전원의 출전 시간을 3~4쿼터(14인 기준)로 균등화하는 최적화 알고리즘 적용.
     - 골키퍼 그룹 분리를 통한 알고리즘 안정성 확보.
 - **Seed Data Generation**: 국가대표 17명(손흥민, 이강인 등) 데이터 스크립트(`seed_players.py`) 제작을 통한 로직 검증 환경 구축.
+
+### 📅 2026-03-19 (UI/UX Refinement & Data Sync)
+- **Data Synchronization Overhaul**:
+    - 백엔드 벌크 등록 API(`POST /api/matches/match-123/players/bulk`) 추가를 통해 샘플 데이터를 실제 DB(JSON)와 동기화.
+    - 프론트엔드 폴링(Polling) 시 데이터 유실 문제 원인 규명 및 로직 수정 완료.
+- **Player Management (CRUD)**:
+    - 사이드바 내 점 3개(⋮) 메뉴를 통한 선수 정보 **수정(PUT)** 및 **삭제(DELETE)** 기능 구현.
+    - **샘플(Sample)** 버튼: 15명의 국가대표 데이터를 백엔드에 즉시 등록.
+    - **멸종(Extinction)** 버튼: 모든 선수 및 라인업 데이터를 한 번에 초기화하는 전체 삭제 기능 구현.
+- **UX/UI Improvements**:
+    - **Loading Overlay**: 데이터 등록/삭제 시 스피너와 메시지를 포함한 로딩 상태 시각화.
+    - **Responsive Pitch**: `aspect-ratio` 및 `flex` 설정을 최적화하여 4쿼터 전체 보기 모드에서도 잘림 없는 축구장 레이아웃 구현.
+    - **Icon Layout Fix**: 선수 카드 내 점 3개 아이콘과 텍스트 간의 겹침 현상을 Flex 레이아웃으로 해결.

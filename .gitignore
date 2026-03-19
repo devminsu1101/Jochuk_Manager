@@ -1,4 +1,10 @@
-# OS / IDE
+# Next.js
+.next/
+frontend/.next/
+out/
+build/
+.next_minimal-server.js.nft.json
+.next-server.js.nft.json
 .DS_Store
 .vscode/
 .idea/

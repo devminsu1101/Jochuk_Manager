@@ -8,7 +8,7 @@ import { SoccerPitch } from '@/components/SoccerPitch';
 import { ParticipationSidebar } from '@/components/ParticipationSidebar';
 
 export default function Home() {
-  const { setPlayers, updateLineup, lineups, players, activeQuarterId, setActiveQuarterId } = useMatchStore();
+  const { setPlayers, updateLineup, lineups, players, activeQuarterId, setActiveQuarterId, isLoading } = useMatchStore();
   const [showShareOptions, setShowShareOptions] = useState(false);
   const [isCapturing, setIsCapturing] = useState(false);
   const captureRef = useRef<HTMLDivElement>(null);
@@ -145,6 +145,24 @@ export default function Home() {
   return (
     <DndContext sensors={sensors} onDragEnd={handleDragEnd}>
       <main className="main-layout">
+        {isLoading && (
+          <div style={{
+            position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
+            backgroundColor: 'rgba(255, 255, 255, 0.7)',
+            display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+            zIndex: 9999
+          }}>
+            <div className="spinner" style={{
+              width: '40px', height: '40px', border: '4px solid #f3f3f3',
+              borderTop: '4px solid #3498db', borderRadius: '50%',
+              animation: 'spin 1s linear infinite'
+            }} />
+            <p style={{ marginTop: '10px', fontWeight: 'bold', color: '#333' }}>데이터를 불러오는 중입니다...</p>
+            <style>{`
+              @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+            `}</style>
+          </div>
+        )}
         <section className="workspace">
           {activeQuarterId === 0 ? (
             <div className="full-view-container" ref={fullViewRef}>

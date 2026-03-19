@@ -65,22 +65,26 @@ body {
 .editor-main-view {
   flex: 1;
   display: flex;
-  padding: 20px;
-  gap: 20px;
+  padding: 10px;
+  gap: 15px;
   justify-content: center;
-  align-items: center;
-  overflow-y: auto;
+  align-items: center; /* 중앙 정렬 */
+  overflow: hidden;
+  height: calc(100vh - 80px);
 }
 
 .pitch-wrapper {
   flex: 1;
-  max-width: 850px;
-  aspect-ratio: 4/3;
+  max-width: 900px;
+  height: 95%; /* 쿼터 편집 모드에서는 화면 높이에 맞게 */
+  display: flex;
+  flex-direction: column;
   background: var(--pitch-green);
   border-radius: 12px;
   box-shadow: 0 10px 30px rgba(0,0,0,0.1);
   position: relative;
   overflow: hidden;
+  padding: 10px;
 }
 
 .subs-sidebar {
@@ -99,13 +103,14 @@ body {
 .full-view-container {
   flex: 1;
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: 1fr 1fr;
-  gap: 10px;
-  padding: 10px;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 15px;
+  padding: 15px;
   background: #eee;
-  height: calc(100vh - 80px); /* 탭 바 높이 제외 */
+  height: calc(100vh - 80px);
   box-sizing: border-box;
+  overflow: hidden;
 }
 
 .mini-pitch-card {
@@ -114,15 +119,16 @@ body {
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  min-height: 0; /* 그리드 내에서 높이 압축 방지 */
+  height: 100%; /* 그리드 셀 높이 전체 사용 */
 }
 
 .mini-pitch-box {
   background: var(--pitch-green);
   position: relative;
-  flex: 1; /* 가용한 높이 차지 */
+  flex: 1;
   width: 100%;
-  overflow: hidden;
+  display: flex; /* 자식인 SoccerPitch가 100% 찰 수 있도록 */
+  flex-direction: column;
 }
 
 .mini-subs-box {

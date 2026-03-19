@@ -23,6 +23,9 @@ class PlayerIn(BaseModel):
     primaryPosition: str
     secondaryPositions: List[str]
 
+class BulkPlayersIn(BaseModel):
+    players: List[PlayerIn]
+
 class QuarterConfig(BaseModel):
     quarterId: int
     formation: str
@@ -142,6 +145,70 @@ async def register_player(match_id: str, player: PlayerIn):
     matches_db[match_id].append(new_player)
     save_db(matches_db)
     return new_player
+
+@app.put("/api/matches/{match_id}/players/{player_id}")
+async def update_player(match_id: str, player_id: str, player: PlayerIn):
+    if match_id not in matches_db:
+        raise HTTPException(status_code=404, detail="매치를 찾을 수 없습니다.")
+    
+    for p in matches_db[match_id]:
+        if p["id"] == player_id:
+            p["name"] = player.name
+            p["primaryPosition"] = player.primaryPosition
+            p["secondaryPositions"] = player.secondaryPositions
+            save_db(matches_db)
+            return p
+    
+    raise HTTPException(status_code=404, detail="선수를 찾을 수 없습니다.")
+
+@app.delete("/api/matches/{match_id}/players/{player_id}")
+async def delete_player(match_id: str, player_id: str):
+    if match_id not in matches_db:
+        raise HTTPException(status_code=404, detail="매치를 찾을 수 없습니다.")
+    
+    initial_len = len(matches_db[match_id])
+    matches_db[match_id] = [p for p in matches_db[match_id] if p["id"] != player_id]
+    
+    if len(matches_db[match_id]) < initial_len:
+        save_db(matches_db)
+        return {"success": True}
+    
+    raise HTTPException(status_code=404, detail="선수를 찾을 수 없습니다.")
+
+@app.delete("/api/matches/{match_id}/players")
+async def delete_all_players(match_id: str):
+    if match_id in matches_db:
+        matches_db[match_id] = []
+        save_db(matches_db)
+        return {"success": True, "message": "모든 선수가 삭제되었습니다."}
+    raise HTTPException(status_code=404, detail="매치를 찾을 수 없습니다.")
+
+@app.post("/api/matches/{match_id}/players/bulk")
+async def register_players_bulk(match_id: str, req: BulkPlayersIn):
+    if match_id not in matches_db:
+        matches_db[match_id] = []
+    
+    new_players = []
+    used_colors = [p['color'] for p in matches_db[match_id]]
+    
+    for player in req.players:
+        available_colors = [c for c in PLAYER_COLORS if c not in used_colors]
+        color = random.choice(available_colors if available_colors else PLAYER_COLORS)
+        
+        new_player = {
+            "id": str(uuid.uuid4()),
+            "name": player.name,
+            "primaryPosition": player.primaryPosition,
+            "secondaryPositions": player.secondaryPositions,
+            "playCount": 0,
+            "color": color
+        }
+        new_players.append(new_player)
+        matches_db[match_id].append(new_player)
+        used_colors.append(color)
+        
+    save_db(matches_db)
+    return new_players
 
 @app.post("/api/auto-assign")
 async def auto_assign(req: AutoAssignRequest):
