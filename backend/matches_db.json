@@ -1,0 +1,160 @@
+{
+    "match-123": [
+        {
+            "id": "60cea880-7c04-4906-8e23-5eeb3ca3cbd8",
+            "name": "손흥민",
+            "primaryPosition": "LW",
+            "secondaryPositions": [
+                "ST",
+                "RW"
+            ],
+            "playCount": 0,
+            "color": "#D81B60"
+        },
+        {
+            "id": "d50bcd10-c087-431e-b4d9-f0b8e8168eda",
+            "name": "김민재",
+            "primaryPosition": "CB",
+            "secondaryPositions": [
+                "RCB",
+                "LCB"
+            ],
+            "playCount": 0,
+            "color": "#039BE5"
+        },
+        {
+            "id": "5399ccb9-3904-424f-ab23-8f480eab291c",
+            "name": "이강인",
+            "primaryPosition": "RW",
+            "secondaryPositions": [
+                "CAM",
+                "RM"
+            ],
+            "playCount": 0,
+            "color": "#00ACC1"
+        },
+        {
+            "id": "15d9da37-3097-4301-9931-37a4765f964e",
+            "name": "황희찬",
+            "primaryPosition": "ST",
+            "secondaryPositions": [
+                "LW",
+                "RW"
+            ],
+            "playCount": 0,
+            "color": "#757575"
+        },
+        {
+            "id": "80031390-a03c-4391-959f-2547876bf5a6",
+            "name": "황인범",
+            "primaryPosition": "CM",
+            "secondaryPositions": [
+                "CDM",
+                "CAM"
+            ],
+            "playCount": 0,
+            "color": "#FDD835"
+        },
+        {
+            "id": "ab7409da-d5d7-4548-b4a7-3c4ad36066b6",
+            "name": "이재성",
+            "primaryPosition": "CAM",
+            "secondaryPositions": [
+                "CM",
+                "LW"
+            ],
+            "playCount": 0,
+            "color": "#FB8C00"
+        },
+        {
+            "id": "9d01da05-a4b4-47af-8dc0-be341b561464",
+            "name": "박용우",
+            "primaryPosition": "CDM",
+            "secondaryPositions": [
+                "CM"
+            ],
+            "playCount": 0,
+            "color": "#00897B"
+        },
+        {
+            "id": "58e68461-3673-4e48-9183-9d47b6f2720f",
+            "name": "설영우",
+            "primaryPosition": "LB",
+            "secondaryPositions": [
+                "RB",
+                "LWB"
+            ],
+            "playCount": 0,
+            "color": "#C0CA33"
+        },
+        {
+            "id": "c7f71382-3e0c-4830-9f79-c4437308a644",
+            "name": "김영권",
+            "primaryPosition": "CB",
+            "secondaryPositions": [
+                "LCB"
+            ],
+            "playCount": 0,
+            "color": "#E53935"
+        },
+        {
+            "id": "e952b29c-8940-45de-8598-15b751f662a4",
+            "name": "정승현",
+            "primaryPosition": "CB",
+            "secondaryPositions": [
+                "RCB"
+            ],
+            "playCount": 0,
+            "color": "#3949AB"
+        },
+        {
+            "id": "9c0d3d99-721f-4995-9428-2623acc699a5",
+            "name": "조현우",
+            "primaryPosition": "GK",
+            "secondaryPositions": [],
+            "playCount": 0,
+            "color": "#43A047"
+        },
+        {
+            "id": "75db8230-1186-4286-98e2-1166b59cfd06",
+            "name": "조규성",
+            "primaryPosition": "ST",
+            "secondaryPositions": [
+                "CF"
+            ],
+            "playCount": 0,
+            "color": "#7CB342"
+        },
+        {
+            "id": "91064731-e0d2-428e-a92f-5294763f2edc",
+            "name": "정우영",
+            "primaryPosition": "RW",
+            "secondaryPositions": [
+                "LW",
+                "CAM"
+            ],
+            "playCount": 0,
+            "color": "#FFB300"
+        },
+        {
+            "id": "32ebc90b-a399-45a3-a9c2-912eee3ec376",
+            "name": "홍현석",
+            "primaryPosition": "CM",
+            "secondaryPositions": [
+                "CAM"
+            ],
+            "playCount": 0,
+            "color": "#F4511E"
+        },
+        {
+            "id": "21939a40-9d0e-4e81-895a-4b18b92ad860",
+            "name": "김태환",
+            "primaryPosition": "RB",
+            "secondaryPositions": [
+                "RWB"
+            ],
+            "playCount": 0,
+            "color": "#1E88E5"
+        }
+    ]
+}
