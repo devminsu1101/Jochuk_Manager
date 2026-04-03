@@ -4,26 +4,80 @@
 
 조기축구회 운영자의 '공평한 출전 시간 배분'과 '포지션 배치' 문제를 해결하는 축구 라인업 관리 솔루션입니다.
 
-## 🚀 주요 기능
+---
 
-### 1. 지능형 라인업 자동 배정 (AI)
-- **포지션 선호도 반영**: 1순위, 2순위 포지션을 고려한 최적의 배치.
-- **출전 시간 공평성 보정**: 모든 선수가 균등한 출전 시간을 갖도록 자동 스왑 알고리즘 적용.
-- **전술적 호환성**: 포지션 간 친밀도 및 좌우 측면성을 고려한 정교한 배치.
+## 🏛 전체 시스템 체계 (System Architecture)
 
-### 2. 드래그 앤 드롭 편집 (DnD)
-- **직관적 인터페이스**: 사이드바에서 운동장으로 선수를 드래그하여 배치.
-- **포지션 교체**: 운동장 내에 배치된 선수들끼리 드래그하여 포지션 스왑 가능.
+본 프로젝트는 **Frontend (Next.js)**와 **Backend (FastAPI)**로 구성된 분리형 아키텍처를 따릅니다.
 
-### 3. 실시간 동기화 및 관리
-- **선수 명단 관리**: 선수 정보 **수정(PUT)** 및 **삭제(DELETE)** 기능.
-- **샘플 데이터(샘플)**: 한 번의 클릭으로 15명의 선수 데이터를 즉시 생성 및 백엔드 동기화.
-- **멸종(전체 삭제)**: 모든 선수 데이터 및 라인업을 한 번에 초기화.
-- **로딩 인터페이스**: 데이터 처리 중 시각적 피드백(스피너) 제공.
+### 1. 기술 스택 (Tech Stack)
+- **Frontend**: Next.js (App Router), TypeScript, Zustand (State Management), dnd-kit (Drag & Drop), CSS Modules.
+- **Backend**: FastAPI (Python), Uvicorn (ASGI Server), Pydantic (Data Validation).
+- **Database**: JSON file-based storage (`matches_db.json`) - 프로토타입 단계의 경량화를 위해 채택.
 
-### 4. 시각화 및 공유
-- **반응형 축구장**: 해상도에 맞춰 잘림 없는 최적화된 레이아웃 제공 (4쿼터 전체 보기 지원).
-- **이미지 저장**: 생성된 라인업을 PNG 이미지로 저장하여 팀원들에게 공유.
+### 2. 시스템 구조
+- **Frontend**: 사용자 인터페이스 및 드래그 앤 드롭 로직 담당. Zustand를 통해 전역 상태 관리 및 API 통신 수행.
+- **Backend**: RESTful API 제공. 선수 정보 생성, 조회, 수정, 삭제(CRUD) 및 자동 라인업 생성 알고리즘 수행.
+
+---
+
+## 🚀 시작하기 (How to Run)
+
+### 1. Backend 실행 방법
+Backend는 Python 기반의 FastAPI로 구동됩니다.
+
+```bash
+cd backend
+
+# 1. 가상환경 생성 (최초 1회)
+python -m venv venv
+
+# 2. 가상환경 활성화
+# macOS/Linux:
+source venv/bin/activate
+# Windows:
+# .\venv\Scripts\activate
+
+# 3. 의존성 설치
+pip install -r requirements.txt
+
+# 4. 서버 실행
+uvicorn main:app --reload --port 8000
+
+# (선택 사항) 초기 샘플 데이터 생성
+# 서버 실행 중 혹은 실행 전, 아래 명령어로 국가대표 선수 데이터를 생성할 수 있습니다.
+python seed_players.py
+```
+- API 문서 확인: `http://localhost:8000/docs`
+
+### 2. Frontend 실행 방법
+Frontend는 Next.js 기반으로 구동됩니다.
+
+```bash
+cd frontend
+
+# 1. 의존성 설치
+npm install
+
+# 2. 개발 서버 실행
+npm run dev
+```
+- 접속 주소: `http://localhost:3000`
+
+---
+
+## 📋 포팅 매뉴얼 (Porting Manual)
+
+### 환경 요구 사항
+- **Node.js**: v18.0.0 이상
+- **Python**: v3.9 이상
+- **npm**: v9.0.0 이상
+
+### 주요 설정 변경
+1. **API URL 설정**: 현재 프론트엔드는 `http://localhost:8000`을 백엔드 주소로 사용합니다. 배포 환경에 따라 프론트엔드 코드 내의 API base URL을 수정해야 합니다.
+2. **CORS 설정**: `backend/main.py`의 `CORSMiddleware` 설정에서 허용할 Origin을 운영 환경의 도메인으로 제한해야 합니다.
+
+---
 
 ## 🛠 Engineering Standards
 

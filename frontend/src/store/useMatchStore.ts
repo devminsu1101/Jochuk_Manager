@@ -2,8 +2,10 @@ import { create } from 'zustand';
 import { Player, QuarterLineup, MatchState } from '@/types';
 
 interface MatchStore extends MatchState {
+  matchId: string | null;
   activeQuarterId: number;
   isLoading: boolean;
+  setMatchId: (id: string) => void;
   setActiveQuarterId: (id: number) => void;
   setPlayers: (players: Player[]) => void;
   updateLineup: (quarterId: number, position: string, playerId: string | null) => void;
@@ -15,7 +17,8 @@ interface MatchStore extends MatchState {
   deleteAllPlayers: () => Promise<void>;
 }
 
-export const useMatchStore = create<MatchStore>((set) => ({
+export const useMatchStore = create<MatchStore>((set, get) => ({
+  matchId: null,
   players: [],
   activeQuarterId: 1,
   isLoading: false,
@@ -25,6 +28,8 @@ export const useMatchStore = create<MatchStore>((set) => ({
     assignedPlayers: {},
   })),
 
+  setMatchId: (id) => set({ matchId: id }),
+
   setActiveQuarterId: (id) => set({ activeQuarterId: id }),
 
   setPlayers: (players) => set({ players }),
@@ -32,6 +37,9 @@ export const useMatchStore = create<MatchStore>((set) => ({
   setIsLoading: (loading) => set({ isLoading: loading }),
 
   addDummyPlayers: async () => {
+    const { matchId } = get();
+    if (!matchId) return;
+
     set({ isLoading: true });
     await new Promise((resolve) => setTimeout(resolve, 1500));
     
@@ -55,7 +63,7 @@ export const useMatchStore = create<MatchStore>((set) => ({
     
     try {
       const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
-      const response = await fetch(`${apiUrl}/api/matches/match-123/players/bulk`, {
+      const response = await fetch(`${apiUrl}/api/matches/${matchId}/players/bulk`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ players: dummyPlayers }),
@@ -76,9 +84,12 @@ export const useMatchStore = create<MatchStore>((set) => ({
   },
 
   updatePlayer: async (playerId, name, primaryPosition, secondaryPositions) => {
+    const { matchId } = get();
+    if (!matchId) return;
+
     try {
       const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
-      const response = await fetch(`${apiUrl}/api/matches/match-123/players/${playerId}`, {
+      const response = await fetch(`${apiUrl}/api/matches/${matchId}/players/${playerId}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name, primaryPosition, secondaryPositions }),
@@ -96,9 +107,12 @@ export const useMatchStore = create<MatchStore>((set) => ({
   },
 
   deletePlayer: async (playerId) => {
+    const { matchId } = get();
+    if (!matchId) return;
+
     try {
       const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
-      const response = await fetch(`${apiUrl}/api/matches/match-123/players/${playerId}`, {
+      const response = await fetch(`${apiUrl}/api/matches/${matchId}/players/${playerId}`, {
         method: 'DELETE',
       });
       if (!response.ok) throw new Error('선수 삭제 실패');
@@ -116,32 +130,35 @@ export const useMatchStore = create<MatchStore>((set) => ({
         }),
       }));
     } catch (error) {
-    console.error(error);
-    alert('선수 삭제 중 오류가 발생했습니다.');
+      console.error(error);
+      alert('선수 삭제 중 오류가 발생했습니다.');
     }
-    },
+  },
 
-    deleteAllPlayers: async () => {
+  deleteAllPlayers: async () => {
+    const { matchId } = get();
+    if (!matchId) return;
+
     if (!window.confirm('모든 선수와 라인업을 삭제하시겠습니까?')) return;
     try {
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
-    const response = await fetch(`${apiUrl}/api/matches/match-123/players`, {
-      method: 'DELETE',
-    });
-    if (!response.ok) throw new Error('전체 삭제 실패');
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+      const response = await fetch(`${apiUrl}/api/matches/${matchId}/players`, {
+        method: 'DELETE',
+      });
+      if (!response.ok) throw new Error('전체 삭제 실패');
 
-    set((state) => ({
-      players: [],
-      lineups: state.lineups.map((lineup) => ({
-        ...lineup,
-        assignedPlayers: {},
-      })),
-    }));
+      set((state) => ({
+        players: [],
+        lineups: state.lineups.map((lineup) => ({
+          ...lineup,
+          assignedPlayers: {},
+        })),
+      }));
     } catch (error) {
-    console.error(error);
-    alert('전체 삭제 중 오류가 발생했습니다.');
+      console.error(error);
+      alert('전체 삭제 중 오류가 발생했습니다.');
     }
-    },
+  },
 
     updateLineup: (quarterId, position, playerId) =>
 

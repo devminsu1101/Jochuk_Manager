@@ -45,7 +45,7 @@ export default function PlayerRegisterPage({ params }: { params: Promise<{ match
       if (!response.ok) throw new Error('등록 실패');
       
       alert(`${name}님, 매치 참여 등록이 완료되었습니다!`);
-      router.push('/'); 
+      router.push(`/${matchId}`); 
     } catch (error) {
       alert('등록 중 오류가 발생했습니다. 서버 상태를 확인하세요.');
     }

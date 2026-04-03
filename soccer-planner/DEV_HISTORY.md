@@ -42,3 +42,14 @@
     - **Loading Overlay**: 데이터 등록/삭제 시 스피너와 메시지를 포함한 로딩 상태 시각화.
     - **Responsive Pitch**: `aspect-ratio` 및 `flex` 설정을 최적화하여 4쿼터 전체 보기 모드에서도 잘림 없는 축구장 레이아웃 구현.
     - **Icon Layout Fix**: 선수 카드 내 점 3개 아이콘과 텍스트 간의 겹침 현상을 Flex 레이아웃으로 해결.
+
+    ### 📅 2026-04-03 (Infra & Multi-Tenancy Foundation)
+    - **Database Migration (Supabase)**:
+        - JSON 파일 기반 저장소에서 Supabase(PostgreSQL)로 데이터 레이어 전면 이전.
+        - 데이터 영속성 확보를 통해 서버 재시작 시에도 선수 및 매치 데이터 보존.
+    - **Match ID Dynamic Routing**:
+        - 하드코딩된 'match-123' 제거 및 URL 파라미터 기반 동적 라우팅(`/[matchId]`) 구현.
+        - Zustand Store 내 `matchId` 상태 관리를 통한 멀티 매치(Multi-match) 지원 기반 마련.
+    - **Security & Env Management**:
+        - Supabase API Key 및 백엔드 URL을 `.env`로 분리하여 보안 및 환경 설정 유연성 강화.
+

@@ -1,19 +1,6 @@
-# 📅 Jochuk Manager Development Roadmap (Updated 2026-03-19)
+# 📅 Jochuk Manager Development Roadmap (Updated 2026-04-03)
 
 이 문서는 QA 리포트 분석 결과를 바탕으로 서비스의 안정성과 실사용성을 확보하기 위한 최우선 과제들을 정리한 로드맵입니다.
-
----
-
-## 🚨 최우선 해결 과제 (Phase 0: Survival & Infra)
-*서비스의 근간을 흔드는 치명적인 결함 해결*
-
-- [ ] **데이터 영속성 확보 (Persistence)**:
-    - 현재의 `matches_db.json` 방식은 Vercel 배포 환경에서 서버 재시작 시 데이터가 증발함.
-    - **해결**: Supabase(PostgreSQL) 또는 MongoDB Atlas 등 외부 DB로 데이터 레이어 이전.
-- [ ] **Match ID 동적화 (Multi-Match Support)**:
-    - 하드코딩된 `match-123` 제거. URL 파라미터를 기반으로 개별 매치 데이터를 분리하여 여러 팀이 동시에 사용할 수 있도록 개선.
-- [ ] **환경 변수 보안 강화**:
-    - 프론트엔드 및 백엔드 API URL 등을 `.env`로 관리하고, 배포 환경(Vercel)에 등록.
 
 ---
 
@@ -49,13 +36,15 @@
 ---
 
 ## ✅ 완료된 항목
+- [x] **DB 연동 및 데이터 영속성 확보 (Supabase)**: 데이터 유실 방지 및 PostgreSQL 이전 (2026-04-03)
+- [x] **Match ID 동적화 (Multi-Match Support)**: URL 파라미터 기반 동적 라우팅 및 멀티 테넌시 구현 (2026-04-03)
+- [x] **환경 변수 보안 강화**: .env를 통한 API 키 및 설정 관리 (2026-04-03)
 - [x] **AI 알고리즘 개선**: 선호 포지션 가중치 및 출전 시간 공평성 보정 로직 도입 (2026-03-19)
 - [x] **Next.js 프로젝트 초기 세팅**: TypeScript 및 App Router 기반의 프론트엔드 구축.
 
 ---
 
 ### 우선순위 분석 요약
-1. **Critical (P0)**: DB 연동 (데이터 유실 방지), Match ID 동적화 (멀티 테넌트)
-2. **Urgent (P1)**: 포메이션 변경 시 증발 방지, Empty State 안내
-3. **Important (P2)**: 모바일 반응형 CSS, 쿼터 간 이동
-4. **Non-Urgent**: WebSocket 도입 (폴링으로 충분), 전체 TypeScript 마이그레이션 (이미 상당 부분 진행됨)
+1. **Urgent (P1)**: 포메이션 변경 시 증발 방지, Empty State 안내
+2. **Important (P2)**: 모바일 반응형 CSS, 쿼터 간 이동
+3. **Non-Urgent**: WebSocket 도입 (폴링으로 충분), 전체 TypeScript 마이그레이션 (이미 상당 부분 진행됨)
