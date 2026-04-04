@@ -50,6 +50,18 @@
     - **Match ID Dynamic Routing**:
         - 하드코딩된 'match-123' 제거 및 URL 파라미터 기반 동적 라우팅(`/[matchId]`) 구현.
         - Zustand Store 내 `matchId` 상태 관리를 통한 멀티 매치(Multi-match) 지원 기반 마련.
-    - **Security & Env Management**:
+        - **Security & Env Management**:
         - Supabase API Key 및 백엔드 URL을 `.env`로 분리하여 보안 및 환경 설정 유연성 강화.
 
+        ### 📅 2026-04-03 (Part 2: Discovery Hub & Platform Expansion)
+        - **Discovery Hub (Overview Page)**:
+        - 루트 페이지(`/`)를 검색 가능한 공개 매치 대시보드로 전면 개편.
+        - Lucide-react 아이콘을 활용한 세련된 UI 및 매치 리스트 카드 설계.
+        - **Match Scheduling & Management**:
+        - 매치 생성 시 제목, 날짜, 시간 정보를 입력받아 DB에 실시간 저장하는 모달 기반 흐름 구축.
+        - UUID 기반 짧은 고유 ID 발급 시스템 도입.
+        - **Backend API Expansion**:
+        - 매치 리스트 검색 필터링 및 상세 조회 엔드포인트 구현.
+        - Pydantic 모델 고도화를 통해 날짜/시간 데이터 유효성 검증 강화.
+        - **Frontend Dependency Update**:
+        - `@supabase/supabase-js`, `lucide-react` 패키지 설치를 통해 향후 Auth 연동 기반 마련.
