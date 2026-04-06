@@ -8,13 +8,17 @@ interface MatchStore extends MatchState {
   setMatchId: (id: string) => void;
   setActiveQuarterId: (id: number) => void;
   setPlayers: (players: Player[]) => void;
-  updateLineup: (quarterId: number, position: string, playerId: string | null) => void;
-  setFormation: (quarterId: number, formation: string) => void;
+  fetchLineups: (id: string) => Promise<void>;
+  fetchPlayers: () => Promise<void>;
+  saveLineups: () => Promise<void>;
+  updateLineup: (quarterId: number, position: string, playerId: string | null) => Promise<void>;
+  setFormation: (quarterId: number, formation: string) => Promise<void>;
   setIsLoading: (loading: boolean) => void;
   addDummyPlayers: () => Promise<void>;
   updatePlayer: (playerId: string, name: string, primaryPosition: string, secondaryPositions: string[]) => Promise<void>;
   deletePlayer: (playerId: string) => Promise<void>;
   deleteAllPlayers: () => Promise<void>;
+  setLineups: (lineups: QuarterLineup[]) => void;
 }
 
 export const useMatchStore = create<MatchStore>((set, get) => ({
@@ -28,13 +32,69 @@ export const useMatchStore = create<MatchStore>((set, get) => ({
     assignedPlayers: {},
   })),
 
-  setMatchId: (id) => set({ matchId: id }),
+  setMatchId: (id) => {
+    set({ matchId: id });
+    get().fetchPlayers();
+    get().fetchLineups(id);
+  },
 
   setActiveQuarterId: (id) => set({ activeQuarterId: id }),
 
   setPlayers: (players) => set({ players }),
 
   setIsLoading: (loading) => set({ isLoading: loading }),
+
+  setLineups: (lineups) => set({ lineups }),
+
+  fetchLineups: async (id) => {
+    set({ isLoading: true });
+    try {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+      const response = await fetch(`${apiUrl}/api/matches/${id}/lineups`);
+      if (response.ok) {
+        const lineups = await response.json();
+        console.log('불러온 라인업:', lineups);
+        set({ lineups });
+      }
+    } catch (error) {
+      console.error('라인업 불러오기 실패:', error);
+    } finally {
+      set({ isLoading: false });
+    }
+  },
+
+  fetchPlayers: async () => {
+    const { matchId } = get();
+    if (!matchId) return;
+    try {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+      const response = await fetch(`${apiUrl}/api/matches/${matchId}/players`);
+      if (response.ok) {
+        const players = await response.json();
+        set({ players });
+      }
+    } catch (error) {
+      console.error('선수 목록 가져오기 실패:', error);
+    }
+  },
+
+  saveLineups: async () => {
+    const { matchId, lineups } = get();
+    if (!matchId) return;
+
+    try {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+      const response = await fetch(`${apiUrl}/api/matches/${matchId}/lineups/bulk`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ lineups }),
+      });
+      if (!response.ok) throw new Error('벌크 저장 실패');
+      console.log('전체 라인업 저장 성공');
+    } catch (error) {
+      console.error('전체 라인업 저장 실패:', error);
+    }
+  },
 
   addDummyPlayers: async () => {
     const { matchId } = get();
@@ -160,8 +220,11 @@ export const useMatchStore = create<MatchStore>((set, get) => ({
     }
   },
 
-    updateLineup: (quarterId, position, playerId) =>
+  updateLineup: async (quarterId, position, playerId) => {
+    const { matchId } = get();
+    if (!matchId) return;
 
+    // 로컬 상태 즉시 업데이트
     set((state) => ({
       lineups: state.lineups.map((lineup) => {
         if (lineup.quarterId !== quarterId) return lineup;
@@ -176,12 +239,24 @@ export const useMatchStore = create<MatchStore>((set, get) => ({
         newAssignedPlayers[position] = playerId;
         return { ...lineup, assignedPlayers: newAssignedPlayers };
       }),
-    })),
+    }));
 
-  setFormation: (quarterId, formation) =>
+    // 전체 저장 호출
+    get().saveLineups();
+  },
+
+  setFormation: async (quarterId, formation) => {
+    const { matchId } = get();
+    if (!matchId) return;
+
+    // 로컬 상태 업데이트 (선수는 유지)
     set((state) => ({
       lineups: state.lineups.map((lineup) =>
-        lineup.quarterId === quarterId ? { ...lineup, formation, assignedPlayers: {} } : lineup
+        lineup.quarterId === quarterId ? { ...lineup, formation } : lineup
       ),
-    })),
+    }));
+
+    // 전체 저장 호출
+    get().saveLineups();
+  },
 }));

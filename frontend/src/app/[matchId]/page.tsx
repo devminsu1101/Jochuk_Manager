@@ -14,8 +14,10 @@ export default function MatchPage() {
   
   const { 
     setMatchId, 
-    setPlayers, 
+    fetchPlayers,
     updateLineup, 
+    setLineups,
+    saveLineups,
     lineups, 
     players, 
     activeQuarterId, 
@@ -43,24 +45,11 @@ export default function MatchPage() {
     }
   }, [matchId, setMatchId]);
 
-  const fetchPlayers = async () => {
-    if (!matchId) return;
-    try {
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
-      const response = await fetch(`${apiUrl}/api/matches/${matchId}/players`);
-      if (!response.ok) throw new Error('선수 목록 가져오기 실패');
-      const data = await response.json();
-      setPlayers(data);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
   useEffect(() => {
     fetchPlayers();
     const interval = setInterval(fetchPlayers, 5000);
     return () => clearInterval(interval);
-  }, [matchId, setPlayers]);
+  }, [matchId, fetchPlayers]);
 
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
@@ -113,13 +102,16 @@ export default function MatchPage() {
 
       if (!response.ok) throw new Error('API 호출 실패');
       const data = await response.json();
-      data.forEach((item: any) => {
-        Object.entries(item.assignedPlayers).forEach(([pos, pid]) => {
-          updateLineup(item.quarterId, pos, pid as string);
-        });
-      });
+      
+      // 1. 스토어 상태 한꺼번에 업데이트
+      setLineups(data);
+      
+      // 2. 백엔드에 벌크 저장 호출
+      await saveLineups();
+      
       alert('AI 자동 배정이 완료되었습니다!');
     } catch (error) {
+      console.error(error);
       alert('자동 배정 중 오류가 발생했습니다.');
     }
   };
