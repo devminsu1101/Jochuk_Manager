@@ -65,3 +65,16 @@
         - Pydantic 모델 고도화를 통해 날짜/시간 데이터 유효성 검증 강화.
         - **Frontend Dependency Update**:
         - `@supabase/supabase-js`, `lucide-react` 패키지 설치를 통해 향후 Auth 연동 기반 마련.
+
+
+### 📅 2026-04-06 (Backend Refactoring & Lineup Persistence)
+- **Backend Architecture Overhaul (Layered Architecture)**:
+    - `main.py` 중심의 모놀리식 구조에서 `Controller-Service-DTO-Repository` 계층형 아키텍처로 전면 리팩토링.
+    - FastAPI `APIRouter`를 활용한 도메인별(Match, Player, Lineup) 엔드포인트 분리 및 가독성 증대.
+- **Bulk Lineup Persistence & Logic Recovery**:
+    - 4개 쿼터 라인업을 한 번에 저장하는 `Bulk Save API` 구현을 통해 데이터 유실 방지 및 네트워크 부하 감소.
+    - 유실되었던 AI 자동 배정 로직(v2: Tactical Affinity & Play-count Balancing) 복구 및 `AIService` 이식.
+    - Supabase `lineups` 테이블 스키마 정규화 및 `quarter_id` 기반 유니크 제약 조건 적용.
+- **UX/UI Stability**:
+    - Trailing Slash(/)로 인한 307 리다이렉트 문제 해결 및 `DELETE` 메소드 허용 정책 수정.
+    - 참여 선수 부재 시에도 항상 축구장 코트를 노출하도록 UI 단순화.
