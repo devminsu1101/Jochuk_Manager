@@ -13,10 +13,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# 라우터 등록
-app.include_router(matches.router)
+# 구체적인 경로를 가진 라우터를 먼저 등록하여 경로 섀도잉(Shadowing) 방지
 app.include_router(players.router)
 app.include_router(lineups.router)
+app.include_router(matches.router)
 
 @app.get("/")
 async def root():
