@@ -5,12 +5,20 @@ import { useParams } from 'next/navigation';
 import { DndContext, DragEndEvent, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
 import { toPng } from 'html-to-image';
 import { useMatchStore } from '@/store/useMatchStore';
+import { useAuthStore } from '@/store/useAuthStore';
 import { SoccerPitch } from '@/components/SoccerPitch';
 import { ParticipationSidebar } from '@/components/ParticipationSidebar';
+import { Lock, Info } from 'lucide-react';
+
+const actionButtonStyle: React.CSSProperties = {
+  width: '100%', padding: '12px', fontSize: '1rem', cursor: 'pointer',
+  background: '#2e7d32', color: 'white', border: 'none', borderRadius: '4px', fontWeight: 'bold'
+};
 
 export default function MatchPage() {
   const params = useParams();
   const matchId = params.matchId as string;
+  const { user } = useAuthStore();
   
   const { 
     setMatchId, 
@@ -18,6 +26,7 @@ export default function MatchPage() {
     updateLineup, 
     setLineups,
     saveLineups,
+    autoAssign,
     lineups, 
     players, 
     activeQuarterId, 
@@ -25,8 +34,11 @@ export default function MatchPage() {
     isLoading 
   } = useMatchStore();
 
+  const [matchInfo, setMatchInfo] = useState<any>(null);
+  const [isOwner, setIsOwner] = useState(false);
   const [showShareOptions, setShowShareOptions] = useState(false);
   const [isCapturing, setIsCapturing] = useState(false);
+  
   const captureRef = useRef<HTMLDivElement>(null);
   const fullViewRef = useRef<HTMLDivElement>(null);
   
@@ -38,12 +50,28 @@ export default function MatchPage() {
     })
   );
 
-  // matchId 설정
+  // 매치 상세 정보 및 권한 확인
   useEffect(() => {
+    const fetchMatchDetail = async () => {
+      try {
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+        const response = await fetch(`${apiUrl}/api/matches/${matchId}`);
+        if (response.ok) {
+          const data = await response.json();
+          setMatchInfo(data);
+          // owner_id가 없거나(레거시) 현재 사용자와 일치하면 방장으로 간주
+          setIsOwner(!data.owner_id || data.owner_id === user?.id);
+        }
+      } catch (error) {
+        console.error('Match detail fetch error:', error);
+      }
+    };
+
     if (matchId) {
       setMatchId(matchId);
+      fetchMatchDetail();
     }
-  }, [matchId, setMatchId]);
+  }, [matchId, user, setMatchId]);
 
   useEffect(() => {
     fetchPlayers();
@@ -52,6 +80,8 @@ export default function MatchPage() {
   }, [matchId, fetchPlayers]);
 
   const handleDragEnd = (event: DragEndEvent) => {
+    if (!isOwner) return; // 방장이 아니면 드래그 무시
+
     const { active, over } = event;
     if (!over || activeQuarterId === 0) return;
 
@@ -83,37 +113,8 @@ export default function MatchPage() {
   };
 
   const handleAutoAssign = async () => {
-    const currentPlayers = useMatchStore.getState().players;
-    if (currentPlayers.length < 11) {
-      alert(`최소 11명의 선수가 필요합니다. (현재: ${currentPlayers.length}명)`);
-      return;
-    }
-
-    try {
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
-      const response = await fetch(`${apiUrl}/api/auto-assign`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          players: currentPlayers,
-          quarters: lineups.map(l => ({ quarterId: l.quarterId, formation: l.formation })),
-        }),
-      });
-
-      if (!response.ok) throw new Error('API 호출 실패');
-      const data = await response.json();
-      
-      // 1. 스토어 상태 한꺼번에 업데이트
-      setLineups(data);
-      
-      // 2. 백엔드에 벌크 저장 호출
-      await saveLineups();
-      
-      alert('AI 자동 배정이 완료되었습니다!');
-    } catch (error) {
-      console.error(error);
-      alert('자동 배정 중 오류가 발생했습니다.');
-    }
+    if (!isOwner) return;
+    await autoAssign(players, lineups.map(l => ({ quarterId: l.quarterId, formation: l.formation })));
   };
 
   const handleSaveImage = async () => {
@@ -158,25 +159,26 @@ export default function MatchPage() {
   return (
     <DndContext sensors={sensors} onDragEnd={handleDragEnd}>
       <main className="main-layout">
-        {isLoading && (
-          <div style={{
-            position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
-            backgroundColor: 'rgba(255, 255, 255, 0.7)',
-            display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
-            zIndex: 9999
-          }}>
-            <div className="spinner" style={{
-              width: '40px', height: '40px', border: '4px solid #f3f3f3',
-              borderTop: '4px solid #3498db', borderRadius: '50%',
-              animation: 'spin 1s linear infinite'
-            }} />
-            <p style={{ marginTop: '10px', fontWeight: 'bold', color: '#333' }}>데이터를 불러오는 중입니다...</p>
-            <style>{`
-              @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-            `}</style>
+        {!isOwner && !isLoading && (
+          <div className="readonly-banner">
+            <Lock size={14} />
+            <span>읽기 전용 모드: 이 매치를 수정할 권한이 없습니다.</span>
           </div>
         )}
+        
+        {isLoading && (
+          <div className="loading-overlay">
+            <div className="spinner" />
+            <p>데이터를 불러오는 중입니다...</p>
+          </div>
+        )}
+
         <section className="workspace">
+          <div className="match-title-header">
+            <h2>{matchInfo?.title || '로딩 중...'}</h2>
+            {!isOwner && <span className="view-only-tag">View Only</span>}
+          </div>
+
           {activeQuarterId === 0 ? (
             <div className="full-view-container" ref={fullViewRef}>
               {[1, 2, 3, 4].map(q => {
@@ -239,15 +241,11 @@ export default function MatchPage() {
           <ParticipationSidebar />
           <div className="actions" style={{ marginTop: 'auto', paddingTop: '20px', position: 'relative' }}>
             {showShareOptions && (
-              <div style={{
-                position: 'absolute', bottom: '130px', left: 0, right: 0,
-                background: 'white', border: '1px solid #ddd', borderRadius: '8px',
-                padding: '10px', boxShadow: '0 -4px 10px rgba(0,0,0,0.1)', zIndex: 100
-              }}>
-                <button onClick={handleSaveImage} style={shareItemStyle} disabled={isCapturing}>
+              <div className="share-popover">
+                <button onClick={handleSaveImage} className="share-item" disabled={isCapturing}>
                   {isCapturing ? '저장 중...' : (activeQuarterId === 0 ? '전체 라인업 저장' : '현재 쿼터 저장')}
                 </button>
-                <button onClick={handleCopyInviteLink} style={shareItemStyle}>플레이어 초대 링크 복사</button>
+                <button onClick={handleCopyInviteLink} className="share-item">플레이어 초대 링크 복사</button>
               </div>
             )}
             
@@ -256,22 +254,42 @@ export default function MatchPage() {
             }}>
               공유 및 관리
             </button>
-            <button onClick={handleAutoAssign} style={actionButtonStyle}>
-              AI 자동 배정
-            </button>
+            
+            {isOwner && (
+              <button onClick={handleAutoAssign} style={actionButtonStyle}>
+                AI 자동 배정
+              </button>
+            )}
+            
+            {!isOwner && (
+              <div className="owner-only-notice">
+                <Info size={14} />
+                <span>방장만 수정할 수 있습니다.</span>
+              </div>
+            )}
           </div>
         </aside>
       </main>
+
+      <style jsx>{`
+        .readonly-banner {
+          position: fixed; top: 0; left: 0; right: 0; height: 32px;
+          background: #fff3e0; color: #e65100; font-size: 0.8rem; font-weight: 600;
+          display: flex; align-items: center; justify-content: center; gap: 8px;
+          z-index: 1000; border-bottom: 1px solid #ffe0b2;
+        }
+        .main-layout { padding-top: 32px; }
+        .match-title-header { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
+        .match-title-header h2 { margin: 0; font-size: 1.5rem; color: #1a1a1a; }
+        .view-only-tag { background: #eee; color: #666; padding: 2px 8px; border-radius: 4px; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; }
+        .loading-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(255, 255, 255, 0.7); display: flex; flexDirection: column; alignItems: center; justifyContent: center; z-index: 9999; }
+        .spinner { width: 40px; height: 40px; border: 4px solid #f3f3f3; borderTop: 4px solid #3498db; borderRadius: 50%; animation: spin 1s linear infinite; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        
+        .share-popover { position: absolute; bottom: 130px; left: 0; right: 0; background: white; border: 1px solid #ddd; borderRadius: 8px; padding: 10px; box-shadow: 0 -4px 10px rgba(0,0,0,0.1); z-index: 100; }
+        .share-item { width: 100%; padding: 10px; fontSize: 0.9rem; cursor: pointer; background: none; border: none; borderBottom: 1px solid #eee; textAlign: left; display: block; }
+        .owner-only-notice { display: flex; align-items: center; justify-content: center; gap: 6px; padding: 12px; background: #f5f5f5; color: #888; border-radius: 4px; font-size: 0.85rem; font-weight: 500; }
+      `}</style>
     </DndContext>
   );
 }
-
-const actionButtonStyle: React.CSSProperties = {
-  width: '100%', padding: '12px', fontSize: '1rem', cursor: 'pointer',
-  background: '#2e7d32', color: 'white', border: 'none', borderRadius: '4px', fontWeight: 'bold'
-};
-
-const shareItemStyle: React.CSSProperties = {
-  width: '100%', padding: '10px', fontSize: '0.9rem', cursor: 'pointer',
-  background: 'none', border: 'none', borderBottom: '1px solid #eee', textAlign: 'left', display: 'block'
-};

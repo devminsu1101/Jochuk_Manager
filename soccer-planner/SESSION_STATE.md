@@ -1,20 +1,15 @@
 # 🔄 Current Session State (2026-04-11 - FINAL)
 
-## 📍 Baseline: "System Hardened & Architecture Unified"
-- **Commit Baseline**: `2026-04-11-Refactor`
-- **Backend**: `app/` 계층형 구조 단일화 완료. (`backend/main.py`는 래퍼일 뿐임)
-- **Frontend**: Zustand Store API 호출 로직 최적화 및 타입 시스템 보강 완료.
-- **Context Harness**: `GEMINI.md`에 세션 시작 프로토콜(Lock Protocol) 주입 완료.
+## 📍 Baseline: "Auth & Governance System Fixed"
+- **Auth**: Supabase Google 로그인 연동 완료.
+- **Security**: 백엔드 API 권한 가드(`verify_match_owner`) 및 프론트엔드 `authFetch` 도입 완료.
+- **UX**: 방장 권한에 따른 Read-only UI 및 안내 시스템 구축 완료.
 
-## 🎯 Next Objective: "Phase 1.5 - Auth & Governance"
-1.  **Supabase Auth Integration**: 소셜 로그인 연동 작업 시작.
-2.  **Access Control**: 매치 생성자(`owner_id`)만 수정 가능하도록 백엔드 라우터 가드 구현.
-3.  **SUB List Logic**: 포메이션 변경 시 'assignedPlayers' 유실 방지 로직 설계.
+## 🎯 Next Objective: "Phase 2 - UI Polish & UX"
+1.  **SUB List Logic**: 포메이션 변경 시 배치된 선수가 사라지지 않고 '대기 명단'으로 이동하도록 개선. (최우선)
+2.  **Empty State UX**: 선수가 한 명도 없을 때의 가이드 화면 구현.
+3.  **Mobile Responsive**: 축구장 UI 및 드래그 영역의 모바일 최적화.
 
-## ⚠️ Handover Notes (Critical for Next AI)
-- **Mandatory Read**: `GEMINI.md`의 `SESSION START PROTOCOL`을 읽지 않고 코드를 수정하면 안 됨.
-- **Architecture**: 모든 API 확장은 `backend/app/api/`의 도메인별 파일에서 수행할 것.
-- **Fairness**: AI 자동 배정 로직 수정 시 `soccer-planner/scripts/lineup_generator.py`의 전술적 친밀도를 계승할 것.
-
----
-*Next AI, please report this state to the user and activate `soccer-planner` skill before proceeding.*
+## ⚠️ Handover Notes
+- **Architecture**: 모든 API 호출은 `useMatchStore`의 `authFetch`를 통해 인증 토큰을 전달해야 함.
+- **Constraints**: 포메이션 변경 시 `assignedPlayers` 데이터를 보존하는 로직을 `useMatchStore.ts`의 `setFormation`에 추가해야 함.
