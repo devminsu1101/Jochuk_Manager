@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { Player, QuarterLineup, MatchState } from '@/types';
+import { supabase } from '@/utils/supabase';
 
 interface MatchStore extends MatchState {
   matchId: string | null;
@@ -19,9 +20,21 @@ interface MatchStore extends MatchState {
   deletePlayer: (playerId: string) => Promise<void>;
   deleteAllPlayers: () => Promise<void>;
   setLineups: (lineups: QuarterLineup[]) => void;
+  autoAssign: (players: Player[], quarters: { quarterId: number; formation: string }[]) => Promise<void>;
 }
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+
+// 인증 헤더를 포함한 Fetch 헬퍼
+const authFetch = async (url: string, options: RequestInit = {}) => {
+  const { data: { session } } = await supabase.auth.getSession();
+  const headers = {
+    ...options.headers,
+    'Authorization': `Bearer ${session?.access_token || ''}`,
+    'Content-Type': 'application/json',
+  };
+  return fetch(url, { ...options, headers });
+};
 
 export const useMatchStore = create<MatchStore>((set, get) => ({
   matchId: null,
@@ -41,11 +54,8 @@ export const useMatchStore = create<MatchStore>((set, get) => ({
   },
 
   setActiveQuarterId: (id) => set({ activeQuarterId: id }),
-
   setPlayers: (players) => set({ players }),
-
   setIsLoading: (loading) => set({ isLoading: loading }),
-
   setLineups: (lineups) => set({ lineups }),
 
   fetchLineups: async (id) => {
@@ -82,14 +92,38 @@ export const useMatchStore = create<MatchStore>((set, get) => ({
     if (!matchId) return;
 
     try {
-      const response = await fetch(`${API_BASE_URL}/api/matches/${matchId}/lineups/bulk`, {
+      const response = await authFetch(`${API_BASE_URL}/api/matches/${matchId}/lineups/bulk`, {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ lineups }),
       });
-      if (!response.ok) throw new Error('벌크 저장 실패');
+      if (!response.ok) throw new Error('방장만 수정할 수 있습니다.');
     } catch (error) {
       console.error('전체 라인업 저장 실패:', error);
+      alert('권한이 없거나 저장 중 오류가 발생했습니다.');
+    }
+  },
+
+  autoAssign: async (players, quarters) => {
+    const { matchId } = get();
+    if (!matchId) return;
+
+    set({ isLoading: true });
+    try {
+      const response = await authFetch(`${API_BASE_URL}/api/matches/${matchId}/auto-assign`, {
+        method: 'POST',
+        body: JSON.stringify({ players, quarters }),
+      });
+
+      if (!response.ok) throw new Error('AI 배정 실패 (방장 권한 필요)');
+      
+      const newLineups = await response.json();
+      set({ lineups: newLineups });
+      alert('AI가 쿼터별 라인업을 공평하게 배정했습니다!');
+    } catch (error) {
+      console.error(error);
+      alert('AI 배정 중 오류가 발생했습니다.');
+    } finally {
+      set({ isLoading: false });
     }
   },
 
@@ -98,8 +132,6 @@ export const useMatchStore = create<MatchStore>((set, get) => ({
     if (!matchId) return;
 
     set({ isLoading: true });
-    await new Promise((resolve) => setTimeout(resolve, 800)); // 조금 더 빠른 피드백
-    
     const dummyPlayers = [
       { name: '손흥민', primaryPosition: 'LW', secondaryPositions: ['ST', 'RW'] },
       { name: '김민재', primaryPosition: 'CB', secondaryPositions: ['RCB', 'LCB'] },
@@ -109,23 +141,16 @@ export const useMatchStore = create<MatchStore>((set, get) => ({
       { name: '이재성', primaryPosition: 'CAM', secondaryPositions: ['CM', 'LW'] },
       { name: '박용우', primaryPosition: 'CDM', secondaryPositions: ['CM'] },
       { name: '설영우', primaryPosition: 'LB', secondaryPositions: ['RB', 'LWB'] },
-      { name: '김영권', primaryPosition: 'CB', secondaryPositions: ['LCB'] },
-      { name: '정승현', primaryPosition: 'CB', secondaryPositions: ['RCB'] },
       { name: '조현우', primaryPosition: 'GK', secondaryPositions: [] },
-      { name: '조규성', primaryPosition: 'ST', secondaryPositions: ['CF'] },
-      { name: '정우영', primaryPosition: 'RW', secondaryPositions: ['LW', 'CAM'] },
-      { name: '홍현석', primaryPosition: 'CM', secondaryPositions: ['CAM'] },
-      { name: '김태환', primaryPosition: 'RB', secondaryPositions: ['RWB'] },
     ];
     
     try {
-      const response = await fetch(`${API_BASE_URL}/api/matches/${matchId}/players/bulk`, {
+      const response = await authFetch(`${API_BASE_URL}/api/matches/${matchId}/players/bulk`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ players: dummyPlayers }),
       });
 
-      if (!response.ok) throw new Error('샘플 데이터 등록 실패');
+      if (!response.ok) throw new Error('방장만 선수를 추가할 수 있습니다.');
       
       const newPlayers = await response.json();
       set((state) => ({ 
@@ -144,12 +169,11 @@ export const useMatchStore = create<MatchStore>((set, get) => ({
     if (!matchId) return;
 
     try {
-      const response = await fetch(`${API_BASE_URL}/api/matches/${matchId}/players/${playerId}`, {
+      const response = await authFetch(`${API_BASE_URL}/api/matches/${matchId}/players/${playerId}`, {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name, primaryPosition, secondaryPositions }),
       });
-      if (!response.ok) throw new Error('선수 수정 실패');
+      if (!response.ok) throw new Error('방장만 수정 가능합니다.');
 
       const updatedPlayer = await response.json();
       set((state) => ({
@@ -157,7 +181,7 @@ export const useMatchStore = create<MatchStore>((set, get) => ({
       }));
     } catch (error) {
       console.error(error);
-      alert('선수 수정 중 오류가 발생했습니다.');
+      alert('권한이 없거나 수정 중 오류가 발생했습니다.');
     }
   },
 
@@ -166,10 +190,10 @@ export const useMatchStore = create<MatchStore>((set, get) => ({
     if (!matchId) return;
 
     try {
-      const response = await fetch(`${API_BASE_URL}/api/matches/${matchId}/players/${playerId}`, {
+      const response = await authFetch(`${API_BASE_URL}/api/matches/${matchId}/players/${playerId}`, {
         method: 'DELETE',
       });
-      if (!response.ok) throw new Error('선수 삭제 실패');
+      if (!response.ok) throw new Error('방장만 삭제 가능합니다.');
 
       set((state) => ({
         players: state.players.filter((p) => p.id !== playerId),
@@ -185,7 +209,7 @@ export const useMatchStore = create<MatchStore>((set, get) => ({
       }));
     } catch (error) {
       console.error(error);
-      alert('선수 삭제 중 오류가 발생했습니다.');
+      alert('권한이 없거나 삭제 중 오류가 발생했습니다.');
     }
   },
 
@@ -195,10 +219,10 @@ export const useMatchStore = create<MatchStore>((set, get) => ({
 
     if (!window.confirm('모든 선수와 라인업을 삭제하시겠습니까?')) return;
     try {
-      const response = await fetch(`${API_BASE_URL}/api/matches/${matchId}/players`, {
+      const response = await authFetch(`${API_BASE_URL}/api/matches/${matchId}/players`, {
         method: 'DELETE',
       });
-      if (!response.ok) throw new Error('전체 삭제 실패');
+      if (!response.ok) throw new Error('방장만 전체 삭제 가능합니다.');
 
       set((state) => ({
         players: [],
@@ -209,7 +233,7 @@ export const useMatchStore = create<MatchStore>((set, get) => ({
       }));
     } catch (error) {
       console.error(error);
-      alert('전체 삭제 중 오류가 발생했습니다.');
+      alert('권한이 없거나 전체 삭제 중 오류가 발생했습니다.');
     }
   },
 
@@ -217,7 +241,7 @@ export const useMatchStore = create<MatchStore>((set, get) => ({
     const { matchId } = get();
     if (!matchId) return;
 
-    // 로컬 상태 즉시 업데이트
+    // 로컬 상태 즉시 업데이트 (비동기 처리 전 사용자 피드백)
     set((state) => ({
       lineups: state.lineups.map((lineup) => {
         if (lineup.quarterId !== quarterId) return lineup;
@@ -234,7 +258,7 @@ export const useMatchStore = create<MatchStore>((set, get) => ({
       }),
     }));
 
-    // 전체 저장 호출
+    // 전체 저장 호출 (권한 체크 포함)
     get().saveLineups();
   },
 
@@ -242,15 +266,14 @@ export const useMatchStore = create<MatchStore>((set, get) => ({
     const { matchId } = get();
     if (!matchId) return;
 
-    // 로컬 상태 업데이트 (선수는 유지)
+    // 로컬 상태 업데이트
     set((state) => ({
       lineups: state.lineups.map((lineup) =>
         lineup.quarterId === quarterId ? { ...lineup, formation } : lineup
       ),
     }));
 
-    // 전체 저장 호출
+    // 전체 저장 호출 (권한 체크 포함)
     get().saveLineups();
   },
 }));
-

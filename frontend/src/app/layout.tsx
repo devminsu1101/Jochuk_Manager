@@ -1,16 +1,20 @@
-import '@/styles/globals.css'
-import type { Metadata } from 'next'
+'use client';
 
-export const metadata: Metadata = {
-  title: 'Jochuk Manager',
-  description: 'Fair play soccer lineup generator',
-}
+import '@/styles/globals.css'
+import { useEffect } from 'react'
+import { useAuthStore } from '@/store/useAuthStore'
 
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
+  const checkSession = useAuthStore((state) => state.checkSession);
+
+  useEffect(() => {
+    checkSession();
+  }, [checkSession]);
+
   return (
     <html lang="ko">
       <body>{children}</body>

@@ -2,7 +2,9 @@
 
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Search, Plus, Calendar, Clock, ChevronRight, User } from 'lucide-react';
+import { Search, Plus, Calendar, Clock, ChevronRight, User, LogOut } from 'lucide-react';
+import { useAuthStore } from '@/store/useAuthStore';
+import { supabase } from '@/utils/supabase';
 
 interface Match {
   id: string;
@@ -15,6 +17,7 @@ interface Match {
 
 export default function OverviewPage() {
   const router = useRouter();
+  const { user, isLoading: isAuthLoading, signInWithGoogle, signOut } = useAuthStore();
   const [matches, setMatches] = useState<Match[]>([]);
   const [search, setSearch] = useState('');
   const [isLoading, setIsLoading] = useState(true);
@@ -53,16 +56,24 @@ export default function OverviewPage() {
 
   const handleCreateMatch = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!user) {
+      alert('로그인이 필요한 서비스입니다.');
+      return;
+    }
     if (!newMatch.title || !newMatch.matchDate || !newMatch.matchTime) {
       alert('모든 필수 정보를 입력해주세요.');
       return;
     }
 
     try {
+      const { data: { session } } = await supabase.auth.getSession();
       const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
       const response = await fetch(`${apiUrl}/api/matches`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${session?.access_token}`
+        },
         body: JSON.stringify(newMatch),
       });
 
@@ -72,7 +83,8 @@ export default function OverviewPage() {
       alert('새로운 매치가 생성되었습니다!');
       router.push(`/${createdMatch.id}`);
     } catch (error) {
-      alert('매치 생성 중 오류가 발생했습니다.');
+      console.error(error);
+      alert('매치 생성 중 오류가 발생했습니다. (로그인 세션을 확인해주세요)');
     }
   };
 
@@ -81,15 +93,26 @@ export default function OverviewPage() {
       {/* Header */}
       <header className="overview-header">
         <div className="header-content">
-          <div className="logo-section">
+          <div className="logo-section" onClick={() => router.push('/')} style={{cursor: 'pointer'}}>
             <div className="soccer-ball-icon">⚽️</div>
             <h1>Jochuk Manager</h1>
           </div>
           <div className="user-section">
-            <button className="login-button">
-              <User size={18} />
-              <span>로그인</span>
-            </button>
+            {isAuthLoading ? (
+              <div className="auth-loading">...</div>
+            ) : user ? (
+              <div className="user-info">
+                <span className="user-name">{user.user_metadata?.full_name || user.email}</span>
+                <button className="logout-button" onClick={signOut} title="로그아웃">
+                  <LogOut size={18} />
+                </button>
+              </div>
+            ) : (
+              <button className="login-button" onClick={signInWithGoogle}>
+                <User size={18} />
+                <span>Google 로그인</span>
+              </button>
+            )}
           </div>
         </div>
       </header>
@@ -119,7 +142,10 @@ export default function OverviewPage() {
         <section className="match-list-section">
           <div className="section-header">
             <h3>공개된 매치 ({matches.length})</h3>
-            <button className="create-match-btn" onClick={() => setShowCreateModal(true)}>
+            <button 
+              className="create-match-btn" 
+              onClick={() => user ? setShowCreateModal(true) : alert('로그인 후 매치를 생성할 수 있습니다.')}
+            >
               <Plus size={18} />
               새 매치 만들기
             </button>
@@ -222,6 +248,13 @@ export default function OverviewPage() {
         .logo-section { display: flex; align-items: center; gap: 0.5rem; }
         .logo-section h1 { font-size: 1.25rem; font-weight: 800; color: #1a1a1a; margin: 0; }
         .soccer-ball-icon { font-size: 1.5rem; }
+        
+        .user-section { display: flex; align-items: center; }
+        .user-info { display: flex; align-items: center; gap: 1rem; }
+        .user-name { font-size: 0.9rem; font-weight: 600; color: #444; }
+        .logout-button { background: none; border: 1px solid #eee; padding: 0.4rem; border-radius: 50%; cursor: pointer; color: #666; transition: all 0.2s; }
+        .logout-button:hover { background: #fee2e2; color: #ef4444; border-color: #fecaca; }
+
         .login-button { display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; border: 1px solid #ddd; border-radius: 20px; background: white; cursor: pointer; font-weight: 600; transition: all 0.2s; }
         .login-button:hover { background: #f0f0f0; border-color: #ccc; }
 

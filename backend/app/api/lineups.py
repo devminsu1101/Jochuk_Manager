@@ -1,9 +1,10 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Depends
 from typing import List, Dict, Optional
 from pydantic import BaseModel
 from app.db.supabase import supabase
 from app.schemas.lineup import LineupUpdateIn, AutoAssignRequest
 from app.services.ai_service import AIService
+from app.core.security import verify_match_owner
 
 router = APIRouter(tags=["lineups"])
 
@@ -32,7 +33,7 @@ async def get_lineups(match_id: str):
     return [{"quarterId": i, "formation": "4-2-3-1", "assignedPlayers": {}} for i in [1, 2, 3, 4]]
 
 @router.put("/api/matches/{match_id}/lineups/bulk")
-async def update_lineups_bulk(match_id: str, req: BulkLineupsIn):
+async def update_lineups_bulk(match_id: str, req: BulkLineupsIn, authorized: bool = Depends(verify_match_owner)):
     """모든 쿼터 라인업을 유연하게 저장"""
     try:
         # 1. 시도해볼 컬럼명 조합들
@@ -65,10 +66,9 @@ async def update_lineups_bulk(match_id: str, req: BulkLineupsIn):
 
     except Exception as e:
         print(f"Bulk save critical error: {e}")
-        # 만약 저장에 실패하더라도 프론트엔드에 500을 주지 않고 성공인 척 해서 
-        # 사용자 경험을 해치지 않되 로그만 남김 (임시 조치)
         return {"success": False, "error": str(e)}
 
-@router.post("/api/auto-assign")
-async def auto_assign(req: AutoAssignRequest):
+@router.post("/api/matches/{match_id}/auto-assign")
+async def auto_assign(match_id: str, req: AutoAssignRequest, authorized: bool = Depends(verify_match_owner)):
+    """특정 매치의 라인업을 AI로 자동 배정 (방장 전용)"""
     return AIService.auto_assign(req.players, req.quarters)

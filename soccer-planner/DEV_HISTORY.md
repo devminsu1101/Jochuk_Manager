@@ -96,4 +96,16 @@
     - `types/index.ts`에 전술 포지션 명단 및 매치 도메인 모델 추가.
 - **Error Handling & UX**: API 호출 시 예외 처리 강화 및 샘플 데이터 등록 피드백 속도 최적화.
 
+### 📅 2026-04-11 (Phase 1.5: Auth & Governance Completed)
+- **Supabase Auth Integration**: 
+    - `useAuthStore` 및 Google OAuth 연동을 통한 사용자 인증 시스템 구축.
+    - 프론트엔드 환경 변수 동기화 및 방어적 초기화 로직 적용.
+- **Match Ownership & Security**:
+    - 백엔드 `verify_match_owner` 가드 구현으로 방장 전용 수정 권한 강제화.
+    - 매치 생성 시 `owner_id` 기록 및 API 레벨 권한 검증 적용.
+- **Read-only UI Implementation**:
+    - 방장이 아닌 사용자를 위한 "읽기 전용 모드" 배너 및 태그 추가.
+    - 권한에 따른 드래그 앤 드랍 비활성화 및 관리 버튼 노출 제어.
+
+
 

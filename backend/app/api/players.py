@@ -1,9 +1,10 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Depends
 from typing import List
 import random
 from app.db.supabase import supabase
 from app.schemas.player import PlayerIn, BulkPlayersIn
 from app.core.constants import PLAYER_COLORS
+from app.core.security import verify_match_owner
 
 # strict_slashes=False를 통해 /players 와 /players/ 모두 허용
 router = APIRouter(prefix="/api/matches/{match_id}/players", tags=["players"])
@@ -19,7 +20,7 @@ async def get_players(match_id: str):
 
 @router.post("", include_in_schema=True)
 @router.post("/", include_in_schema=False)
-async def register_player(match_id: str, player: PlayerIn):
+async def register_player(match_id: str, player: PlayerIn, authorized: bool = Depends(verify_match_owner)):
     color = random.choice(PLAYER_COLORS)
     new_player_data = {
         "match_id": match_id,
@@ -42,7 +43,7 @@ async def register_player(match_id: str, player: PlayerIn):
 
 @router.delete("", include_in_schema=True)
 @router.delete("/", include_in_schema=False)
-async def delete_all_players(match_id: str):
+async def delete_all_players(match_id: str, authorized: bool = Depends(verify_match_owner)):
     try:
         supabase.table("players").delete().eq("match_id", match_id).execute()
         return {"success": True}
@@ -50,7 +51,7 @@ async def delete_all_players(match_id: str):
         raise HTTPException(status_code=500, detail="전체 삭제 실패")
 
 @router.put("/{player_id}")
-async def update_player(match_id: str, player_id: str, player: PlayerIn):
+async def update_player(match_id: str, player_id: str, player: PlayerIn, authorized: bool = Depends(verify_match_owner)):
     update_data = {
         "name": player.name,
         "primary_position": player.primaryPosition,
@@ -65,7 +66,7 @@ async def update_player(match_id: str, player_id: str, player: PlayerIn):
         raise HTTPException(status_code=404, detail="선수를 찾을 수 없습니다.")
 
 @router.delete("/{player_id}")
-async def delete_player(match_id: str, player_id: str):
+async def delete_player(match_id: str, player_id: str, authorized: bool = Depends(verify_match_owner)):
     try:
         supabase.table("players").delete().eq("id", player_id).eq("match_id", match_id).execute()
         return {"success": True}
@@ -73,7 +74,7 @@ async def delete_player(match_id: str, player_id: str):
         return {"success": False}
 
 @router.post("/bulk")
-async def register_players_bulk(match_id: str, req: BulkPlayersIn):
+async def register_players_bulk(match_id: str, req: BulkPlayersIn, authorized: bool = Depends(verify_match_owner)):
     batch_data = []
     for player in req.players:
         color = random.choice(PLAYER_COLORS)
