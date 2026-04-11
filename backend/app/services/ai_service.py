@@ -2,7 +2,7 @@ import random
 from typing import List, Dict, Set
 from app.schemas.lineup import QuarterConfig
 from app.schemas.player import PlayerIn
-from app.core.constants import CATEGORIES, POSITION_CATEGORY_MAP
+from app.core.constants import CATEGORIES, POSITION_CATEGORY_MAP, FORMATIONS
 
 class AIService:
     @staticmethod
@@ -36,9 +36,8 @@ class AIService:
             quarter_id = q_cfg.quarterId
             formation = q_cfg.formation
             
-            # 4-2-3-1 등 포메이션에 따른 기본 슬롯 정의
-            # (실제로는 formations.ts와 동기화된 데이터가 필요하지만, 여기선 범용 슬롯 리스트 사용)
-            slots = cls._get_slots_for_formation(formation)
+            # constants.py에서 정의된 슬롯 정보를 가져옴 (정의되지 않은 경우 기본값 4-2-3-1 사용)
+            slots = FORMATIONS.get(formation, FORMATIONS["4-2-3-1"])
             
             assigned_in_quarter = {}
             used_player_ids = set()
@@ -74,14 +73,9 @@ class AIService:
 
     @classmethod
     def _get_slots_for_formation(cls, formation: str) -> List[str]:
-        # 단순화된 슬롯 생성기 (4-2-3-1 기준)
-        if formation == "4-2-3-1":
-            return ["GK", "LB", "LCB", "RCB", "RB", "LCDM", "RCDM", "LW", "CAM", "RW", "ST"]
-        if formation == "4-4-2":
-            return ["GK", "LB", "LCB", "RCB", "RB", "LM", "LCM", "RCM", "RM", "LS", "RS"]
-        if formation == "4-3-3":
-            return ["GK", "LB", "LCB", "RCB", "RB", "CDM", "LCM", "RCM", "LW", "ST", "RW"]
-        return ["GK", "LB", "LCB", "RCB", "RB", "LCDM", "RCDM", "LW", "CAM", "RW", "ST"]
+        # 이 메서드는 이제 사용되지 않지만 하위 호환성을 위해 유지하거나 상수를 참조하게 함
+        return FORMATIONS.get(formation, FORMATIONS["4-2-3-1"])
+
 
     @classmethod
     def _select_best_player(cls, pool: List[Dict], slot: str, used_ids: Set[str]):
