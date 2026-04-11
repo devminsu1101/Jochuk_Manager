@@ -21,6 +21,8 @@ interface MatchStore extends MatchState {
   setLineups: (lineups: QuarterLineup[]) => void;
 }
 
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+
 export const useMatchStore = create<MatchStore>((set, get) => ({
   matchId: null,
   players: [],
@@ -49,11 +51,9 @@ export const useMatchStore = create<MatchStore>((set, get) => ({
   fetchLineups: async (id) => {
     set({ isLoading: true });
     try {
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
-      const response = await fetch(`${apiUrl}/api/matches/${id}/lineups`);
+      const response = await fetch(`${API_BASE_URL}/api/matches/${id}/lineups`);
       if (response.ok) {
         const lineups = await response.json();
-        console.log('불러온 라인업:', lineups);
         set({ lineups });
       }
     } catch (error) {
@@ -67,8 +67,7 @@ export const useMatchStore = create<MatchStore>((set, get) => ({
     const { matchId } = get();
     if (!matchId) return;
     try {
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
-      const response = await fetch(`${apiUrl}/api/matches/${matchId}/players`);
+      const response = await fetch(`${API_BASE_URL}/api/matches/${matchId}/players`);
       if (response.ok) {
         const players = await response.json();
         set({ players });
@@ -83,14 +82,12 @@ export const useMatchStore = create<MatchStore>((set, get) => ({
     if (!matchId) return;
 
     try {
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
-      const response = await fetch(`${apiUrl}/api/matches/${matchId}/lineups/bulk`, {
+      const response = await fetch(`${API_BASE_URL}/api/matches/${matchId}/lineups/bulk`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ lineups }),
       });
       if (!response.ok) throw new Error('벌크 저장 실패');
-      console.log('전체 라인업 저장 성공');
     } catch (error) {
       console.error('전체 라인업 저장 실패:', error);
     }
@@ -101,7 +98,7 @@ export const useMatchStore = create<MatchStore>((set, get) => ({
     if (!matchId) return;
 
     set({ isLoading: true });
-    await new Promise((resolve) => setTimeout(resolve, 1500));
+    await new Promise((resolve) => setTimeout(resolve, 800)); // 조금 더 빠른 피드백
     
     const dummyPlayers = [
       { name: '손흥민', primaryPosition: 'LW', secondaryPositions: ['ST', 'RW'] },
@@ -122,8 +119,7 @@ export const useMatchStore = create<MatchStore>((set, get) => ({
     ];
     
     try {
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
-      const response = await fetch(`${apiUrl}/api/matches/${matchId}/players/bulk`, {
+      const response = await fetch(`${API_BASE_URL}/api/matches/${matchId}/players/bulk`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ players: dummyPlayers }),
@@ -148,8 +144,7 @@ export const useMatchStore = create<MatchStore>((set, get) => ({
     if (!matchId) return;
 
     try {
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
-      const response = await fetch(`${apiUrl}/api/matches/${matchId}/players/${playerId}`, {
+      const response = await fetch(`${API_BASE_URL}/api/matches/${matchId}/players/${playerId}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name, primaryPosition, secondaryPositions }),
@@ -171,8 +166,7 @@ export const useMatchStore = create<MatchStore>((set, get) => ({
     if (!matchId) return;
 
     try {
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
-      const response = await fetch(`${apiUrl}/api/matches/${matchId}/players/${playerId}`, {
+      const response = await fetch(`${API_BASE_URL}/api/matches/${matchId}/players/${playerId}`, {
         method: 'DELETE',
       });
       if (!response.ok) throw new Error('선수 삭제 실패');
@@ -201,8 +195,7 @@ export const useMatchStore = create<MatchStore>((set, get) => ({
 
     if (!window.confirm('모든 선수와 라인업을 삭제하시겠습니까?')) return;
     try {
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
-      const response = await fetch(`${apiUrl}/api/matches/${matchId}/players`, {
+      const response = await fetch(`${API_BASE_URL}/api/matches/${matchId}/players`, {
         method: 'DELETE',
       });
       if (!response.ok) throw new Error('전체 삭제 실패');
@@ -260,3 +253,4 @@ export const useMatchStore = create<MatchStore>((set, get) => ({
     get().saveLineups();
   },
 }));
+

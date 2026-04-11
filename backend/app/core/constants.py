@@ -14,7 +14,6 @@ CATEGORIES = {
 }
 
 # 포지션별 전술적 친밀도 맵 (더 정교한 AI 배정용)
-# 주 포지션 외에도 해당 카테고리에 속하는지 여부를 판단하기 위함
 POSITION_CATEGORY_MAP = {
     "GK": "GK",
     "LB": "DF", "LCB": "DF", "CB": "DF", "RCB": "DF", "RB": "DF", "LWB": "DF", "RWB": "DF",
@@ -22,3 +21,13 @@ POSITION_CATEGORY_MAP = {
     "LW": "AM", "CAM": "AM", "RW": "AM", "LM": "AM", "RM": "AM",
     "ST": "FW", "CF": "FW", "LS": "FW", "RS": "FW"
 }
+
+# 포메이션별 슬롯 정의 (프론트엔드와 동일하게 유지)
+FORMATIONS = {
+    "4-2-3-1": ["GK", "LB", "LCB", "RCB", "RB", "LCDM", "RCDM", "LW", "CAM", "RW", "ST"],
+    "4-4-2": ["GK", "LB", "LCB", "RCB", "RB", "LM", "LCM", "RCM", "RM", "LS", "RS"],
+    "4-3-3": ["GK", "LB", "LCB", "RCB", "RB", "CDM", "LCM", "RCM", "LW", "ST", "RW"],
+    "3-5-2": ["GK", "LCB", "CB", "RCB", "LWB", "RWB", "CDM", "LCM", "RCM", "ST", "CF"],
+    "3-4-3": ["GK", "LCB", "CB", "RCB", "LM", "RM", "LCM", "RCM", "LW", "ST", "RW"]
+}
+

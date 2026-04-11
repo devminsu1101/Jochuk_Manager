@@ -78,3 +78,22 @@
 - **UX/UI Stability**:
     - Trailing Slash(/)로 인한 307 리다이렉트 문제 해결 및 `DELETE` 메소드 허용 정책 수정.
     - 참여 선수 부재 시에도 항상 축구장 코트를 노출하도록 UI 단순화.
+
+### 📅 2026-04-11 (Context Harnessing & Session Reset)
+- **The Great Reset**: 이전 세션의 불안정한 변경 사항을 전체 롤백하고 `2026-04-06` 시점으로 프로젝트 상태 복구.
+- **Context Harness System Implementation**:
+    - `GEMINI.md` (Project Constitution) 도입을 통한 기술 스택 및 아키텍처 가이드라인 고정.
+    - `SESSION_STATE.md` (Handover Protocol) 구축을 통해 세션 간 작업 연속성 확보.
+- **Governance Reinforcement**: "베테랑 총무" 페르소나와 데이터 기반 공정성 원칙 재정립.
+
+### 📅 2026-04-11 (Backend Unification & System Optimization)
+- **Backend Entry-Point Unification**: 
+    - 루트 `backend/main.py`를 `app/main.py`의 래퍼로 교체하여 계층형 아키텍처(Router-Service-DTO) 강제화.
+- **Tactical Constants Centralization**:
+    - `constants.py`에 포메이션 슬롯 정의(4-2-3-1, 3-5-2 등)를 중앙 집중화하여 AI 배정 로직의 확장성 확보.
+- **Frontend Store & Type Refinement**:
+    - `useMatchStore.ts` 내 API 호출 로직 최적화 및 `API_BASE_URL` 중앙 관리 도입.
+    - `types/index.ts`에 전술 포지션 명단 및 매치 도메인 모델 추가.
+- **Error Handling & UX**: API 호출 시 예외 처리 강화 및 샘플 데이터 등록 피드백 속도 최적화.
+
+
