@@ -1,0 +1,378 @@
+.container {
+  min-height: 100vh;
+  background-color: #f8f9fa;
+  color: #1a1a1a;
+}
+
+.header {
+  background: white;
+  border-bottom: 1px solid #eee;
+  padding: 0.75rem 1.5rem;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+}
+
+.headerContent {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logoSection {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+}
+
+.logoSection h1 {
+  font-size: 1.1rem;
+  font-weight: 800;
+  margin: 0;
+  letter-spacing: -0.5px;
+}
+
+.userSection {
+  display: flex;
+  align-items: center;
+}
+
+.userInfo {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.userName {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #444;
+}
+
+.logoutButton {
+  background: none;
+  border: 1px solid #eee;
+  padding: 0.4rem;
+  border-radius: 50%;
+  cursor: pointer;
+  color: #666;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.logoutButton:hover {
+  background: #fee2e2;
+  color: #ef4444;
+  border-color: #fecaca;
+}
+
+.loginButton {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border: 1px solid #ddd;
+  border-radius: 20px;
+  background: white;
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+
+.loginButton:hover {
+  background: #f0f0f0;
+}
+
+.main {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
+}
+
+/* Hero Section */
+.heroSection {
+  text-align: center;
+  padding: 2rem 0 3rem;
+}
+
+.heroSection h2 {
+  font-size: 2rem;
+  font-weight: 900;
+  margin-bottom: 0.75rem;
+  letter-spacing: -1px;
+}
+
+.heroSection p {
+  font-size: 1rem;
+  color: #666;
+  margin-bottom: 2rem;
+}
+
+.searchBarContainer {
+  display: flex;
+  max-width: 600px;
+  margin: 0 auto;
+  gap: 0.5rem;
+}
+
+.searchInputWrapper {
+  flex: 1;
+  position: relative;
+  display: flex;
+  align-items: center;
+  background: white;
+  border: 2px solid #eee;
+  border-radius: 12px;
+  transition: border-color 0.2s;
+}
+
+.searchInputWrapper:focus-within {
+  border-color: #2e7d32;
+}
+
+.searchIcon {
+  position: absolute;
+  left: 1rem;
+  color: #999;
+}
+
+.searchInputWrapper input {
+  width: 100%;
+  border: none;
+  padding: 0.85rem 1rem 0.85rem 3rem;
+  border-radius: 12px;
+  font-size: 0.95rem;
+  outline: none;
+}
+
+.searchBtn {
+  padding: 0 1.5rem;
+  background: #2e7d32;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+/* Match List */
+.matchListSection {
+  margin-top: 1rem;
+}
+
+.sectionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.sectionHeader h3 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.createMatchBtn {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.6rem 1rem;
+  background: #1976d2;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.matchGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.25rem;
+}
+
+.matchCard {
+  background: white;
+  border: 1px solid #eee;
+  border-radius: 16px;
+  padding: 1.5rem;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.matchCard:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px rgba(0,0,0,0.06);
+  border-color: #1976d2;
+}
+
+.statusBadge {
+  font-size: 0.7rem;
+  font-weight: 800;
+  padding: 0.2rem 0.5rem;
+  border-radius: 6px;
+  display: inline-block;
+  margin-bottom: 0.75rem;
+}
+
+.statusBadge.upcoming {
+  background: #e3f2fd;
+  color: #1976d2;
+}
+
+.cardTitle {
+  font-size: 1.15rem;
+  font-weight: 700;
+  margin: 0 0 1rem 0;
+  line-height: 1.4;
+}
+
+.cardInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  color: #666;
+  font-size: 0.85rem;
+  margin-bottom: 1.25rem;
+}
+
+.infoItem {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.cardFooter {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #1976d2;
+  font-weight: 700;
+  font-size: 0.85rem;
+  border-top: 1px solid #f5f5f5;
+  padding-top: 1rem;
+  margin-top: auto;
+}
+
+/* Modal */
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.6);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+}
+
+.modalContent {
+  background: white;
+  padding: 2rem;
+  border-radius: 20px;
+  width: 100%;
+  max-width: 450px;
+}
+
+.modalContent h3 {
+  font-size: 1.35rem;
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+}
+
+.formGroup {
+  margin-bottom: 1.25rem;
+}
+
+.formGroup label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #666;
+  margin-bottom: 0.5rem;
+}
+
+.formGroup input[type="text"], 
+.formGroup input[type="date"], 
+.formGroup input[type="time"] {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 0.95rem;
+}
+
+.formRow {
+  display: flex;
+  gap: 1rem;
+}
+
+.formRow .formGroup {
+  flex: 1;
+}
+
+.checkbox {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.modalActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  margin-top: 2rem;
+}
+
+.cancelBtn {
+  padding: 0.7rem 1.25rem;
+  background: #f5f5f5;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.submitBtn {
+  padding: 0.7rem 1.5rem;
+  background: #1976d2;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .header { padding: 0.75rem 1rem; }
+  .logoSection h1 { font-size: 1rem; }
+  .userName { display: none; }
+  
+  .heroSection h2 { font-size: 1.5rem; }
+  .heroSection p { font-size: 0.9rem; }
+  
+  .searchBarContainer { flex-direction: column; }
+  .searchBtn { padding: 0.85rem; }
+  
+  .matchGrid { grid-template-columns: 1fr; }
+  
+  .formRow { flex-direction: column; gap: 0; }
+}

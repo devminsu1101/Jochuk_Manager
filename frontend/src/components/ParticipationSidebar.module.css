@@ -3,57 +3,156 @@
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  height: 100%;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.25rem;
+}
+
+.header h3 {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #1a1a1a;
+}
+
+.buttonGroup {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.actionBtn {
+  font-size: 0.7rem;
+  padding: 0.4rem 0.75rem;
+  border-radius: 6px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: 1px solid transparent;
+}
+
+.sampleBtn {
+  background-color: #eff6ff;
+  border-color: #dbeafe;
+  color: #1d4ed8;
+}
+
+.sampleBtn:hover {
+  background-color: #dbeafe;
+}
+
+.clearBtn {
+  background-color: #fef2f2;
+  border-color: #fee2e2;
+  color: #dc2626;
+}
+
+.clearBtn:hover {
+  background-color: #fee2e2;
 }
 
 .playerList {
   flex: 1;
   overflow-y: auto;
-  margin-top: 10px;
-  padding-right: 5px;
+  padding-right: 4px;
 }
 
-.playerItem {
+/* Custom Scrollbar */
+.playerList::-webkit-scrollbar {
+  width: 4px;
+}
+
+.playerList::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.playerList::-webkit-scrollbar-thumb {
+  background: #e2e8f0;
+  border-radius: 10px;
+}
+
+.playerList::-webkit-scrollbar-thumb:hover {
+  background: #cbd5e1;
+}
+
+/* Modal Styles */
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
   display: flex;
-  gap: 12px;
   align-items: center;
-  padding: 10px;
-  border-bottom: 1px solid #eee;
-  background: #f9f9f9;
-  margin-bottom: 4px;
-  border-radius: 4px;
-}
-
-.avatarWrapper {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  display: flex;
   justify-content: center;
-  align-items: center;
-  flex-shrink: 0;
+  z-index: 10000;
+  padding: 1rem;
 }
 
-.playerInfo {
-  flex: 1;
+.modalContent {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 340px;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+}
+
+.modalContent h4 {
+  margin: 0 0 1.25rem 0;
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.inputField {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  margin-bottom: 0.75rem;
+  font-size: 0.9rem;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.inputField:focus {
+  border-color: #1976d2;
+}
+
+.modalActions {
   display: flex;
-  flex-direction: column;
-  gap: 2px;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
 }
 
-.playerName {
-  font-weight: bold;
-  font-size: 0.95rem;
-  color: #333;
+.saveBtn, .cancelBtn {
+  flex: 1;
+  padding: 0.75rem;
+  border: none;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 0.9rem;
+  cursor: pointer;
 }
 
-.playerPosition {
-  font-size: 0.75rem;
-  color: #888;
+.saveBtn {
+  background: #1976d2;
+  color: white;
 }
 
-.playStats {
-  font-size: 0.8rem;
-  font-weight: bold;
-  color: #2e7d32;
-  white-space: nowrap;
+.cancelBtn {
+  background: #f1f5f9;
+  color: #64748b;
+}
+
+@media (max-width: 1024px) {
+  .playerList {
+    max-height: 400px;
+  }
 }

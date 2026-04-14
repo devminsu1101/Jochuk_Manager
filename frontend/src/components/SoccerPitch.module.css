@@ -9,10 +9,11 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  min-height: 400px;
 }
 
 .miniPitch {
-  /* 미니 피치에서도 부모 박스를 꽉 채우도록 설정 */
+  min-height: auto;
 }
 
 .pitchLines {
@@ -84,6 +85,18 @@
   transition: transform 0.1s ease;
 }
 
+@media (max-width: 640px) {
+  .nodeCircle {
+    width: 24px;
+    height: 24px;
+  }
+  
+  .nodeLabel {
+    font-size: 0.6rem;
+    padding: 1px 3px;
+  }
+}
+
 .nodeCircle:hover {
   transform: scale(1.15);
 }
@@ -105,6 +118,13 @@
   cursor: default;
 }
 
+@media (max-width: 640px) {
+  .nodeCircleEmpty {
+    width: 24px;
+    height: 24px;
+  }
+}
+
 .nodeLabel {
   margin-top: 4px;
   font-size: 0.7rem;
@@ -113,6 +133,15 @@
   padding: 1px 4px;
   border-radius: 4px;
   white-space: nowrap;
+}
+
+.nodeLabelMini {
+  font-size: 0.5rem;
+  color: white;
+  background: rgba(0,0,0,0.5);
+  padding: 0 2px;
+  border-radius: 2px;
+  margin-top: 2px;
 }
 
 .emptyPitch {
