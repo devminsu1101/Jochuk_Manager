@@ -10,11 +10,21 @@ router = APIRouter(prefix="/api/matches", tags=["matches"])
 @router.get("")
 async def list_matches(search: Optional[str] = None):
     try:
-        query = supabase.table("matches").select("*").eq("is_public", True).order("match_date", desc=False)
+        # 매치와 해당 매치의 선수 숫자를 함께 가져옴
+        query = supabase.table("matches").select("*, players(count)").eq("is_public", True).order("match_date", desc=False)
         if search: query = query.ilike("title", f"%{search}%")
         res = query.execute()
-        return res.data
-    except: return []
+        
+        # 데이터 가공: players count 데이터를 player_count 필드로 변환
+        processed_data = []
+        for match in res.data:
+            match["player_count"] = match.get("players", [{}])[0].get("count", 0) if match.get("players") else 0
+            processed_data.append(match)
+            
+        return processed_data
+    except Exception as e:
+        print(f"List matches error: {e}")
+        return []
 
 @router.post("")
 async def create_match(match: MatchCreate, user = Depends(get_current_user)):

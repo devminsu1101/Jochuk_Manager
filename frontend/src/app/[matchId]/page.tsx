@@ -161,6 +161,29 @@ export default function MatchPage() {
   return (
     <DndContext sensors={sensors} onDragEnd={handleDragEnd}>
       <main className={styles.mainLayout}>
+        {/* Mobile Sticky Bar */}
+        <div className={styles.stickyBottomActions}>
+          <button 
+            onClick={(e) => {
+              e.stopPropagation();
+              setShowShareOptions(!showShareOptions);
+            }} 
+            className={styles.tabButton} 
+            style={{flex: 1, background: 'var(--primary)', color: 'white', border: 'none'}}
+          >
+            공유/관리
+          </button>
+          {isOwner && (
+            <button 
+              onClick={handleAutoAssign} 
+              className={styles.tabButton} 
+              style={{flex: 1, background: 'var(--secondary)', color: 'white', border: 'none'}}
+            >
+              AI 자동배정
+            </button>
+          )}
+        </div>
+
         {!isOwner && !isLoading && (
           <div className={styles.readonlyBanner}>
             <Lock size={14} />
@@ -262,7 +285,13 @@ export default function MatchPage() {
               </div>
             )}
             
-            <button onClick={() => setShowShareOptions(!showShareOptions)} style={actionButtonStyle('#1976d2')}>
+            <button 
+              onClick={(e) => {
+                e.stopPropagation();
+                setShowShareOptions(!showShareOptions);
+              }} 
+              style={actionButtonStyle('#1976d2')}
+            >
               <Share2 size={18} />
               공유 및 관리
             </button>

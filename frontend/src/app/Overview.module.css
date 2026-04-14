@@ -201,20 +201,54 @@
 }
 
 .matchCard {
-  background: white;
-  border: 1px solid #eee;
-  border-radius: 16px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
   padding: 1.5rem;
   cursor: pointer;
   transition: all 0.25s ease;
   display: flex;
   flex-direction: column;
+  box-shadow: var(--shadow-sm);
 }
 
 .matchCard:hover {
   transform: translateY(-4px);
-  box-shadow: 0 12px 24px rgba(0,0,0,0.06);
-  border-color: #1976d2;
+  box-shadow: var(--shadow-lg);
+  border-color: var(--primary);
+}
+
+/* Attendance Progress Bar */
+.attendanceWrapper {
+  margin-bottom: 1.25rem;
+}
+
+.attendanceInfo {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  margin-bottom: 0.4rem;
+}
+
+.attendanceBar {
+  width: 100%;
+  height: 6px;
+  background: var(--bg-main);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.attendanceFill {
+  height: 100%;
+  background: var(--primary);
+  border-radius: 3px;
+  transition: width 0.3s ease;
+}
+
+.attendanceFill.full {
+  background: var(--accent);
 }
 
 .statusBadge {

@@ -1,180 +1,75 @@
 :root {
+  /* Core Colors - Plab-Inspired Modern Palette */
+  --primary: #1976d2;
+  --primary-dark: #1565c0;
+  --primary-light: #e3f2fd;
+  
+  --secondary: #2e7d32;
+  --secondary-dark: #1b5e20;
+  --secondary-light: #e8f5e9;
+  
+  --accent: #f59e0b; /* Attention/Urgent colors */
+  
+  --bg-main: #f8fafc;
+  --bg-card: #ffffff;
+  
+  --text-main: #1e293b;
+  --text-muted: #64748b;
+  --text-light: #94a3b8;
+  
+  --border-color: #e2e8f0;
+  
+  /* Pitch Colors */
   --pitch-green: #2e7d32;
-  --pitch-line: rgba(255, 255, 255, 0.5);
-  --sidebar-width: 300px;
-  --subs-sidebar-width: 220px;
+  --pitch-line: rgba(255, 255, 255, 0.6);
+  
+  /* Spacing & Radius */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  
+  /* Shadows */
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --shadow-deep: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
 }
 
-body {
-  margin: 0;
-  padding: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  background-color: #f0f2f5;
-  color: #333;
-}
-
-.main-layout {
-  display: flex;
-  height: 100vh;
-  overflow: hidden;
-}
-
-.workspace {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  background: #f0f2f5;
-  overflow: hidden;
-}
-
-/* 하단 쿼터 셀렉터 */
-.quarter-tabs-bottom {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 15px;
-  padding: 15px;
-  background: white;
-  border-top: 1px solid #ddd;
-}
-
-.tab-button {
-  padding: 10px 25px;
-  border-radius: 20px;
-  border: 1px solid #ddd;
-  background: white;
-  font-weight: bold;
-  cursor: pointer;
-  transition: all 0.2s;
-  color: #666;
-}
-
-.tab-button.active {
-  background: #2e7d32;
-  color: white;
-  border-color: #2e7d32;
-}
-
-.tab-button.full-view {
-  background: #1976d2;
-  color: white;
-  border-color: #1976d2;
-}
-
-/* 메인 편집 뷰 */
-.editor-main-view {
-  flex: 1;
-  display: flex;
-  padding: 10px;
-  gap: 15px;
-  justify-content: center;
-  align-items: center; /* 중앙 정렬 */
-  overflow: hidden;
-  height: calc(100vh - 80px);
-}
-
-.pitch-wrapper {
-  flex: 1;
-  max-width: 900px;
-  height: 95%; /* 쿼터 편집 모드에서는 화면 높이에 맞게 */
-  display: flex;
-  flex-direction: column;
-  background: var(--pitch-green);
-  border-radius: 12px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-  position: relative;
-  overflow: hidden;
-  padding: 10px;
-}
-
-.subs-sidebar {
-  width: var(--subs-sidebar-width);
-  background: white;
-  border-radius: 12px;
-  padding: 15px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-  border: 1px solid #eee;
-  max-height: 90%;
-  display: flex;
-  flex-direction: column;
-}
-
-/* 전체 보기 (Full View) 그리드 */
-.full-view-container {
-  flex: 1;
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  grid-template-rows: repeat(2, 1fr);
-  gap: 15px;
-  padding: 15px;
-  background: #eee;
-  height: calc(100vh - 80px);
+* {
   box-sizing: border-box;
-  overflow: hidden;
+  padding: 0;
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-.mini-pitch-card {
-  background: white;
-  border-radius: 8px;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  height: 100%; /* 그리드 셀 높이 전체 사용 */
+html, body {
+  max-width: 100vw;
+  overflow-x: hidden;
+  background-color: var(--bg-main);
+  color: var(--text-main);
+  font-family: -apple-system, BlinkMacSystemFont, system-ui, Roboto, 'Helvetica Neue', 'Segoe UI', 'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic', 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', sans-serif;
 }
 
-.mini-pitch-box {
-  background: var(--pitch-green);
-  position: relative;
-  flex: 1;
-  width: 100%;
-  display: flex; /* 자식인 SoccerPitch가 100% 찰 수 있도록 */
-  flex-direction: column;
+a {
+  color: inherit;
+  text-decoration: none;
 }
 
-.mini-subs-box {
-  padding: 8px;
-  background: #f9f9f9;
-  border-top: 1px solid #eee;
-  font-size: 0.7rem;
+/* Spinner Animation */
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }
 
-/* 사이드바 */
-.sidebar {
-  width: var(--sidebar-width);
-  background: white;
-  border-left: 1px solid #ddd;
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-}
-
-.pitch-title {
-  position: absolute;
-  top: 15px;
-  left: 15px;
-  font-weight: bold;
-  background: rgba(0,0,0,0.5);
-  color: white;
-  padding: 4px 12px;
-  border-radius: 6px;
-  z-index: 20;
-}
-
-.mini-player-badge {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  background: #f9f9f9;
-  padding: 4px 8px;
-  border-radius: 6px;
-  font-size: 0.75rem;
-  border: 1px solid #eee;
-  margin-bottom: 4px;
-}
-
-.mini-avatar {
-  width: 20px;
+.spinner {
+  width: 24px;
   height: 24px;
+  border: 3px solid var(--primary-light);
+  border-top-color: var(--primary);
   border-radius: 50%;
-  object-fit: cover;
+  animation: spin 0.8s linear infinite;
 }
+
+/* Common Layout Utilities (Deprecated legacy styles removed) */

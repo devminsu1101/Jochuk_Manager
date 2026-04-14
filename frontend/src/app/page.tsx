@@ -6,6 +6,7 @@ import { Search, Plus, Calendar, Clock, ChevronRight, User, LogOut } from 'lucid
 import { useAuthStore } from '@/store/useAuthStore';
 import { supabase } from '@/utils/supabase';
 import styles from './Overview.module.css';
+import { HeroCarousel } from '@/components/HeroCarousel';
 
 interface Match {
   id: string;
@@ -99,7 +100,7 @@ export default function OverviewPage() {
       <header className={styles.header}>
         <div className={styles.headerContent}>
           <div className={styles.logoSection} onClick={() => router.push('/')}>
-            <span>⚽️</span>
+            <span style={{fontSize: '1.5rem'}}>⚽️</span>
             <h1>Jochuk Manager</h1>
           </div>
           <div className={styles.userSection}>
@@ -123,8 +124,10 @@ export default function OverviewPage() {
       </header>
 
       <main className={styles.main}>
+        <HeroCarousel />
+
         <section className={styles.heroSection}>
-          <h2>팀의 라인업을 스마트하게 관리하세요</h2>
+          <h2>팀 라인업 관리의 새로운 기준</h2>
           <p>공정한 출전 시간 배정과 전술 수립, 조축 매니저와 함께라면 쉽습니다.</p>
           
           <div className={styles.searchBarContainer}>
@@ -164,6 +167,17 @@ export default function OverviewPage() {
                     {match.status === 'upcoming' ? '예정' : '진행중'}
                   </span>
                   <h4 className={styles.cardTitle}>{match.title}</h4>
+                  
+                  <div className={styles.attendanceWrapper}>
+                    <div className={styles.attendanceInfo}>
+                      <span>참여 인원</span>
+                      <span>15 / 18 명</span>
+                    </div>
+                    <div className={styles.attendanceBar}>
+                      <div className={styles.attendanceFill} style={{ width: '83%' }}></div>
+                    </div>
+                  </div>
+
                   <div className={styles.cardInfo}>
                     <div className={styles.infoItem}>
                       <Calendar size={14} />

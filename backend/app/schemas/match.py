@@ -15,3 +15,4 @@ class MatchOut(MatchBase):
     id: str
     owner_id: Optional[str] = None
     status: str
+    player_count: int = 0

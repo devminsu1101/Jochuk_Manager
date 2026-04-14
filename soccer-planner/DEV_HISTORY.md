@@ -123,3 +123,10 @@
     - 권한에 따른 버튼 노출 및 드래그 앤 드랍 동작 제어 정교화.
 - **Component Refinement**:
     - ParticipationSidebar 내 선수 수정 모달 디자인 개선 및 모바일 스크롤 영역 최적화.
+
+### 📅 2026-04-14 (Real-time Attendance Sync)
+- **Backend API Enhancement**:
+    -  조회 시 Supabase count를 활용하여 실제 참여 선수 인원()을 연동.
+- **Frontend Integration**:
+    - 매치 카드 UI 내 참여 인원 현황 프로그레스 바를 서버 데이터 기반으로 동적 구현.
+    - 참여 인원 비율에 따른 프로그레스 바 채움 로직 및 'full' 상태 강조 스타일 적용.
