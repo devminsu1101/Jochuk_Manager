@@ -1,15 +1,15 @@
-# 🔄 Current Session State (2026-04-11 - FINAL)
+# 🔄 Current Session State (2026-04-14)
 
-## 📍 Baseline: "Auth & Governance System Fixed"
-- **Auth**: Supabase Google 로그인 연동 완료.
-- **Security**: 백엔드 API 권한 가드(`verify_match_owner`) 및 프론트엔드 `authFetch` 도입 완료.
-- **UX**: 방장 권한에 따른 Read-only UI 및 안내 시스템 구축 완료.
+## 📍 Baseline: "Mobile & UX Polish Completed"
+- **UX**: 메인(Overview) 및 상세 페이지 디자인 고도화 및 CSS Module 전환 완료.
+- **Mobile**: 전 페이지 반응형 레이아웃(Stacking Sidebar, Scaling Pitch) 적용 완료.
+- **Security**: 방장(Owner) vs 게스트(Guest) UI 명확화 및 권한 기반 기능 제어 보강.
 
-## 🎯 Next Objective: "Phase 2 - UI Polish & UX"
-1.  **SUB List Logic**: 포메이션 변경 시 배치된 선수가 사라지지 않고 '대기 명단'으로 이동하도록 개선. (최우선)
-2.  **Empty State UX**: 선수가 한 명도 없을 때의 가이드 화면 구현.
-3.  **Mobile Responsive**: 축구장 UI 및 드래그 영역의 모바일 최적화.
+## 🎯 Next Objective: "Phase 2 - Logic & Stability"
+1.  **SUB List Logic**: 포메이션 변경 시 배치된 선수가 사라지지 않고 '대기 명단'으로 이동하도록 개선. (데이터 정합성)
+2.  **Empty State UX**: 선수가 한 명도 없을 때의 가이드 화면 및 등록 유도 UI 구현.
+3.  **Performance**: 매치 리스트 폴링 최적화 및 이미지 캡처 품질 개선.
 
 ## ⚠️ Handover Notes
-- **Architecture**: 모든 API 호출은 `useMatchStore`의 `authFetch`를 통해 인증 토큰을 전달해야 함.
-- **Constraints**: 포메이션 변경 시 `assignedPlayers` 데이터를 보존하는 로직을 `useMatchStore.ts`의 `setFormation`에 추가해야 함.
+- **UI/UX**: `MatchDetail.module.css`와 `Overview.module.css`가 새로 도입되었으므로 스타일 수정 시 해당 파일을 참조할 것.
+- **Responsiveness**: 축구장 내 선수 노드는 640px 이하에서 자동으로 크기가 조절되도록 설정됨.

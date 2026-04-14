@@ -109,3 +109,17 @@
 
 
 
+
+### 📅 2026-04-14 (Mobile Optimization & UX Polishing)
+- **UI/UX Modernization**:
+    - Overview 및 Match Detail 페이지의 인라인 스타일을 CSS Module로 전면 교체.
+    - 매치 카드 디자인 개선 및 '라인업 관리하기' 등 행동 유도 UI 강화.
+- **Mobile Responsiveness Overhaul**:
+    - 작은 화면에서 사이드바가 축구장 아래로 배치되는 Stacking 레이아웃 구현.
+    - 640px 이하 기기에서 축구장 노드 및 라벨 크기 자동 축소(Scaling) 로직 적용.
+    - 하단 플로팅 쿼터 네비게이션 바 도입으로 한 손 조작성 향상.
+- **Security-Driven UX Enhancement**:
+    - 방장(Owner) 전용 배지 및 게스트용 '읽기 전용' 배너/태그 시각화.
+    - 권한에 따른 버튼 노출 및 드래그 앤 드랍 동작 제어 정교화.
+- **Component Refinement**:
+    - ParticipationSidebar 내 선수 수정 모달 디자인 개선 및 모바일 스크롤 영역 최적화.

@@ -14,7 +14,6 @@ export const ParticipationSidebar: React.FC = () => {
   const [editName, setEditName] = useState('');
   const [editPrimary, setEditPrimary] = useState('');
   const [editSecondary, setEditSecondary] = useState('');
-  const [showMenuId, setShowMenuId] = useState<string | null>(null);
 
   const getPlayCount = (playerId: string) => {
     let count = 0;
@@ -31,7 +30,6 @@ export const ParticipationSidebar: React.FC = () => {
     setEditName(player.name);
     setEditPrimary(player.primaryPosition);
     setEditSecondary(player.secondaryPositions.join(', '));
-    setShowMenuId(null);
   };
 
   const handleUpdate = async () => {
@@ -44,33 +42,18 @@ export const ParticipationSidebar: React.FC = () => {
   const handleDelete = async (id: string) => {
     if (window.confirm('이 선수를 정말 삭제하시겠습니까?')) {
       await deletePlayer(id);
-      setShowMenuId(null);
     }
   };
 
   return (
     <div className={styles.sidebarContent}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '15px' }}>
-        <h3 style={{ margin: 0, fontSize: '1.1rem' }}>참여 명단 ({players.length})</h3>
-        <div style={{ display: 'flex', gap: '5px' }}>
-          <button 
-            onClick={() => addDummyPlayers()}
-            style={{ 
-              fontSize: '0.75rem', padding: '5px 10px', cursor: 'pointer',
-              backgroundColor: '#e3f2fd', border: '1px solid #90caf9', borderRadius: '4px',
-              color: '#1976d2', fontWeight: 'bold'
-            }}
-          >
+      <div className={styles.header}>
+        <h3>참여 명단 ({players.length})</h3>
+        <div className={styles.buttonGroup}>
+          <button onClick={() => addDummyPlayers()} className={`${styles.actionBtn} ${styles.sampleBtn}`}>
             샘플
           </button>
-          <button 
-            onClick={() => deleteAllPlayers()}
-            style={{ 
-              fontSize: '0.75rem', padding: '5px 10px', cursor: 'pointer',
-              backgroundColor: '#ffebee', border: '1px solid #ef9a9a', borderRadius: '4px',
-              color: '#d32f2f', fontWeight: 'bold'
-            }}
-          >
+          <button onClick={() => deleteAllPlayers()} className={`${styles.actionBtn} ${styles.clearBtn}`}>
             멸종
           </button>
         </div>
@@ -89,19 +72,30 @@ export const ParticipationSidebar: React.FC = () => {
             onDelete={() => handleDelete(player.id)}
           />
         ))}
+        {players.length === 0 && (
+          <p style={{ textAlign: 'center', color: '#999', fontSize: '0.85rem', marginTop: '2rem' }}>
+            등록된 선수가 없습니다.
+          </p>
+        )}
       </div>
 
       {editingPlayerId && (
-        <div style={modalOverlayStyle}>
-          <div style={modalContentStyle}>
+        <div className={styles.modalOverlay}>
+          <div className={styles.modalContent}>
             <h4>선수 정보 수정</h4>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-              <input value={editName} onChange={(e) => setEditName(e.target.value)} placeholder="이름" style={inputStyle} />
-              <input value={editPrimary} onChange={(e) => setEditPrimary(e.target.value)} placeholder="주 포지션 (예: ST)" style={inputStyle} />
-              <input value={editSecondary} onChange={(e) => setEditSecondary(e.target.value)} placeholder="부 포지션 (쉼표로 구분)" style={inputStyle} />
-              <div style={{ display: 'flex', gap: '10px', marginTop: '10px' }}>
-                <button onClick={handleUpdate} style={{ ...actionButtonStyle, background: '#2e7d32' }}>저장</button>
-                <button onClick={() => setEditingPlayerId(null)} style={{ ...actionButtonStyle, background: '#666' }}>취소</button>
+            <div style={{ display: 'flex', flexDirection: 'column' }}>
+              <label style={{ fontSize: '0.75rem', fontWeight: 700, color: '#666', marginBottom: '4px' }}>이름</label>
+              <input value={editName} onChange={(e) => setEditName(e.target.value)} className={styles.inputField} />
+              
+              <label style={{ fontSize: '0.75rem', fontWeight: 700, color: '#666', marginBottom: '4px' }}>주 포지션</label>
+              <input value={editPrimary} onChange={(e) => setEditPrimary(e.target.value)} className={styles.inputField} />
+              
+              <label style={{ fontSize: '0.75rem', fontWeight: 700, color: '#666', marginBottom: '4px' }}>부 포지션 (쉼표 구분)</label>
+              <input value={editSecondary} onChange={(e) => setEditSecondary(e.target.value)} className={styles.inputField} />
+              
+              <div className={styles.modalActions}>
+                <button onClick={handleUpdate} className={styles.saveBtn}>저장하기</button>
+                <button onClick={() => setEditingPlayerId(null)} className={styles.cancelBtn}>취소</button>
               </div>
             </div>
           </div>
@@ -109,21 +103,4 @@ export const ParticipationSidebar: React.FC = () => {
       )}
     </div>
   );
-};
-
-const modalOverlayStyle: React.CSSProperties = {
-  position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, 
-  backgroundColor: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 10000
-};
-
-const modalContentStyle: React.CSSProperties = {
-  background: 'white', padding: '20px', borderRadius: '8px', width: '300px', boxShadow: '0 4px 20px rgba(0,0,0,0.2)'
-};
-
-const inputStyle: React.CSSProperties = {
-  padding: '8px', border: '1px solid #ddd', borderRadius: '4px'
-};
-
-const actionButtonStyle: React.CSSProperties = {
-  flex: 1, padding: '10px', border: 'none', borderRadius: '4px', color: 'white', fontWeight: 'bold', cursor: 'pointer'
 };

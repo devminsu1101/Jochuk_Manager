@@ -8,12 +8,14 @@ import { useMatchStore } from '@/store/useMatchStore';
 import { useAuthStore } from '@/store/useAuthStore';
 import { SoccerPitch } from '@/components/SoccerPitch';
 import { ParticipationSidebar } from '@/components/ParticipationSidebar';
-import { Lock, Info } from 'lucide-react';
+import { Lock, Info, Share2, Award, Download, Link as LinkIcon } from 'lucide-react';
+import styles from './MatchDetail.module.css';
 
-const actionButtonStyle: React.CSSProperties = {
-  width: '100%', padding: '12px', fontSize: '1rem', cursor: 'pointer',
-  background: '#2e7d32', color: 'white', border: 'none', borderRadius: '4px', fontWeight: 'bold'
-};
+const actionButtonStyle = (bgColor: string): React.CSSProperties => ({
+  width: '100%', padding: '12px', fontSize: '0.9rem', cursor: 'pointer',
+  background: bgColor, color: 'white', border: 'none', borderRadius: '8px', fontWeight: 'bold',
+  display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', transition: 'opacity 0.2s'
+});
 
 export default function MatchPage() {
   const params = useParams();
@@ -24,8 +26,6 @@ export default function MatchPage() {
     setMatchId, 
     fetchPlayers,
     updateLineup, 
-    setLineups,
-    saveLineups,
     autoAssign,
     lineups, 
     players, 
@@ -59,8 +59,10 @@ export default function MatchPage() {
         if (response.ok) {
           const data = await response.json();
           setMatchInfo(data);
-          // owner_id가 없거나(레거시) 현재 사용자와 일치하면 방장으로 간주
-          setIsOwner(!data.owner_id || data.owner_id === user?.id);
+          // owner_id가 현재 사용자와 일치하면 방장으로 간주
+          const isUserOwner = data.owner_id === user?.id;
+          setIsOwner(isUserOwner);
+          console.log("Ownership Check:", { matchOwner: data.owner_id, currentUser: user?.id, isOwner: isUserOwner });
         }
       } catch (error) {
         console.error('Match detail fetch error:', error);
@@ -124,7 +126,7 @@ export default function MatchPage() {
     setIsCapturing(true);
     try {
       const dataUrl = await toPng(target, { 
-        backgroundColor: activeQuarterId === 0 ? '#eee' : '#f0f2f5',
+        backgroundColor: activeQuarterId === 0 ? '#f0f2f5' : '#ffffff',
         pixelRatio: 2
       });
       
@@ -158,111 +160,122 @@ export default function MatchPage() {
 
   return (
     <DndContext sensors={sensors} onDragEnd={handleDragEnd}>
-      <main className="main-layout">
+      <main className={styles.mainLayout}>
         {!isOwner && !isLoading && (
-          <div className="readonly-banner">
+          <div className={styles.readonlyBanner}>
             <Lock size={14} />
-            <span>읽기 전용 모드: 이 매치를 수정할 권한이 없습니다.</span>
+            <span>읽기 전용 모드: 매치 관리자만 수정할 수 있습니다.</span>
           </div>
         )}
         
         {isLoading && (
-          <div className="loading-overlay">
+          <div className={styles.loadingOverlay}>
             <div className="spinner" />
-            <p>데이터를 불러오는 중입니다...</p>
+            <p>데이터를 동기화 중입니다...</p>
           </div>
         )}
 
-        <section className="workspace">
-          <div className="match-title-header">
+        <section className={styles.workspace}>
+          <div className={styles.matchTitleHeader}>
             <h2>{matchInfo?.title || '로딩 중...'}</h2>
-            {!isOwner && <span className="view-only-tag">View Only</span>}
+            {!isOwner && <span className={styles.viewOnlyTag}>View Only</span>}
+            {isOwner && <span className={`${styles.viewOnlyTag} ${styles.owner}`} style={{background: '#dcfce7', color: '#166534', borderColor: '#bbf7d0'}}>Owner</span>}
           </div>
 
           {activeQuarterId === 0 ? (
-            <div className="full-view-container" ref={fullViewRef}>
+            <div className={styles.fullViewContainer} ref={fullViewRef}>
               {[1, 2, 3, 4].map(q => {
                 const subs = getSubsForQuarter(q);
                 return (
-                  <div key={q} className="mini-pitch-card">
-                    <div className="mini-pitch-box">
-                      <span className="pitch-title">{q}쿼터</span>
+                  <div key={q} className={styles.miniPitchCard}>
+                    <div className={styles.miniPitchBox}>
+                      <span className={styles.pitchTitle}>{q}쿼터</span>
                       <SoccerPitch quarterId={q} isMini={true} />
                     </div>
-                    <div className="mini-subs-box">
-                      <b style={{ color: '#d32f2f' }}>대기:</b> {subs.map(p => p.name).join(', ') || '없음'}
+                    <div className={styles.miniSubsBox}>
+                      <b style={{ color: '#d32f2f' }}>대기 명단:</b> {subs.map(p => p.name).join(', ') || '없음'}
                     </div>
                   </div>
                 );
               })}
             </div>
           ) : (
-            <div className="editor-main-view" ref={captureRef}>
-              <div className="pitch-wrapper">
-                <span className="pitch-title">{activeQuarterId}쿼터 라인업</span>
+            <div className={styles.editorMainView} ref={captureRef}>
+              <div className={styles.pitchWrapper}>
+                <span className={styles.pitchTitle}>{activeQuarterId}쿼터 라인업</span>
                 <SoccerPitch quarterId={activeQuarterId} />
               </div>
 
-              <div className="subs-sidebar">
-                <h4 style={{ margin: 0, fontSize: '0.9rem', color: '#d32f2f' }}>이번 쿼터 대기 ({getSubsForQuarter(activeQuarterId).length})</h4>
-                <div style={{ overflowY: 'auto', marginTop: '10px' }}>
-                  {getSubsForQuarter(activeQuarterId).map(p => (
-                    <div key={p.id} className="mini-player-badge">
-                      <div style={{ width: '12px', height: '12px', borderRadius: '50%', backgroundColor: p.color }} />
-                      <span>{p.name}</span>
-                    </div>
-                  ))}
+              <div className={styles.subsSidebar}>
+                <h4 style={{ margin: 0, fontSize: '0.9rem', color: '#d32f2f', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  대기 ({getSubsForQuarter(activeQuarterId).length})
+                </h4>
+                <div style={{ overflowY: 'auto', marginTop: '12px' }}>
+                  {getSubsForQuarter(activeQuarterId).length > 0 ? (
+                    getSubsForQuarter(activeQuarterId).map(p => (
+                      <div key={p.id} className={styles.miniPlayerBadge}>
+                        <div style={{ width: '10px', height: '10px', borderRadius: '50%', backgroundColor: p.color }} />
+                        <span>{p.name}</span>
+                      </div>
+                    ))
+                  ) : (
+                    <p style={{fontSize: '0.8rem', color: '#999', textAlign: 'center', marginTop: '20px'}}>대기 선수 없음</p>
+                  )}
                 </div>
               </div>
             </div>
           )}
 
-          <div className="quarter-tabs-bottom">
+          <div className={styles.quarterTabsBottom}>
             <button 
-              className={`tab-button ${activeQuarterId === 0 ? 'full-view' : ''}`}
+              className={`${styles.tabButton} ${activeQuarterId === 0 ? styles.fullView : ''}`}
               onClick={() => setActiveQuarterId(0)}
             >
-              📊 전체 보기
+              전체 보기
             </button>
-            <div style={{ width: '1px', height: '24px', background: '#ddd', margin: '0 10px' }} />
+            <div style={{ width: '1px', height: '16px', background: '#e2e8f0', margin: '0 8px' }} />
             {[1, 2, 3, 4].map(q => (
               <button 
                 key={q} 
-                className={`tab-button ${activeQuarterId === q ? 'active' : ''}`}
+                className={`${styles.tabButton} ${activeQuarterId === q ? styles.active : ''}`}
                 onClick={() => setActiveQuarterId(q)}
               >
-                {q}쿼터
+                {q}Q
               </button>
             ))}
           </div>
         </section>
         
-        <aside className="sidebar">
+        <aside className={styles.sidebar}>
           <ParticipationSidebar />
-          <div className="actions" style={{ marginTop: 'auto', paddingTop: '20px', position: 'relative' }}>
+          <div className={styles.actions}>
             {showShareOptions && (
-              <div className="share-popover">
-                <button onClick={handleSaveImage} className="share-item" disabled={isCapturing}>
-                  {isCapturing ? '저장 중...' : (activeQuarterId === 0 ? '전체 라인업 저장' : '현재 쿼터 저장')}
+              <div className={styles.sharePopover}>
+                <button onClick={handleSaveImage} className={styles.shareItem} disabled={isCapturing}>
+                  <Download size={14} style={{marginRight: '8px'}} />
+                  {isCapturing ? '저장 중...' : (activeQuarterId === 0 ? '전체 이미지 저장' : `${activeQuarterId}쿼터 이미지 저장`)}
                 </button>
-                <button onClick={handleCopyInviteLink} className="share-item">플레이어 초대 링크 복사</button>
+                <button onClick={handleCopyInviteLink} className={styles.shareItem}>
+                  <LinkIcon size={14} style={{marginRight: '8px'}} />
+                  선수 초대 링크 복사
+                </button>
               </div>
             )}
             
-            <button onClick={() => setShowShareOptions(!showShareOptions)} style={{ 
-              ...actionButtonStyle, background: '#1976d2', marginBottom: '10px'
-            }}>
+            <button onClick={() => setShowShareOptions(!showShareOptions)} style={actionButtonStyle('#1976d2')}>
+              <Share2 size={18} />
               공유 및 관리
             </button>
             
-            {isOwner && (
-              <button onClick={handleAutoAssign} style={actionButtonStyle}>
+            <div style={{height: '10px'}} />
+
+            {isOwner ? (
+              <button onClick={handleAutoAssign} style={actionButtonStyle('#2e7d32')}>
+                <Award size={18} />
                 AI 자동 배정
               </button>
-            )}
-            
-            {!isOwner && (
-              <div className="owner-only-notice">
+            ) : (
+              <div className={styles.ownerOnlyNotice}>
                 <Info size={14} />
                 <span>방장만 수정할 수 있습니다.</span>
               </div>
@@ -270,26 +283,6 @@ export default function MatchPage() {
           </div>
         </aside>
       </main>
-
-      <style jsx>{`
-        .readonly-banner {
-          position: fixed; top: 0; left: 0; right: 0; height: 32px;
-          background: #fff3e0; color: #e65100; font-size: 0.8rem; font-weight: 600;
-          display: flex; align-items: center; justify-content: center; gap: 8px;
-          z-index: 1000; border-bottom: 1px solid #ffe0b2;
-        }
-        .main-layout { padding-top: 32px; }
-        .match-title-header { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
-        .match-title-header h2 { margin: 0; font-size: 1.5rem; color: #1a1a1a; }
-        .view-only-tag { background: #eee; color: #666; padding: 2px 8px; border-radius: 4px; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; }
-        .loading-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(255, 255, 255, 0.7); display: flex; flexDirection: column; alignItems: center; justifyContent: center; z-index: 9999; }
-        .spinner { width: 40px; height: 40px; border: 4px solid #f3f3f3; borderTop: 4px solid #3498db; borderRadius: 50%; animation: spin 1s linear infinite; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        
-        .share-popover { position: absolute; bottom: 130px; left: 0; right: 0; background: white; border: 1px solid #ddd; borderRadius: 8px; padding: 10px; box-shadow: 0 -4px 10px rgba(0,0,0,0.1); z-index: 100; }
-        .share-item { width: 100%; padding: 10px; fontSize: 0.9rem; cursor: pointer; background: none; border: none; borderBottom: 1px solid #eee; textAlign: left; display: block; }
-        .owner-only-notice { display: flex; align-items: center; justify-content: center; gap: 6px; padding: 12px; background: #f5f5f5; color: #888; border-radius: 4px; font-size: 0.85rem; font-weight: 500; }
-      `}</style>
     </DndContext>
   );
 }

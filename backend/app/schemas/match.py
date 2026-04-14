@@ -13,5 +13,5 @@ class MatchCreate(MatchBase):
 
 class MatchOut(MatchBase):
     id: str
-    creator_id: Optional[str] = None
+    owner_id: Optional[str] = None
     status: str
