@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { useDroppable } from '@dnd-kit/core';
-import styles from './SoccerPitch.module.css';
+import styles from './SoccerPitch.module.scss';
 
 interface DroppableNodeProps {
   quarterId: number;

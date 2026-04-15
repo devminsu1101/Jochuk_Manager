@@ -1,0 +1,355 @@
+@import "../styles/variables";
+
+.container {
+  min-height: 100vh;
+  background-color: $grey-10;
+  color: $black;
+  font-family: $font-main;
+}
+
+.header {
+  background: $white;
+  border-bottom: $border-light;
+  padding: $space-sm $space-lg;
+  position: sticky;
+  top: 0;
+  z-index: $z-sticky;
+  box-shadow: $shadow-sm;
+
+  &Content {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+}
+
+.logoSection {
+  display: flex;
+  align-items: center;
+  gap: $space-sm;
+  cursor: pointer;
+
+  h1 {
+    font-size: 1.15rem;
+    font-weight: $weight-heavy;
+    margin: 0;
+    letter-spacing: -0.5px;
+  }
+}
+
+.userSection {
+  display: flex;
+  align-items: center;
+}
+
+.userInfo {
+  display: flex;
+  align-items: center;
+  gap: $space-sm;
+}
+
+.myPageBtn {
+  display: flex;
+  align-items: center;
+  gap: $space-xs;
+  background: $grey-10;
+  border: $border-light;
+  padding: $space-xs $space-md;
+  border-radius: $radius-full;
+  cursor: pointer;
+  color: $grey-80;
+  transition: all 0.2s;
+
+  &:hover {
+    background: $grey-20;
+    color: $black;
+  }
+}
+
+.userName {
+  font-size: 0.85rem;
+  font-weight: $weight-bold;
+}
+
+.logoutButton {
+  background: none;
+  border: $border-light;
+  padding: $space-xs;
+  border-radius: 50%;
+  cursor: pointer;
+  color: $grey-60;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+
+  &:hover {
+    background: #fee2e2;
+    color: $error;
+    border-color: #fecaca;
+  }
+}
+
+.loginButton {
+  display: flex;
+  align-items: center;
+  gap: $space-sm;
+  padding: $space-sm $space-lg;
+  border: $border-light;
+  border-radius: $radius-full;
+  background: $white;
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: $weight-bold;
+  transition: all 0.2s;
+
+  &:hover {
+    background: $grey-10;
+  }
+}
+
+.main {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: $space-xl $space-lg;
+  display: flex;
+  flex-direction: column;
+  gap: $space-xl;
+}
+
+/* Hero Section */
+.heroSection {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: $space-md;
+  padding: $space-xl 0;
+
+  h2 {
+    font-size: 2.25rem;
+    font-weight: $weight-heavy;
+    margin: 0;
+    letter-spacing: -1px;
+  }
+
+  p {
+    font-size: 1.1rem;
+    color: $grey-60;
+    margin: 0;
+  }
+}
+
+.searchBarContainer {
+  display: flex;
+  max-width: 600px;
+  margin: $space-md auto 0;
+  gap: $space-sm;
+}
+
+.searchInputWrapper {
+  flex: 1;
+  position: relative;
+  display: flex;
+  align-items: center;
+  background: $white;
+  border: 2px solid $grey-10;
+  border-radius: $radius-md;
+  transition: border-color 0.2s;
+
+  &:focus-within {
+    border-color: $primary-80;
+  }
+}
+
+.searchIcon {
+  position: absolute;
+  left: $space-md;
+  color: $grey-40;
+}
+
+.searchInputWrapper input {
+  width: 100%;
+  border: none;
+  padding: $space-md $space-md $space-md 3rem;
+  border-radius: $radius-md;
+  font-size: 1rem;
+  outline: none;
+}
+
+.searchBtn {
+  padding: 0 $space-lg;
+  background: $primary-80;
+  color: $white;
+  border: none;
+  border-radius: $radius-md;
+  font-weight: $weight-bold;
+  cursor: pointer;
+  transition: background 0.2s;
+
+  &:hover {
+    background: $primary-100;
+  }
+}
+
+/* Match List */
+.matchListSection {
+  display: flex;
+  flex-direction: column;
+  gap: $space-lg;
+}
+
+.sectionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  h3 {
+    font-size: 1.25rem;
+    font-weight: $weight-heavy;
+    margin: 0;
+  }
+}
+
+.createMatchBtn {
+  display: flex;
+  align-items: center;
+  gap: $space-xs;
+  padding: $space-sm $space-lg;
+  background: $primary-80;
+  color: $white;
+  border: none;
+  border-radius: $radius-sm;
+  font-size: 0.85rem;
+  font-weight: $weight-bold;
+  cursor: pointer;
+
+  &:hover {
+    background: $primary-100;
+  }
+}
+
+.dateGroups {
+  display: flex;
+  flex-direction: column;
+  gap: $space-xl;
+}
+
+.dateHeader {
+  font-size: 1.1rem;
+  font-weight: $weight-heavy;
+  color: $black;
+  padding-bottom: $space-xs;
+  border-bottom: 2px solid $grey-10;
+}
+
+.matchList {
+  display: flex;
+  flex-direction: column;
+  gap: $space-sm;
+}
+
+.matchRow {
+  display: flex;
+  align-items: center;
+  padding: $space-md $space-lg;
+  background: $white;
+  border-radius: $radius-md;
+  border: 1px solid transparent;
+  box-shadow: $shadow-sm;
+  cursor: pointer;
+  transition: all 0.2s;
+
+  &:hover {
+    border-color: $primary-80;
+    box-shadow: $shadow-md;
+    transform: translateX($space-xs);
+  }
+}
+
+.matchTime {
+  font-size: 1.1rem;
+  font-weight: $weight-heavy;
+  color: $primary-80;
+  min-width: 80px;
+}
+
+.matchMainInfo {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: $space-xs;
+}
+
+.matchTitle {
+  font-size: 1.1rem;
+  font-weight: $weight-bold;
+  margin: 0;
+}
+
+.matchSubInfo {
+  font-size: 0.85rem;
+  color: $grey-60;
+  font-weight: $weight-medium;
+}
+
+.matchStatus {
+  display: flex;
+  align-items: center;
+  gap: $space-md;
+}
+
+.statusBadge {
+  font-size: 0.75rem;
+  font-weight: $weight-bold;
+  padding: $space-xs $space-md;
+  border-radius: $radius-full;
+  min-width: 80px;
+  text-align: center;
+}
+
+.statusOpen { background: $primary-10; color: $primary-80; }
+.statusUrgent { background: #fff3e0; color: $cta; }
+.statusClosed { background: $grey-10; color: $grey-40; }
+
+.rowArrow {
+  color: $grey-20;
+}
+
+/* Empty State */
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: $space-md;
+  padding: $space-xl;
+  background: $white;
+  border-radius: $radius-lg;
+  border: 2px dashed $grey-20;
+
+  .emptyIcon { font-size: 3.5rem; }
+  p { color: $grey-60; font-weight: $weight-bold; }
+}
+
+.emptyCreateBtn {
+  padding: $space-md $space-xl;
+  background: $primary-80;
+  color: $white;
+  border: none;
+  border-radius: $radius-md;
+  font-weight: $weight-heavy;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: transform 0.2s;
+
+  &:hover { transform: scale(1.05); }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .main { padding: $space-md; }
+  .heroSection h2 { font-size: 1.75rem; }
+  .searchBarContainer { flex-direction: column; }
+  .matchTime { min-width: 60px; font-size: 1rem; }
+}

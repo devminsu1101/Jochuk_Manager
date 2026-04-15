@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { useMatchStore } from '@/store/useMatchStore';
 import { PlayerListItem } from './PlayerListItem';
-import styles from './ParticipationSidebar.module.css';
+import styles from './ParticipationSidebar.module.scss';
 
 export const ParticipationSidebar: React.FC = () => {
   const players = useMatchStore((state) => state.players);

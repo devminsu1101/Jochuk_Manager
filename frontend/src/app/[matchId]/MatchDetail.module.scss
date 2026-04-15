@@ -1,0 +1,325 @@
+@import "../../styles/variables";
+
+.mainLayout {
+  display: flex;
+  min-height: 100vh;
+  background-color: $grey-10;
+  padding-top: $space-xl;
+  transition: padding-bottom 0.3s;
+}
+
+.workspace {
+  flex: 1;
+  padding: $space-lg;
+  display: flex;
+  flex-direction: column;
+  gap: $space-lg;
+  overflow-x: hidden;
+}
+
+.sidebar {
+  width: 350px;
+  background: $white;
+  border-left: $border-light;
+  padding: $space-lg;
+  display: flex;
+  flex-direction: column;
+  gap: $space-md;
+  height: calc(100vh - 32px);
+  position: sticky;
+  top: 32px;
+  box-shadow: $shadow-sm;
+}
+
+/* Header */
+.matchTitleHeader {
+  display: flex;
+  align-items: center;
+  gap: $space-sm;
+
+  h2 {
+    margin: 0;
+    font-size: 1.75rem;
+    font-weight: $weight-heavy;
+    color: $black;
+    letter-spacing: -0.5px;
+  }
+}
+
+.viewOnlyTag {
+  background: $primary-10;
+  color: $primary-80;
+  padding: $space-xs $space-sm;
+  border-radius: $radius-sm;
+  font-size: 0.7rem;
+  font-weight: $weight-heavy;
+  text-transform: uppercase;
+  border: 1px solid $primary-20;
+
+  &.owner {
+    background: #dcfce7;
+    color: #166534;
+    border-color: #bbf7d0;
+  }
+}
+
+/* Editor Main View - Vertical Stack */
+.editorMainView {
+  display: flex;
+  flex-direction: column;
+  gap: $space-lg;
+  flex: 1;
+  min-height: 0;
+}
+
+.pitchWrapper {
+  flex: 1;
+  background: $white;
+  border-radius: $radius-lg;
+  padding: $space-lg;
+  box-shadow: $shadow-lg;
+  display: flex;
+  flex-direction: column;
+  gap: $space-md;
+  min-height: 500px;
+}
+
+.pitchHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: $space-sm;
+  border-bottom: $border-light;
+}
+
+.pitchTitle {
+  font-size: 1.1rem;
+  font-weight: $weight-heavy;
+  color: $black;
+}
+
+.pitchContainer {
+  flex: 1;
+  position: relative;
+  min-height: 0;
+}
+
+/* Inline Quarter Tabs */
+.quarterTabsInline {
+  display: flex;
+  background: $grey-10;
+  padding: $space-xs;
+  border-radius: $radius-md;
+  gap: $space-xs;
+}
+
+.tabButtonInline {
+  padding: $space-xs $space-md;
+  border-radius: $radius-sm;
+  border: none;
+  background: transparent;
+  font-size: 0.85rem;
+  font-weight: $weight-bold;
+  color: $grey-60;
+  cursor: pointer;
+  transition: all 0.2s;
+
+  &.active {
+    background: $white;
+    color: $primary-80;
+    box-shadow: $shadow-sm;
+  }
+
+  &.fullView {
+    background: $black;
+    color: $white;
+  }
+}
+
+/* Horizontal Subs Bar */
+.horizontalSubsBar {
+  background: $white;
+  border-radius: $radius-lg;
+  padding: $space-md $space-lg;
+  box-shadow: $shadow-md;
+  display: flex;
+  align-items: center;
+  gap: $space-lg;
+}
+
+.subsBarHeader {
+  min-width: 120px;
+  padding-right: $space-lg;
+  border-right: $border-light;
+
+  h4 {
+    margin: 0;
+    font-size: 0.9rem;
+    font-weight: $weight-heavy;
+    color: $error;
+  }
+}
+
+.horizontalSubsGrid {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: $space-md;
+  overflow-x: auto;
+  padding: $space-xs;
+
+  &::-webkit-scrollbar { height: 4px; }
+  &::-webkit-scrollbar-thumb { background: $grey-20; border-radius: 2px; }
+}
+
+.subsItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: $space-xs;
+  min-width: 60px;
+}
+
+.subsName {
+  font-size: 0.75rem;
+  font-weight: $weight-bold;
+  color: $grey-80;
+  white-space: nowrap;
+}
+
+.emptyPlayersGuide {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: $space-xs;
+  padding: $space-md;
+  background: $grey-10;
+  border-radius: $radius-md;
+  border: 1px dashed $grey-40;
+  width: 100%;
+  text-align: center;
+
+  p { font-size: 0.8rem; color: $grey-60; font-weight: $weight-bold; margin: 0; }
+}
+
+.inviteBtnSmall {
+  padding: $space-xs $space-md;
+  background: $secondary;
+  color: $white;
+  border: none;
+  border-radius: $radius-sm;
+  font-size: 0.8rem;
+  font-weight: $weight-bold;
+  cursor: pointer;
+}
+
+/* Full View (All Quarters) */
+.fullViewContainer {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: $space-lg;
+  padding-bottom: $space-xl;
+}
+
+.miniPitchCard {
+  background: $white;
+  border-radius: $radius-md;
+  padding: $space-md;
+  box-shadow: $shadow-md;
+  display: flex;
+  flex-direction: column;
+  gap: $space-sm;
+}
+
+.miniPitchBox {
+  position: relative;
+  aspect-ratio: 4/5;
+}
+
+.miniSubsBox {
+  font-size: 0.8rem;
+  color: $grey-60;
+  line-height: 1.4;
+}
+
+/* Actions Sidebar */
+.actions {
+  margin-top: auto;
+  padding-top: $space-md;
+  border-top: $border-light;
+  display: flex;
+  flex-direction: column;
+  gap: $space-sm;
+}
+
+.sharePopover {
+  position: absolute;
+  bottom: calc(100% + 10px);
+  left: 0;
+  right: 0;
+  background: $white;
+  border: $border-light;
+  border-radius: $radius-md;
+  padding: $space-xs;
+  box-shadow: $shadow-deep;
+  z-index: $z-modal;
+  display: flex;
+  flex-direction: column;
+}
+
+.shareItem {
+  width: 100%;
+  padding: $space-sm $space-md;
+  font-size: 0.85rem;
+  font-weight: $weight-bold;
+  text-align: left;
+  background: none;
+  border: none;
+  border-radius: $radius-sm;
+  cursor: pointer;
+
+  &:hover { background: $grey-10; }
+}
+
+/* Utility */
+.readonlyBanner {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 32px;
+  background: #fffbeb;
+  color: #92400e;
+  font-size: 0.75rem;
+  font-weight: $weight-bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: $space-sm;
+  z-index: $z-overlay;
+  border-bottom: 1px solid #fef3c7;
+}
+
+.loadingOverlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(4px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .mainLayout { flex-direction: column; }
+  .sidebar { width: 100%; height: auto; position: static; border-left: none; border-top: $border-light; }
+  .fullViewContainer { grid-template-columns: 1fr; }
+  .pitchHeader { flex-direction: column; gap: $space-md; }
+  .horizontalSubsBar { flex-direction: column; align-items: flex-start; }
+  .subsBarHeader { border-right: none; border-bottom: $border-light; padding: 0 0 $space-sm 0; width: 100%; }
+}

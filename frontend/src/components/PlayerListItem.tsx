@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import styles from './ParticipationSidebar.module.css';
+import styles from './ParticipationSidebar.module.scss';
 
 interface PlayerListItemProps {
   id: string;

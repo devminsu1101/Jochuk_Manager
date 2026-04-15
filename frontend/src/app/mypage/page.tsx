@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { ChevronRight, LogOut, Layout, Calendar, Clock, User, ArrowLeft } from 'lucide-react';
 import { useAuthStore } from '@/store/useAuthStore';
 import { supabase } from '@/utils/supabase';
-import styles from '../Overview.module.css'; // 기존 스타일 재사용
+import styles from '../Overview.module.scss'; // 기존 스타일 재사용
 
 interface Match {
   id: string;

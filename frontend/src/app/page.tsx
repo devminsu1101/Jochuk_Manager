@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { Search, Plus, Calendar, Clock, ChevronRight, User, LogOut, Layout } from 'lucide-react';
 import { useAuthStore } from '@/store/useAuthStore';
 import { supabase } from '@/utils/supabase';
-import styles from './Overview.module.css';
+import styles from './Overview.module.scss';
 import { HeroCarousel } from '@/components/HeroCarousel';
 
 interface Match {
