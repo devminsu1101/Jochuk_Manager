@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { useDraggable } from '@dnd-kit/core';
-import styles from './SoccerPitch.module.css';
+import styles from './SoccerPitch.module.scss';
 
 interface DraggablePlayerNodeProps {
   playerId: string;
@@ -16,29 +16,27 @@ interface DraggablePlayerNodeProps {
 export const DraggablePlayerNode: React.FC<DraggablePlayerNodeProps> = ({ 
   playerId, name, quarterId, positionKey, color, isMini = false 
 }) => {
-  const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({
+  const { attributes, listeners, setNodeRef, isDragging } = useDraggable({
     id: `node-player-${quarterId}-${positionKey}`,
     data: { playerId, fromQuarterId: quarterId, fromPositionKey: positionKey },
     disabled: isMini
   });
-
-  const style = transform ? {
-    transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,
-    opacity: isDragging ? 0 : 1, // 드래그 중인 원본은 숨김 (CSS 드래그 효과와 겹치지 않게)
-    zIndex: 999,
-  } : undefined;
 
   const nodeClass = isMini ? styles.nodeCircleMini : styles.nodeCircle;
 
   return (
     <div 
       ref={setNodeRef} 
-      style={{ ...style, backgroundColor: color || '#666' }}
+      style={{ 
+        backgroundColor: color || '#666',
+        opacity: isDragging ? 0 : 1, // 드래그 중일 때 원본 숨김
+        cursor: isMini ? 'default' : 'grab'
+      }}
       {...(isMini ? {} : listeners)} 
       {...(isMini ? {} : attributes)} 
       className={nodeClass}
     >
-      {/* 텍스트 제거: 사용자 요청 반영 */}
+      {!isMini && <span className={styles.playerInitial}>{name.charAt(0)}</span>}
     </div>
   );
 };

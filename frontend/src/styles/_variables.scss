@@ -1,0 +1,54 @@
+// Jochuk Manager Design System (JMDS) Variables
+
+// 1. Color Scale (Hues: Green)
+$primary-100: #1b5e20; // Deepest Green
+$primary-80:  #2e7d32; // Brand Color (Match Green)
+$primary-60:  #43a047;
+$primary-40:  #66bb6a;
+$primary-20:  #a5d6a7;
+$primary-10:  #e8f5e9; // Sub-background Green
+
+// 2. Action Colors
+$secondary:   #1976d2; // Admin/Trust Blue
+$cta:         #ff5722; // Urgent/Action Orange (Call To Action)
+$error:       #d32f2f; // Warning/Danger Red
+
+// 3. Neutral Scale (Grayscale)
+$black:       #1a1a1a;
+$grey-80:     #475569;
+$grey-60:     #64748b;
+$grey-40:     #94a3b8;
+$grey-20:     #cbd5e1;
+$grey-10:     #f1f5f9;
+$white:       #ffffff;
+
+// 4. Spacing System (8px Grid Based) - 1rem = 16px
+$space-xs: 0.25rem; // 4px
+$space-sm: 0.5rem;  // 8px
+$space-md: 1rem;    // 16px
+$space-lg: 1.5rem;  // 24px
+$space-xl: 2.5rem;  // 40px
+
+// 5. Typography
+$font-main: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+$weight-medium: 500;
+$weight-bold: 700;
+$weight-heavy: 900;
+
+// 6. Border & Radius
+$radius-sm: 6px;
+$radius-md: 12px;
+$radius-lg: 20px;
+$radius-full: 9999px;
+$border-light: 1px solid $grey-20;
+
+// 7. Z-Index Hierarchy
+$z-sticky: 1000;
+$z-modal: 2000;
+$z-overlay: 3000;
+
+// 8. Shadow System
+$shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
+$shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+$shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.12);
+$shadow-deep: 0 12px 32px rgba(0, 0, 0, 0.15);

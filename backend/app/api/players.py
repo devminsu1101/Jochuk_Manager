@@ -20,7 +20,8 @@ async def get_players(match_id: str):
 
 @router.post("", include_in_schema=True)
 @router.post("/", include_in_schema=False)
-async def register_player(match_id: str, player: PlayerIn, authorized: bool = Depends(verify_match_owner)):
+async def register_player(match_id: str, player: PlayerIn):
+    # 개별 등록은 초대 링크를 가진 누구나 가능하도록 verify_match_owner 제거
     color = random.choice(PLAYER_COLORS)
     new_player_data = {
         "match_id": match_id,

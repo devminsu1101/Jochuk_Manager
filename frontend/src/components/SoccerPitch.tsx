@@ -5,7 +5,7 @@ import { FORMATIONS } from '@/constants/formations';
 import { useMatchStore } from '@/store/useMatchStore';
 import { DroppableNode } from './DroppableNode';
 import { DraggablePlayerNode } from './DraggablePlayerNode';
-import styles from './SoccerPitch.module.css';
+import styles from './SoccerPitch.module.scss';
 
 interface SoccerPitchProps {
   quarterId: number;

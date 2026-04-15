@@ -1,15 +1,17 @@
-# 🔄 Current Session State (2026-04-14)
+# 🔄 Current Session State (2026-04-15 - FINAL)
 
-## 📍 Baseline: "Mobile & UX Polish Completed"
-- **UX**: 메인(Overview) 및 상세 페이지 디자인 고도화 및 CSS Module 전환 완료.
-- **Mobile**: 전 페이지 반응형 레이아웃(Stacking Sidebar, Scaling Pitch) 적용 완료.
-- **Security**: 방장(Owner) vs 게스트(Guest) UI 명확화 및 권한 기반 기능 제어 보강.
+## 📍 Baseline: "Plab-style UI & DnD Restoration Completed"
+- **Main Page**: 플랩풋볼 스타일의 날짜별 그룹화 매치 리스트(Grid/Row) 리뉴얼 완료.
+- **Match Detail**: 쿼터별 포메이션 선택 UI 도입 및 대기 명단 DnD(동그란 노드) 기능 복구.
+- **Data Integrity**: 포메이션 변경 시 사라진 포지션 선수를 '대기 명단'으로 자동 이동 로직 적용.
+- **My Page**: 유저가 생성한 매치를 관리할 수 있는 `/mypage` 신설 및 백엔드 연동.
+- **Empty State**: 매치 목록 및 선수 명단이 없을 때의 등록 유도 UX 강화.
 
-## 🎯 Next Objective: "Phase 2 - Logic & Stability"
-1.  **SUB List Logic**: 포메이션 변경 시 배치된 선수가 사라지지 않고 '대기 명단'으로 이동하도록 개선. (데이터 정합성)
-2.  **Empty State UX**: 선수가 한 명도 없을 때의 가이드 화면 및 등록 유도 UI 구현.
-3.  **Performance**: 매치 리스트 폴링 최적화 및 이미지 캡처 품질 개선.
+## 🎯 Next Objective: "Phase 2.5 - Social & Engagement"
+1.  **Participation Link Enhancement**: 선수 등록 시 카카오톡 공유 커스텀 템플릿 적용.
+2.  **Quarterly Stats**: 유저별 누적 출전 쿼터 수 계산 및 시각화 (My Page 확장).
+3.  **Performance**: 매치 리스트 무한 스크롤 또는 페이징 처리.
 
 ## ⚠️ Handover Notes
-- **UI/UX**: `MatchDetail.module.css`와 `Overview.module.css`가 새로 도입되었으므로 스타일 수정 시 해당 파일을 참조할 것.
-- **Responsiveness**: 축구장 내 선수 노드는 640px 이하에서 자동으로 크기가 조절되도록 설정됨.
+- **API**: `GET /api/matches/my` 엔드포인트가 추가됨 (Auth 필요).
+- **UI**: 선수 노드 이니셜 표시 및 드래그 애니메이션 최적화됨.
