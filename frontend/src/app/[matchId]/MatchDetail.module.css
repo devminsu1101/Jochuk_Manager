@@ -99,24 +99,10 @@
   aspect-ratio: 4/5;
 }
 
-.pitchTitle {
-  display: block;
-  font-size: 0.9rem;
-  font-weight: 700;
-  margin-bottom: 0.75rem;
-  color: var(--text-main);
-}
-
-.miniSubsBox {
-  margin-top: 0.75rem;
-  font-size: 0.8rem;
-  line-height: 1.4;
-  color: var(--text-muted);
-}
-
 .editorMainView {
   display: flex;
-  gap: 2rem;
+  flex-direction: column;
+  gap: 1.5rem;
   flex: 1;
   min-height: 0;
 }
@@ -129,16 +115,156 @@
   box-shadow: var(--shadow-lg);
   display: flex;
   flex-direction: column;
+  min-height: 450px;
 }
 
-.subsSidebar {
-  width: 220px;
+.pitchHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.pitchHeaderLeft {
+  min-width: 150px;
+}
+
+.pitchTitle {
+  display: block;
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: var(--text-main);
+  margin: 0;
+}
+
+.pitchContainer {
+  flex: 1;
+  position: relative;
+  min-height: 0;
+}
+
+/* Inline Quarter Tabs */
+.quarterTabsInline {
+  display: flex;
+  background: #f1f5f9;
+  padding: 4px;
+  border-radius: 10px;
+  gap: 4px;
+}
+
+.tabButtonInline {
+  padding: 6px 12px;
+  border-radius: 8px;
+  border: none;
+  background: transparent;
+  font-size: 0.8rem;
+  font-weight: 800;
+  color: #64748b;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.tabButtonInline.active {
+  background: white;
+  color: #2e7d32;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.tabButtonInline.fullView {
+  background: #1e293b;
+  color: white;
+}
+
+/* Horizontal Subs Bar */
+.horizontalSubsBar {
   background: var(--bg-card);
   border-radius: var(--radius-lg);
-  padding: 1.25rem;
+  padding: 1rem 1.5rem;
   box-shadow: var(--shadow-lg);
   display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.subsBarHeader {
+  min-width: 100px;
+  padding-right: 1.5rem;
+  border-right: 1px solid var(--border-color);
+}
+
+.subsBarHeader h4 {
+  margin: 0;
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: #d32f2f;
+  white-space: nowrap;
+}
+
+.horizontalSubsGrid {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  overflow-x: auto;
+  padding: 4px;
+  scrollbar-width: thin;
+}
+
+.horizontalSubsGrid::-webkit-scrollbar {
+  height: 4px;
+}
+
+.horizontalSubsGrid::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 2px;
+}
+
+.emptyPlayersGuide {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.5rem 1rem;
+  background: #f8fafc;
+  border-radius: 8px;
+  border: 1px dashed #e2e8f0;
+}
+
+.emptyPlayersGuide p {
+  font-size: 0.8rem;
+  color: #64748b;
+  font-weight: 600;
+  margin: 0;
+}
+
+.inviteBtnSmall {
+  padding: 6px 12px;
+  background: #1976d2;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.subsItem {
+  display: flex;
   flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  min-width: 50px;
+}
+
+.subsName {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-align: center;
+  white-space: nowrap;
 }
 
 .miniPlayerBadge {

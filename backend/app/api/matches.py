@@ -26,6 +26,22 @@ async def list_matches(search: Optional[str] = None):
         print(f"List matches error: {e}")
         return []
 
+@router.get("/my")
+async def list_my_matches(user = Depends(get_current_user)):
+    try:
+        # 내가 만든 매치들만 가져옴
+        res = supabase.table("matches").select("*, players(count)").eq("owner_id", user.id).order("match_date", desc=True).execute()
+        
+        processed_data = []
+        for match in res.data:
+            match["player_count"] = match.get("players", [{}])[0].get("count", 0) if match.get("players") else 0
+            processed_data.append(match)
+            
+        return processed_data
+    except Exception as e:
+        print(f"List my matches error: {e}")
+        return []
+
 @router.post("")
 async def create_match(match: MatchCreate, user = Depends(get_current_user)):
     match_id = str(uuid.uuid4())[:8]

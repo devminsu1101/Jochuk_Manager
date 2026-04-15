@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Search, Plus, Calendar, Clock, ChevronRight, User, LogOut } from 'lucide-react';
+import { Search, Plus, Calendar, Clock, ChevronRight, User, LogOut, Layout } from 'lucide-react';
 import { useAuthStore } from '@/store/useAuthStore';
 import { supabase } from '@/utils/supabase';
 import styles from './Overview.module.css';
@@ -16,6 +16,7 @@ interface Match {
   status: string;
   is_public: boolean;
   owner_id?: string;
+  player_count?: number;
 }
 
 export default function OverviewPage() {
@@ -61,6 +62,16 @@ export default function OverviewPage() {
     fetchMatches();
   }, []);
 
+  // 날짜별로 매치 그룹화
+  const groupedMatches = matches.reduce((acc: { [key: string]: Match[] }, match) => {
+    const date = match.match_date;
+    if (!acc[date]) acc[date] = [];
+    acc[date].push(match);
+    return acc;
+  }, {});
+
+  const sortedDates = Object.keys(groupedMatches).sort();
+
   const handleCreateMatch = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!user) {
@@ -95,6 +106,20 @@ export default function OverviewPage() {
     }
   };
 
+  const getStatusText = (match: Match) => {
+    const count = match.player_count || 0;
+    if (count >= 18) return '마감';
+    if (count >= 14) return '마감임박';
+    return '신청가능';
+  };
+
+  const getStatusClass = (match: Match) => {
+    const count = match.player_count || 0;
+    if (count >= 18) return styles.statusClosed;
+    if (count >= 14) return styles.statusUrgent;
+    return styles.statusOpen;
+  };
+
   return (
     <div className={styles.container}>
       <header className={styles.header}>
@@ -108,7 +133,14 @@ export default function OverviewPage() {
               <div className={styles.authLoading}>...</div>
             ) : user ? (
               <div className={styles.userInfo}>
-                <span className={styles.userName}>{user.user_metadata?.full_name || user.email}</span>
+                <button 
+                  className={styles.myPageBtn} 
+                  onClick={() => router.push('/mypage')}
+                  title="내 매치 관리"
+                >
+                  <Layout size={18} />
+                  <span className={styles.userName}>{user.user_metadata?.full_name || user.email}</span>
+                </button>
                 <button className={styles.logoutButton} onClick={signOut} title="로그아웃">
                   <LogOut size={18} />
                 </button>
@@ -147,7 +179,7 @@ export default function OverviewPage() {
 
         <section className={styles.matchListSection}>
           <div className={styles.sectionHeader}>
-            <h3>공개 매치 ({matches.length})</h3>
+            <h3>매치 목록</h3>
             <button 
               className={styles.createMatchBtn} 
               onClick={() => user ? setShowCreateModal(true) : alert('로그인 후 매치를 생성할 수 있습니다.')}
@@ -159,45 +191,45 @@ export default function OverviewPage() {
 
           {isLoading ? (
             <div className={styles.loadingState}>경기를 불러오는 중입니다...</div>
-          ) : matches.length > 0 ? (
-            <div className={styles.matchGrid}>
-              {matches.map(match => (
-                <div key={match.id} className={styles.matchCard} onClick={() => router.push(`/${match.id}`)}>
-                  <span className={`${styles.statusBadge} ${styles[match.status]}`}>
-                    {match.status === 'upcoming' ? '예정' : '진행중'}
-                  </span>
-                  <h4 className={styles.cardTitle}>{match.title}</h4>
-                  
-                  <div className={styles.attendanceWrapper}>
-                    <div className={styles.attendanceInfo}>
-                      <span>참여 인원</span>
-                      <span>15 / 18 명</span>
-                    </div>
-                    <div className={styles.attendanceBar}>
-                      <div className={styles.attendanceFill} style={{ width: '83%' }}></div>
-                    </div>
-                  </div>
-
-                  <div className={styles.cardInfo}>
-                    <div className={styles.infoItem}>
-                      <Calendar size={14} />
-                      <span>{match.match_date}</span>
-                    </div>
-                    <div className={styles.infoItem}>
-                      <Clock size={14} />
-                      <span>{match.match_time}</span>
-                    </div>
-                  </div>
-                  <div className={styles.cardFooter}>
-                    <span>라인업 관리하기</span>
-                    <ChevronRight size={16} />
+          ) : sortedDates.length > 0 ? (
+            <div className={styles.dateGroups}>
+              {sortedDates.map(date => (
+                <div key={date} className={styles.dateGroup}>
+                  <h4 className={styles.dateHeader}>
+                    {new Date(date).toLocaleDateString('ko-KR', { month: 'long', day: 'numeric', weekday: 'short' })}
+                  </h4>
+                  <div className={styles.matchList}>
+                    {groupedMatches[date].map(match => (
+                      <div key={match.id} className={styles.matchRow} onClick={() => router.push(`/${match.id}`)}>
+                        <div className={styles.matchTime}>{match.match_time.substring(0, 5)}</div>
+                        <div className={styles.matchMainInfo}>
+                          <h5 className={styles.matchTitle}>{match.title}</h5>
+                          <div className={styles.matchSubInfo}>
+                            <span>참여 인원 {match.player_count || 0}명</span>
+                          </div>
+                        </div>
+                        <div className={styles.matchStatus}>
+                          <span className={`${styles.statusBadge} ${getStatusClass(match)}`}>
+                            {getStatusText(match)}
+                          </span>
+                          <ChevronRight size={18} className={styles.rowArrow} />
+                        </div>
+                      </div>
+                    ))}
                   </div>
                 </div>
               ))}
             </div>
           ) : (
             <div className={styles.emptyState}>
-              <p>검색 결과가 없습니다. 직접 새로운 매치를 만들어보세요!</p>
+              <div className={styles.emptyIcon}>⚽️</div>
+              <p>아직 등록된 경기가 없네요!</p>
+              <button 
+                className={styles.emptyCreateBtn}
+                onClick={() => user ? setShowCreateModal(true) : alert('로그인 후 매치를 생성할 수 있습니다.')}
+              >
+                첫 번째 매치 만들기
+              </button>
             </div>
           )}
         </section>

@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { useMatchStore } from '@/store/useMatchStore';
-import { DraggablePlayer } from './DraggablePlayer';
+import { PlayerListItem } from './PlayerListItem';
 import styles from './ParticipationSidebar.module.css';
 
 export const ParticipationSidebar: React.FC = () => {
@@ -18,7 +18,8 @@ export const ParticipationSidebar: React.FC = () => {
   const getPlayCount = (playerId: string) => {
     let count = 0;
     lineups.forEach((lineup) => {
-      if (Object.values(lineup.assignedPlayers).includes(playerId)) {
+      const assignedIdsInFormation = Object.values(lineup.assignedPlayers);
+      if (assignedIdsInFormation.includes(playerId)) {
         count++;
       }
     });
@@ -61,7 +62,7 @@ export const ParticipationSidebar: React.FC = () => {
 
       <div className={styles.playerList}>
         {players.map((player) => (
-          <DraggablePlayer
+          <PlayerListItem
             key={player.id}
             id={player.id}
             name={player.name}

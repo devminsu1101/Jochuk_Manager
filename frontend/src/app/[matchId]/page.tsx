@@ -2,14 +2,17 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import { useParams } from 'next/navigation';
-import { DndContext, DragEndEvent, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
+import { DndContext, DragEndEvent, DragOverlay, DragStartEvent, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
 import { toPng } from 'html-to-image';
 import { useMatchStore } from '@/store/useMatchStore';
 import { useAuthStore } from '@/store/useAuthStore';
 import { SoccerPitch } from '@/components/SoccerPitch';
 import { ParticipationSidebar } from '@/components/ParticipationSidebar';
+import { DraggablePlayer } from '@/components/DraggablePlayer';
+import { FORMATIONS } from '@/constants/formations';
 import { Lock, Info, Share2, Award, Download, Link as LinkIcon } from 'lucide-react';
 import styles from './MatchDetail.module.css';
+import pitchStyles from '@/components/SoccerPitch.module.css';
 
 const actionButtonStyle = (bgColor: string): React.CSSProperties => ({
   width: '100%', padding: '12px', fontSize: '0.9rem', cursor: 'pointer',
@@ -26,6 +29,7 @@ export default function MatchPage() {
     setMatchId, 
     fetchPlayers,
     updateLineup, 
+    setFormation,
     autoAssign,
     lineups, 
     players, 
@@ -38,6 +42,7 @@ export default function MatchPage() {
   const [isOwner, setIsOwner] = useState(false);
   const [showShareOptions, setShowShareOptions] = useState(false);
   const [isCapturing, setIsCapturing] = useState(false);
+  const [activeId, setActiveId] = useState<string | null>(null);
   
   const captureRef = useRef<HTMLDivElement>(null);
   const fullViewRef = useRef<HTMLDivElement>(null);
@@ -45,12 +50,11 @@ export default function MatchPage() {
   const sensors = useSensors(
     useSensor(PointerSensor, {
       activationConstraint: {
-        distance: 8,
+        distance: 5,
       },
     })
   );
 
-  // 매치 상세 정보 및 권한 확인
   useEffect(() => {
     const fetchMatchDetail = async () => {
       try {
@@ -59,10 +63,8 @@ export default function MatchPage() {
         if (response.ok) {
           const data = await response.json();
           setMatchInfo(data);
-          // owner_id가 현재 사용자와 일치하면 방장으로 간주
           const isUserOwner = data.owner_id === user?.id;
           setIsOwner(isUserOwner);
-          console.log("Ownership Check:", { matchOwner: data.owner_id, currentUser: user?.id, isOwner: isUserOwner });
         }
       } catch (error) {
         console.error('Match detail fetch error:', error);
@@ -81,8 +83,15 @@ export default function MatchPage() {
     return () => clearInterval(interval);
   }, [matchId, fetchPlayers]);
 
+  const handleDragStart = (event: DragStartEvent) => {
+    if (!isOwner) return;
+    const { active } = event;
+    setActiveId(active.id as string);
+  };
+
   const handleDragEnd = (event: DragEndEvent) => {
-    if (!isOwner) return; // 방장이 아니면 드래그 무시
+    setActiveId(null);
+    if (!isOwner) return;
 
     const { active, over } = event;
     if (!over || activeQuarterId === 0) return;
@@ -153,15 +162,37 @@ export default function MatchPage() {
 
   const getSubsForQuarter = (quarterId: number) => {
     const lineup = lineups.find(l => l.quarterId === quarterId);
-    if (!lineup) return [];
-    const assignedIds = Object.values(lineup.assignedPlayers);
-    return players.filter(p => !assignedIds.includes(p.id));
+    if (!lineup) return players;
+    const validPositions = Object.keys(FORMATIONS[lineup.formation] || {});
+    const assignedIdsInFormation = validPositions
+      .map(pos => lineup.assignedPlayers[pos])
+      .filter(id => id !== null && id !== undefined);
+    return players.filter(p => !assignedIdsInFormation.includes(p.id));
   };
 
+  const activePlayer = players.find(p => {
+    if (!activeId) return false;
+    // 대기 명단에서 드래그 시작 시
+    if (activeId.startsWith('subs-player-')) {
+      return p.id === activeId.replace('subs-player-', '');
+    }
+    // 경기장 내에서 드래그 시작 시
+    if (activeId.startsWith('node-player-')) {
+      // activeId 형식: node-player-{Q}-{POS}
+      const parts = activeId.split('-');
+      const qId = parseInt(parts[2]);
+      const posKey = parts[3];
+      const lineup = lineups.find(l => l.quarterId === qId);
+      return lineup?.assignedPlayers[posKey] === p.id;
+    }
+    return false;
+  });
+
+  const currentLineup = lineups.find(l => l.quarterId === activeQuarterId);
+
   return (
-    <DndContext sensors={sensors} onDragEnd={handleDragEnd}>
+    <DndContext sensors={sensors} onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
       <main className={styles.mainLayout}>
-        {/* Mobile Sticky Bar */}
         <div className={styles.stickyBottomActions}>
           <button 
             onClick={(e) => {
@@ -174,11 +205,7 @@ export default function MatchPage() {
             공유/관리
           </button>
           {isOwner && (
-            <button 
-              onClick={handleAutoAssign} 
-              className={styles.tabButton} 
-              style={{flex: 1, background: 'var(--secondary)', color: 'white', border: 'none'}}
-            >
+            <button onClick={handleAutoAssign} className={styles.tabButton} style={{flex: 1, background: 'var(--secondary)', color: 'white', border: 'none'}}>
               AI 자동배정
             </button>
           )}
@@ -216,7 +243,7 @@ export default function MatchPage() {
                       <SoccerPitch quarterId={q} isMini={true} />
                     </div>
                     <div className={styles.miniSubsBox}>
-                      <b style={{ color: '#d32f2f' }}>대기 명단:</b> {subs.map(p => p.name).join(', ') || '없음'}
+                      <b style={{ color: '#d32f2f' }}>대기:</b> {subs.map(p => p.name).join(', ') || '없음'}
                     </div>
                   </div>
                 );
@@ -225,48 +252,70 @@ export default function MatchPage() {
           ) : (
             <div className={styles.editorMainView} ref={captureRef}>
               <div className={styles.pitchWrapper}>
-                <span className={styles.pitchTitle}>{activeQuarterId}쿼터 라인업</span>
-                <SoccerPitch quarterId={activeQuarterId} />
-              </div>
+                <div className={styles.pitchHeader}>
+                  <div className={styles.pitchHeaderLeft}>
+                    <span className={styles.pitchTitle}>{activeQuarterId}쿼터 라인업</span>
+                  </div>
+                  
+                  <div className={styles.quarterTabsInline}>
+                    <button className={`${styles.tabButtonInline} ${activeQuarterId === 0 ? styles.fullView : ''}`} onClick={() => setActiveQuarterId(0)}>
+                      전체
+                    </button>
+                    {[1, 2, 3, 4].map(q => (
+                      <button key={q} className={`${styles.tabButtonInline} ${activeQuarterId === q ? styles.active : ''}`} onClick={() => setActiveQuarterId(q)}>
+                        {q}Q
+                      </button>
+                    ))}
+                  </div>
 
-              <div className={styles.subsSidebar}>
-                <h4 style={{ margin: 0, fontSize: '0.9rem', color: '#d32f2f', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                  대기 ({getSubsForQuarter(activeQuarterId).length})
-                </h4>
-                <div style={{ overflowY: 'auto', marginTop: '12px' }}>
-                  {getSubsForQuarter(activeQuarterId).length > 0 ? (
-                    getSubsForQuarter(activeQuarterId).map(p => (
-                      <div key={p.id} className={styles.miniPlayerBadge}>
-                        <div style={{ width: '10px', height: '10px', borderRadius: '50%', backgroundColor: p.color }} />
-                        <span>{p.name}</span>
-                      </div>
-                    ))
-                  ) : (
-                    <p style={{fontSize: '0.8rem', color: '#999', textAlign: 'center', marginTop: '20px'}}>대기 선수 없음</p>
+                  {isOwner && (
+                    <div className={pitchStyles.formationContainer}>
+                      {Object.keys(FORMATIONS).map(f => (
+                        <button 
+                          key={f}
+                          className={`${pitchStyles.formationBtn} ${currentLineup?.formation === f ? pitchStyles.active : ''}`}
+                          onClick={() => setFormation(activeQuarterId, f)}
+                        >
+                          {f}
+                        </button>
+                      ))}
+                    </div>
                   )}
                 </div>
+                <div className={styles.pitchContainer}>
+                  <SoccerPitch quarterId={activeQuarterId} />
+                </div>
+              </div>
+
+              <div className={styles.horizontalSubsBar}>
+                <div className={styles.subsBarHeader}>
+                  <h4>대기 선수 ({getSubsForQuarter(activeQuarterId).length})</h4>
+                </div>
+                {players.length === 0 ? (
+                  <div className={styles.emptyPlayersGuide}>
+                    <Info size={20} style={{ color: '#1976d2' }} />
+                    <p>등록된 선수가 없습니다. 초대 링크를 공유하세요!</p>
+                    <button onClick={handleCopyInviteLink} className={styles.inviteBtnSmall}>
+                      초대 링크 복사
+                    </button>
+                  </div>
+                ) : (
+                  <div className={styles.horizontalSubsGrid}>
+                    {getSubsForQuarter(activeQuarterId).length > 0 ? (
+                      getSubsForQuarter(activeQuarterId).map(p => (
+                        <div key={p.id} className={styles.subsItem}>
+                          <DraggablePlayer id={p.id} name={p.name} color={p.color} />
+                          <span className={styles.subsName}>{p.name}</span>
+                        </div>
+                      ))
+                    ) : (
+                      <p style={{fontSize: '0.8rem', color: '#999', padding: '10px'}}>현재 쿼터에 모든 선수가 배치되었습니다.</p>
+                    )}
+                  </div>
+                )}
               </div>
             </div>
           )}
-
-          <div className={styles.quarterTabsBottom}>
-            <button 
-              className={`${styles.tabButton} ${activeQuarterId === 0 ? styles.fullView : ''}`}
-              onClick={() => setActiveQuarterId(0)}
-            >
-              전체 보기
-            </button>
-            <div style={{ width: '1px', height: '16px', background: '#e2e8f0', margin: '0 8px' }} />
-            {[1, 2, 3, 4].map(q => (
-              <button 
-                key={q} 
-                className={`${styles.tabButton} ${activeQuarterId === q ? styles.active : ''}`}
-                onClick={() => setActiveQuarterId(q)}
-              >
-                {q}Q
-              </button>
-            ))}
-          </div>
         </section>
         
         <aside className={styles.sidebar}>
@@ -284,20 +333,11 @@ export default function MatchPage() {
                 </button>
               </div>
             )}
-            
-            <button 
-              onClick={(e) => {
-                e.stopPropagation();
-                setShowShareOptions(!showShareOptions);
-              }} 
-              style={actionButtonStyle('#1976d2')}
-            >
+            <button onClick={(e) => { e.stopPropagation(); setShowShareOptions(!showShareOptions); }} style={actionButtonStyle('#1976d2')}>
               <Share2 size={18} />
               공유 및 관리
             </button>
-            
             <div style={{height: '10px'}} />
-
             {isOwner ? (
               <button onClick={handleAutoAssign} style={actionButtonStyle('#2e7d32')}>
                 <Award size={18} />
@@ -311,6 +351,15 @@ export default function MatchPage() {
             )}
           </div>
         </aside>
+
+        <DragOverlay zIndex={3000}>
+          {activePlayer ? (
+            <div className={pitchStyles.nodeCircle} style={{ backgroundColor: activePlayer.color, transform: 'scale(1.1)', opacity: 0.9, cursor: 'grabbing' }}>
+              <span className={pitchStyles.playerInitial}>{activePlayer.name.charAt(0)}</span>
+              <div className={pitchStyles.nodeLabel} style={{background: 'rgba(0,0,0,0.8)'}}>{activePlayer.name}</div>
+            </div>
+          ) : null}
+        </DragOverlay>
       </main>
     </DndContext>
   );

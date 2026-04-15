@@ -69,10 +69,17 @@
   transition: transform 0.2s ease;
 }
 
-.nodeOver .nodeCircle {
-  background: #c8e6c9;
+.nodeOver .nodeCircleEmpty {
+  background: rgba(46, 125, 50, 0.4);
   border-color: #2e7d32;
-  transform: scale(1.2);
+  transform: scale(1.1);
+  box-shadow: 0 0 15px rgba(46, 125, 50, 0.5);
+}
+
+.nodeOver .nodeCircle {
+  border-color: #2e7d32;
+  transform: scale(1.1);
+  box-shadow: 0 0 15px rgba(46, 125, 50, 0.5);
 }
 
 .nodeCircle {
@@ -82,7 +89,60 @@
   border: 2px solid #fff;
   box-shadow: 0 4px 10px rgba(0,0,0,0.3);
   cursor: grab;
-  transition: transform 0.1s ease;
+  transition: all 0.15s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.nodeCircle:hover {
+  transform: scale(1.15);
+  box-shadow: 0 6px 14px rgba(0,0,0,0.4);
+}
+
+.playerInitial {
+  color: white;
+  font-size: 0.8rem;
+  font-weight: 900;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* Formation Selector */
+.formationContainer {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+  padding: 0.5rem;
+  background: #f8fafc;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+}
+
+.formationBtn {
+  padding: 0.5rem 1rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  cursor: pointer;
+  color: #64748b;
+  transition: all 0.2s;
+}
+
+.formationBtn.active {
+  background: #2e7d32;
+  color: white;
+  border-color: #2e7d32;
+  box-shadow: 0 2px 4px rgba(46, 125, 50, 0.2);
+}
+
+.formationBtn:hover:not(.active) {
+  background: #f1f5f9;
+  border-color: #cbd5e1;
 }
 
 @media (max-width: 640px) {
